@@ -1,0 +1,29 @@
+.saveScreen{
+    height: 100%;
+    &:div{
+        height: 100%;
+    }
+    form{
+        height: 100%;
+        .saveScreen__Textarea{
+            height: 60%;
+            textarea{
+                outline:none;
+                resize:none;
+                border:none;
+            }
+        }
+        .saveScreen__buttons{
+            height: 40%;
+        }
+    }
+}
+
+/*-----------------Media Device----------------------*/
+
+@mixin SaveScreen-sm{
+    .saveScreen__buttons{
+        margin-top: 20%;
+        height: 20%!important;
+    }
+}

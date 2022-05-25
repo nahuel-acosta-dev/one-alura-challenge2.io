@@ -16,6 +16,15 @@ module.exports = {
     module:{
         rules:[
             {
+                test: /\.(png|svg|jpg|jpeg|gif)$/,
+                use: [
+                  {
+                    loader: 'file-loader',
+                    options: { name: 'assets/[hash].[ext]' },
+                  }
+                ],
+            },
+            {
                 test: /\.(js|jsx)$/,
                 exclude:/node_modules/,
                 use:{

@@ -1,11 +1,26 @@
 import React from 'react';
-import Button from 'react-bootstrap/Button';
+import Container from 'react-bootstrap/Container';
+import Header from './components/header/Header';
+import SaveScreen from './pages/SaveScreen';
+import GameStarts from './pages/GameStarts';
 
 const App = () => {
+    const show = false;
     return(
-        <div>{process.env.REACT_API}
-        <Button variant="primary">Primary</Button>{' '}
-        </div>
+        <>
+            <Header />
+            <main>
+                <Container className="main__container" fluid>
+                    {show ?
+                        //<Home />
+                        
+                        <SaveScreen />
+                        :
+                        <GameStarts />
+                    }
+                </Container>
+            </main>
+        </>
     )
 }
 //Implememntar esto en los componentes, es el tipo de datos que se recibira del snipet

@@ -1,0 +1,27 @@
+.gameStarts{
+    height: 100%;
+    
+        .gameStarts__letters{
+            height: 70%;
+            .letter{
+                border-bottom: 2px solid blue;
+                height:50px;
+                margin-left:5px;
+                margin-right:5px;
+            }
+        }
+        .gameStarts__buttons{
+            height: 30%;
+        }
+    
+}
+
+
+/*-----------------Media Device----------------------*/
+
+@mixin GameStarts-sm{
+    .gameStarts__buttons{
+        margin-top: 10%;
+        height: 20%!important;
+    }
+}
