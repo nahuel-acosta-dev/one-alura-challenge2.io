@@ -1,13 +1,13 @@
-@import './static/sass/config/Variables';
-@import './static/sass/config/Basic';
+@import './sass/config/Variables';
+@import './sass/config/Basic';
 @import '~bootstrap/scss/bootstrap.scss';
 //components
-@import './static/sass/components/Header';
-@import './static/sass/components/Textarea';
-@import './static/sass/components/Button';
+@import './sass/components/Header';
+@import './sass/components/Textarea';
+@import './sass/components/Button';
 //pages
-@import './static/sass/pages/Home';
-@import './static/sass/pages/SaveScreen';
-@import './static/sass/pages/GameStarts';
+@import './sass/pages/Home';
+@import './sass/pages/SaveScreen';
+@import './sass/pages/GameStarts';
 //Responsive
-@import './static/sass/config/Responsive';
+@import './sass/config/Responsive';

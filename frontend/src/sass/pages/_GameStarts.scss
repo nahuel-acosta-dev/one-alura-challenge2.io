@@ -1,0 +1,142 @@
+.gameStarts{
+    height: 100%;
+    outline: none;
+        .gameStarts__hangman{
+            height: 45%;
+            display: flex;
+            img{
+                width: 60%;
+                margin-left:30%;
+                margin-right:10%;
+            }
+            .post{
+                height: 90%;
+                width: 15%;
+                margin-left:auto;
+                margin-right: auto;
+                border-left: 2px solid blue;
+                border-top: 2px solid blue;
+                .post__rest{
+                    width: 1%;
+                    height: 10%;
+                    padding: 0;
+                    padding-bottom: 0;
+                    padding-top: 0;
+                    margin-left: 99%;
+                    border-right: 2px solid blue;
+                }
+                .post__ellipse{
+                    width: 30%;
+                    height: 15%;
+                    border: 2px solid blue!important;
+                    border-radius: 50%!important;
+                    margin-left: 84%;
+                    position: relative;
+                    padding:0;
+                    top: -1%;
+                }
+                .corp{
+                    height: 60%;
+                    padding: 0;
+                    width: 80%;
+                    margin-left: 50%;
+                    margin-bottom: 30%;
+                    .corp__armOne{
+                        height: 45%;
+                        width: 1%;
+                        border-right: 2px solid blue;
+                        padding: 0;
+                        padding-top: 0;
+                        padding-bottom: 0;
+                        transform: rotate(-45deg);
+                        position: relative;
+                        top: -6%;
+                        right: -79%;
+                    }
+                    .corp__body{
+                        height: 70%;
+                        width: 1%;
+                        border-right: 2px solid blue;
+                        padding: 0;
+                        padding-top: 0;
+                        padding-bottom: 0;
+                        position: relative;
+                        top: -44%;
+                        right: -60%;
+                    }
+                    .corp__armTwo{
+                        height: 45%;
+                        width: 1%;
+                        border-right: 2px solid blue;
+                        padding: 0;
+                        padding-top: 0;
+                        padding-bottom: 0;
+                        transform: rotate(45deg);
+                        position: relative;
+                        top: -120%;
+                        right: -40%;
+                    }
+
+                    .corp__legOne{
+                        height: 45%;
+                        width: 1%;
+                        border-right: 2px solid blue;
+                        padding: 0;
+                        padding-top: 0;
+                        padding-bottom: 0;
+                        transform: rotate(45deg);
+                        position: relative;
+                        top: -98%;
+                        right: -40%;
+                    }
+
+                    .corp__legTwo{
+                        height: 45%;
+                        width: 1%;
+                        border-right: 2px solid blue;
+                        padding: 0;
+                        padding-top: 0;
+                        padding-bottom: 0;
+                        transform: rotate(-45deg);
+                        position: relative;
+                        top: -143%;
+                        right: -81%;
+                    }
+                    
+                }
+                
+            }
+
+            .soil{
+                height: 10%;
+                width:  30%;
+                border-top: 2px solid blue;
+                margin-left:auto;
+                margin-right: auto;
+            }
+        }
+
+        .gameStarts__letters{
+            height: 25%;
+            .letter{
+                border-bottom: 2px solid blue;
+                height:50px;
+                margin-left:5px;
+                margin-right:5px;
+            }
+        }
+        .gameStarts__buttons{
+            height: 30%;
+        }
+    
+}
+
+
+/*-----------------Media Device----------------------*/
+
+@mixin GameStarts-sm{
+    .gameStarts__buttons{
+        margin-top: 10%;
+        height: 20%!important;
+    }
+}

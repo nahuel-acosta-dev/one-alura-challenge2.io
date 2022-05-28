@@ -4,7 +4,7 @@ import Col from 'react-bootstrap/Col';
 import Buttons from '../components/buttons/Buttons';
 import Textarea from '../components/textarea/Textarea';
 import Form from 'react-bootstrap/Form';
-import Info from '../static/image/Info.svg';
+import Info from '../image/Info.svg';
 
 const SaveScreen = () => {
     const save = () => console.log('el array1');

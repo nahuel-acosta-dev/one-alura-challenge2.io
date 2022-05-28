@@ -1,6 +1,6 @@
 import React from 'react';
 import Navbar from 'react-bootstrap/Navbar';
-import Vector from '../../static/image/Vector.svg';
+import Vector from '../../image/Vector.svg';
 import Container from 'react-bootstrap/Container';
 const Header = () => {
     return(
