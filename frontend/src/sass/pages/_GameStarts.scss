@@ -3,11 +3,12 @@
     outline: none;
         .gameStarts__hangman{
             height: 45%;
+            max-height: 45%;
             display: flex;
             img{
-                width: 60%;
-                margin-left:30%;
-                margin-right:10%;
+                height: 100%;
+                margin-left:auto;
+                margin-right:auto;
             }
             .post{
                 height: 90%;
@@ -117,16 +118,36 @@
         }
 
         .gameStarts__letters{
-            height: 25%;
+            height: 20%;
             .letter{
                 border-bottom: 2px solid blue;
                 height:50px;
                 margin-left:5px;
                 margin-right:5px;
+                display: flex;
+                align-items: end;
+                justify-content: center;
+                span{
+                    font-size: 1.5em;
+                }
             }
         }
+        .gameStarts__failures{
+            height: 10%;
+            .gameStarts__fails{
+                display: flex;
+                align-items: center;
+                justify-content: center;
+                span{
+                    font-size: 1.2em;
+                }
+
+            }
+            
+        }
+
         .gameStarts__buttons{
-            height: 30%;
+            height: 25%;
         }
     
 }
