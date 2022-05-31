@@ -6,12 +6,13 @@ const PrivateRoutes = ({isLogged, isVerified,children}) =>{
  return (
     <>
         {
-            (isLogged === true && isVerified === true) ?
-            <Navigate to="/app/home" /> : <Navigate to="/auth/login" />
+            (isLogged == true && isVerified === true) ?
+            //<Navigate to="/app/home" /> //: <Navigate to="/auth/login" />
+            children : <Navigate to="/app/notverified" />
         }
 
         {
-            isLogged ? children : <Navigate to="/auth/login" />
+            //isLogged ? children : <Navigate to="/auth/login" />
         }
     </>
  );

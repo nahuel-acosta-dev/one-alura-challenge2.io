@@ -2,11 +2,9 @@ import React from 'react';
 import Container from 'react-bootstrap/Container';
 import HelperRouters from './routes/HelperRoutes';
 import Header from './components/header/Header';
-import SaveScreen from './pages/SaveScreen';
-import GameStarts from './pages/GameStarts';
 
 const App = () => {
-    const show = false;
+    //const show = false;
     return(
         <>
             <Header />

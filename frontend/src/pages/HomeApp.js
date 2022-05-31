@@ -11,7 +11,7 @@ const HomeApp = () =>{
                 <Col md={4} sm={6} xs={10}>
                     <Row>
                         <Stack gap={2} className="col-md-5 mx-auto">
-                            <Button variant="secondary" size="lg">Iniciar Juego</Button>
+                            *<Button variant="secondary" size="lg">Iniciar Juego</Button>
                             <Button variant="outline-secondary" size="sm">Agregar una nueva palabra</Button>
                         </Stack>
                     </Row>
