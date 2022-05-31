@@ -12,10 +12,10 @@ const ApplicationRouter = () =>{
     return (
         <>
             <Routes>
-                <Route path="/home" element={NotVerified} />
-                <Route path="/savescreen" element={SaveScreen} />
-                <Route path="/gamestarts" element={GameStarts} />
-                <Route path="/notverified" element={NotVerified} />
+                <Route path="/home" element={<HomeApp/>} />
+                <Route path="/savescreen" element={<SaveScreen/>} />
+                <Route path="/gamestarts" element={<GameStarts/>} />
+                <Route path="/notverified" element={<NotVerified/>} />
             </Routes>
         </>
     )
