@@ -18,5 +18,5 @@ from django.urls import path, include
 
 urlpatterns = [
     path('admin/', admin.site.urls),
-    path("hangman/api/", include("hangman.urls", name='hangman_api')),
+    path("hangman/api/", include("hangman.urls", namespace='hangman_api')),
 ]
