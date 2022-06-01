@@ -4,6 +4,9 @@ import Row from 'react-bootstrap/Row';
 import Col from 'react-bootstrap/Col';
 import Hangman from '../components/hangman/Hangman';
 
+//Hace falta agregar una versio para movil ya que hay no hay butones para ingresar letras, debemos
+//ingresar un input de 1 letra que permita usar el teclado virtual del celular
+
 const GameStarts = () => {
     const drawerRef = createRef();
     const palabra = "powerups";

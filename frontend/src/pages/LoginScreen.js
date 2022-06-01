@@ -1,7 +1,7 @@
 import React from 'react';
 
-const NotRegister = () =>{
+const LoginScreen = () =>{
     return <h1>Not Register</h1> 
 }
 
-export default NotRegister;
+export default LoginScreen;

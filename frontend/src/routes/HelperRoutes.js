@@ -9,8 +9,8 @@ import Home from '../pages/Home';
 
 const HelperRouters = () =>{
 
-    const isLogged = true;
-    const isVerified = true; //esta es para que confirme su cuenta por mail
+    const isLogged = false;
+    const isVerified = false; //esta es para que confirme su cuenta por mail
     //por el momento no la usaremos
 
     return (
