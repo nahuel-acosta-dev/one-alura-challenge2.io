@@ -1,8 +1,19 @@
 import React from 'react';
+import {useDispatch} from "react-redux";
+import {googleLogin} from "../actions/authActions";
 import Form from 'react-bootstrap/Form';
 import Button from 'react-bootstrap/Button';
 
+
 const LoginScreen = () =>{
+
+    const dispatch = useDispatch();
+
+    const handleGoogleLogin = (e) =>{
+        dispatch(googleLogin('1', "nahuel"));
+        e.preventDefault();
+    }
+
     return (
         <section className="container">
             <Form>
@@ -23,6 +34,9 @@ const LoginScreen = () =>{
                 </Form.Group>
                 <Button variant="primary" type="submit">
                     Submit
+                </Button>
+                <Button variant="primary" type="info" onClick={e => handleGoogleLogin(e)}>
+                    google
                 </Button>
             </Form>
         </section>
