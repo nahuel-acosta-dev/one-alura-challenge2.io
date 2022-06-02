@@ -1,13 +1,14 @@
 import React from 'react';
+import {Provider} from "react-redux";
+import {store} from "./store/store";
 import Container from 'react-bootstrap/Container';
 import HelperRouters from './routes/HelperRoutes';
 import Header from './components/header/Header';
-import {Provider} from "react-redux";
 
 const App = () => {
     //const show = false;
     return(
-        <Provider>
+        <Provider store={store}>
             <Header />
             <main>
                 <Container className="main__container" fluid>
