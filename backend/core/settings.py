@@ -75,7 +75,8 @@ SPECTACULAR_SETTINGS = {
 }
 
 SIMPLE_JWT = {
-    'ACCESS_TOKEN_LIFETIME': timedelta(minutes=5),
+    # poner en 5 minutos, 90 solo para pruebas
+    'ACCESS_TOKEN_LIFETIME': timedelta(minutes=90),
     'REFRESH_TOKEN_LIFETIME': timedelta(days=1),
     'ROTATE_REFRESH_TOKENS': False,
     'BLACKLIST_AFTER_ROTATION': False,
@@ -142,7 +143,6 @@ WSGI_APPLICATION = 'core.wsgi.application'
 
 DATABASES = MYSQL
 
-
 # Password validation
 # https://docs.djangoproject.com/en/4.0/ref/settings/#auth-password-validators
 
@@ -161,7 +161,7 @@ AUTH_PASSWORD_VALIDATORS = [
     },
 ]
 # configuracion basica de django realizada
-#AUTH_USER_MODEL = 'hangman.User'
+AUTH_USER_MODEL = 'hangman.User'
 
 # Internationalization
 # https://docs.djangoproject.com/en/4.0/topics/i18n/
@@ -184,3 +184,5 @@ STATIC_URL = 'static/'
 # https://docs.djangoproject.com/en/4.0/ref/settings/#default-auto-field
 
 DEFAULT_AUTO_FIELD = 'django.db.models.BigAutoField'
+
+AUTH_USER_MODEL = 'hangman.User'

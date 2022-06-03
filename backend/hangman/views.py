@@ -1,9 +1,19 @@
 #from django.shortcuts import render
+from django.contrib.auth import authenticate
 from drf_spectacular.utils import extend_schema, extend_schema_view
 from rest_framework import viewsets
+from rest_framework.generics import GenericAPIView
+#from rest_framework.views import APIView
+from rest_framework.permissions import IsAuthenticated
+from rest_framework.response import Response
+from rest_framework import status
+from rest_framework_simplejwt.views import TokenObtainPairView
+from rest_framework_simplejwt.tokens import RefreshToken
 
-from hangman.serializers import TaskSerializer
-from hangman.models import Task
+from hangman.serializers import (TaskSerializer,
+                                 CustomTokenObtainPairSerializer, CustomUserSerializer)
+
+from .models import Task, User
 # Create your views here.
 
 
@@ -14,6 +24,38 @@ from hangman.models import Task
     update=extend_schema(description='Permite activar una tarea'),
     destroy=extend_schema(description='Permite eliminar una tarea'),
 )
+class Login(TokenObtainPairView):
+    serializer_class = CustomTokenObtainPairSerializer
+
+    def post(self, request, *args, **kwargs):
+        username = request.data.get('username', '')
+        password = request.data.get('password', '')
+        user = authenticate(username=username, password=password)
+
+        if user:
+            login_serializer = self.serializer_class(data=request.data)
+            if login_serializer.is_valid():
+                user_Serializer = CustomUserSerializer(user)
+                return Response({
+                    'token': login_serializer.validated_data('access'),
+                    'refresh-token': login_serializer.validated_data('refresh'),
+                    'user': user_Serializer.data,
+                    'message': 'Start of successful session'
+                }, status=status.HTTP_200_OK)
+            return Response({'error': 'Incorrect password or username'}, status=status.HTTP_400_BAD_REQUEST)
+        return Response({'error': 'Incorrect password or username'}, status=status.HTTP_400_BAD_REQUEST)
+
+
+class Logout(GenericAPIView):
+    def post(self, request, *args, **kwargs):
+        user = User.objects.filter(id=request.data.get('user', '')).first()
+        if user.exist():
+            RefreshToken.for_user(user.first())
+            return Response({'message': 'Session closed correctly'}, status=status.HTTP_200_OK)
+        return Response({'error': 'This user does not exist'}, status=status.HTTP_400_BAD_REQUEST)
+
+
 class TaskViewSet(viewsets.ModelViewSet):
     serializer_class = TaskSerializer
+    #permission_classes = (IsAuthenticated,)
     queryset = Task.objects.all()
