@@ -9,6 +9,7 @@ from rest_framework.response import Response
 from rest_framework import status
 from rest_framework_simplejwt.views import TokenObtainPairView
 from rest_framework_simplejwt.tokens import RefreshToken
+from rest_framework.decorators import api_view, permission_classes
 
 from hangman.serializers import (TaskSerializer,
                                  CustomTokenObtainPairSerializer, CustomUserSerializer)
@@ -47,14 +48,14 @@ class Login(TokenObtainPairView):
 
 class Logout(GenericAPIView):
     def post(self, request, *args, **kwargs):
-        user = User.objects.filter(id=request.data.get('user', '')).first()
-        if user.exist():
+        user = User.objects.filter(id=request.data.get('user', 0))
+        if user.exists():
             RefreshToken.for_user(user.first())
             return Response({'message': 'Session closed correctly'}, status=status.HTTP_200_OK)
         return Response({'error': 'This user does not exist'}, status=status.HTTP_400_BAD_REQUEST)
 
 
+@permission_classes([IsAuthenticated])
 class TaskViewSet(viewsets.ModelViewSet):
     serializer_class = TaskSerializer
-    #permission_classes = (IsAuthenticated,)
     queryset = Task.objects.all()
