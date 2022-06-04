@@ -14,7 +14,6 @@ from hangman.serializers import (TaskSerializer,
                                  CustomTokenObtainPairSerializer, CustomUserSerializer)
 
 from .models import Task, User
-# Create your views here.
 
 
 @extend_schema_view(
@@ -37,8 +36,8 @@ class Login(TokenObtainPairView):
             if login_serializer.is_valid():
                 user_Serializer = CustomUserSerializer(user)
                 return Response({
-                    'token': login_serializer.validated_data('access'),
-                    'refresh-token': login_serializer.validated_data('refresh'),
+                    'token': login_serializer.validated_data.get('access'),
+                    'refresh-token': login_serializer.validated_data.get('refresh'),
                     'user': user_Serializer.data,
                     'message': 'Start of successful session'
                 }, status=status.HTTP_200_OK)

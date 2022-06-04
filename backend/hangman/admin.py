@@ -1,4 +1,5 @@
 from django.contrib import admin
-from . import models
-from rest_framework_simplejwt import token_blacklist
+from .models import Task
 # Register your models here.
+
+admin.site.register(Task)
