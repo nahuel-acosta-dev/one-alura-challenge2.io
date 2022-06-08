@@ -1,17 +1,14 @@
-import {createStore, combineReducers, compose, applyMiddleware} from 'redux';
-import thunk from 'redux-thunk';
-import {authReducers} from "../reducers/authReducers";
+import { configureStore } from '@reduxjs/toolkit';
+import { apiSlice } from './api/apiSlice';
+import authReducer from '../features/auth/authSlice';
 
-const reducers = combineReducers({
-    auth: authReducers,
+export const store = configureStore({
+    reducer:{
+        [apiSlice.reducerPath]: apiSlice.reducer,
+        auth: authReducer
+    },
+
+    middleware: getDefaultMiddleware => 
+        getDefaultMiddleware().concat(apiSlice.modifiers),
+    devTools: true //cambiar a false al llevar a produccion
 })
-
-const composeEnhancers = 
-(typeof window !== 'undefined' && 
-    window.__REDUX_DEVTOOLS_EXTENSION_COMPOSE__) || 
-compose;
-
-export const store = createStore(
-        reducers,
-        composeEnhancers(applyMiddleware(thunk))
-    );//Unimportant changes not to merge, poor implementation of authentication frontend
