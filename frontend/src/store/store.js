@@ -14,4 +14,4 @@ compose;
 export const store = createStore(
         reducers,
         composeEnhancers(applyMiddleware(thunk))
-    );
+    );//Unimportant changes not to merge, poor implementation of authentication frontend
