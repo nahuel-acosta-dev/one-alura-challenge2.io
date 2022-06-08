@@ -138,7 +138,7 @@ class UserViewSet(viewsets.GenericViewSet):
         }, status=status.HTTP_404_NOT_FOUND)
 
 
-# @permission_classes([IsAuthenticated])
+@permission_classes([IsAuthenticated])
 class TaskViewSet(viewsets.ModelViewSet):
     serializer_class = TaskSerializer
     queryset = Task.objects.all()
