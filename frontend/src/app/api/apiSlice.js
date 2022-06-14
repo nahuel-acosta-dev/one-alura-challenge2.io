@@ -17,15 +17,15 @@ const baseQuery = fetchBaseQuery({
 
 const baseQueryWithReauth = async (args, api, extraOptions) => {
     let result = await baseQuery(args, api, extraOptions);
+    console.log(result)
 
-    //Si nuestro error no devuelve 403 ubicar el codigo correspondiente o solamente error
-    if (result?.error?.originalStatus === 403){
+    if (result?.error?.status === 401 || result?.error?.status === 403){
         console.log('sending refresh token');
         // send refresh token to get new acces token
-        const refreshResult = await baseQuery('token/refresh/', api, extraOptions)
+        const refreshResult = await baseQuery({url:'token/refresh/', method:'POST', body: {
+            "refresh": refresh
+        }}, api, extraOptions)
         //const refreshResult = await baseQuery('token/refresh/', { ...api, endpoint: 'refresh-token' } , extraOptions)
-        console.log("envio el refresh")
-        console.log(refreshResult);
         if (refreshResult?.data){
             const user = api.getState().auth.user;
             // store the new token
