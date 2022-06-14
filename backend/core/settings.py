@@ -43,9 +43,9 @@ INSTALLED_APPS = [
     'django_extensions',
     'hangman',
     'rest_framework',
+    'rest_framework_simplejwt.token_blacklist',
     'rest_framework.authtoken',
     'rest_framework_simplejwt',
-    'rest_framework_simplejwt.token_blacklist',
     "corsheaders",
     'drf_spectacular',
 
@@ -78,7 +78,7 @@ SPECTACULAR_SETTINGS = {
 
 SIMPLE_JWT = {
     # cambiar a 5 al terminar desarrollo
-    'ACCESS_TOKEN_LIFETIME': timedelta(minutes=5),
+    'ACCESS_TOKEN_LIFETIME': timedelta(seconds=5),
     'REFRESH_TOKEN_LIFETIME': timedelta(days=1),
     'ROTATE_REFRESH_TOKENS': True,
     'BLACKLIST_AFTER_ROTATION': True,
@@ -168,17 +168,20 @@ AUTH_PASSWORD_VALIDATORS = [
 ]
 # configuracion basica de django realizada
 # si quiero que solo se permitan peticiones de sitios especificos uso este, y ingreso la url del sitio
+CORS_ALLOW_CREDENTIALS = True
 
 CORS_ALLOWED_ORIGINS = [
     # "https://example.com",
     # "https://sub.example.com",
     # "http://localhost:8080",
     "http://localhost:3000",
+    "http://localhost:3050",
     # "http://127.0.0.1:9000",
 ]
 
 CORS_ORIGIN_WHITELIST = [
     "http://localhost:3000",
+    "http://localhost:3050",
 ]
 
 
