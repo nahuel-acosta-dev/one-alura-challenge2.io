@@ -10,12 +10,6 @@ const baseQuery = fetchBaseQuery({
             headers.set("Content-Type", "application/json");
             headers.set("Accept", "*/*");
             headers.set("Authorization", `Bearer ${token}`);//si no funciona probar authorization
-           
-        /*
-            resonse_object.header("Access-Control-Allow-Origin", "*");
-            resonse_object.header("Access-Control-Allow-Headers", 
-            "Origin, X-Requested-With, Content-Type, Accept");
-        */
         }
         return headers;
     }
@@ -28,7 +22,9 @@ const baseQueryWithReauth = async (args, api, extraOptions) => {
     if (result?.error?.originalStatus === 403){
         console.log('sending refresh token');
         // send refresh token to get new acces token
-        const refreshResult = await baseQuery('/refresh', api, extraOptions);
+        const refreshResult = await baseQuery('token/refresh/', api, extraOptions)
+        //const refreshResult = await baseQuery('token/refresh/', { ...api, endpoint: 'refresh-token' } , extraOptions)
+        console.log("envio el refresh")
         console.log(refreshResult);
         if (refreshResult?.data){
             const user = api.getState().auth.user;
