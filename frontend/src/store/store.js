@@ -1,5 +1,5 @@
 import { configureStore } from '@reduxjs/toolkit';
-import { apiSlice } from './api/apiSlice';
+import { apiSlice } from '../app/api/apiSlice';
 import authReducer from '../features/auth/authSlice';
 
 export const store = configureStore({
@@ -9,6 +9,6 @@ export const store = configureStore({
     },
 
     middleware: getDefaultMiddleware => 
-        getDefaultMiddleware().concat(apiSlice.modifiers),
+        getDefaultMiddleware().concat(apiSlice.middleware),
     devTools: true //cambiar a false al llevar a produccion
-})
+});

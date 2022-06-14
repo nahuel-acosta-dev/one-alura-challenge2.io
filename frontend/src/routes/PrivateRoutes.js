@@ -1,19 +1,25 @@
 import React from 'react';
 import {Navigate} from 'react-router-dom';
+import {useSelector} from 'react-redux';
+import { selectCurrentUser, selectCurrentToken } from '../features/auth/authSlice';
 
-const PrivateRoutes = ({isLogged, isVerified,children}) =>{
+
+const PrivateRoutes = ({children}) =>{
+    const user = useSelector(selectCurrentUser);
+    const token = useSelector(selectCurrentToken);
     //Aqui se administran las rutas que solo los usuarios logueados pueden ver
  return (
     <>
         {
-            (isLogged == true && isVerified === true) ?
-            //<Navigate to="/app/home" /> //: <Navigate to="/auth/login" />
-            children : <Navigate to="/app/notverified" />
+            (user == true && token === true) ?
+            //<Navigate to="/app/home" /> : <Navigate to="/app/notverified" />
+            //children : <Navigate to="/app/notverified" />
+            children : <Navigate to="/auth/login" />
         }
 
-        {
-            isLogged ? children : <Navigate to="/auth/login" />
-        }
+        {/*
+            user ? children : <Navigate to="/auth/login" />
+*/}
     </>
  );
 }
