@@ -42,7 +42,7 @@ class Login(TokenObtainPairView):
                 user_Serializer = CustomUserSerializer(user)
                 return Response({
                     'token': login_serializer.validated_data.get('access'),
-                    'refresh-token': login_serializer.validated_data.get('refresh'),
+                    'refresh_token': login_serializer.validated_data.get('refresh'),
                     'user': user_Serializer.data,
                     'message': 'Start of successful session'
                 }, status=status.HTTP_200_OK)
