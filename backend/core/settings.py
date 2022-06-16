@@ -48,16 +48,34 @@ INSTALLED_APPS = [
     'rest_framework_simplejwt',
     "corsheaders",
     'drf_spectacular',
+    'dj_rest_auth',
+    'django.contrib.sites',
+    'allauth',
+    'allauth.account',
+    'dj_rest_auth.registration',
 
 ]
-
+SITE_ID = 1
 REST_FRAMEWORK = {
     'DEFAULT_AUTHENTICATION_CLASSES': (
-        'rest_framework_simplejwt.authentication.JWTAuthentication',
+        # 'rest_framework_simplejwt.authentication.JWTAuthentication',
+        # 'hangman.authenticate.CustomAuthentication',
+        'dj_rest_auth.jwt_auth.JWTCookieAuthentication',
+
+
     ),
     'DEFAULT_PERMISSIONS_CLASSES': ('rest_framework.permissions.IsAuthenticated',),
     'DEFAULT_SCHEMA_CLASS': 'drf_spectacular.openapi.AutoSchema',
 }
+
+REST_AUTH_SERIALIZERS = {
+    'USER_DETAILS_SERIALIZER': 'hangman.serializers.UpdateUserSerializer',
+}
+
+REST_USE_JWT = True
+
+JWT_AUTH_COOKIE = 'hangman-app-auth'
+JWT_AUTH_REFRESH_COOKIE = 'hangman-refresh-token'
 
 SPECTACULAR_SETTINGS = {
     'TITLE': 'Your Project Hangman_Api',
@@ -108,6 +126,19 @@ SIMPLE_JWT = {
     'SLIDING_TOKEN_REFRESH_EXP_CLAIM': 'refresh_exp',
     'SLIDING_TOKEN_LIFETIME': timedelta(minutes=5),
     'SLIDING_TOKEN_REFRESH_LIFETIME': timedelta(days=1),
+
+    # Cookie name. Enables cookies if value is set.
+    'AUTH_COOKIE': 'access',
+    # A string like "example.com", or None for standard domain cookie.
+    'AUTH_COOKIE_DOMAIN': None,
+    # Whether the auth cookies should be secure (https:// only).
+    'AUTH_COOKIE_SECURE': False,
+    # Http only cookie flag.It's not fetch by javascript.
+    'AUTH_COOKIE_HTTP_ONLY': True,
+    'AUTH_COOKIE_PATH': '/',        # The path of the auth cookie.
+    # Whether to set the flag restricting cookie leaks on cross-site requests. This can be 'Lax', 'Strict', or None to disable the flag.
+    'AUTH_COOKIE_SAMESITE': 'Lax',
+
 }
 
 MIDDLEWARE = [
@@ -177,12 +208,16 @@ CORS_ALLOWED_ORIGINS = [
     # "http://localhost:8080",
     "http://localhost:3000",
     "http://localhost:3050",
+    "http://localhost:3051",
+    "http://192.168.1.14:3051",
     # "http://127.0.0.1:9000",
 ]
 
 CORS_ORIGIN_WHITELIST = [
     "http://localhost:3000",
     "http://localhost:3050",
+    "http://localhost:3051",
+    "http://192.168.1.14:3051",
 ]
 
 
