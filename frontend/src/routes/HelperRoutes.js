@@ -5,29 +5,14 @@ import ApplicationRouter from './ApplicationRouter';
 import PublicRoutes from './PublicRoutes';
 import Home from '../pages/Home';
 import RequireAuth from '../features/auth/RequireAuth';
-import LayoutRoutes from './LayoutRoutes';
+import PersistLogin from '../features/auth/PersistLogin';
 
 
 const HelperRouters = () =>{
 
-    /*return (
-    <Routes>
-      <Route path="/" element={<Home />}>*/
-        {/* public routes */}
-        {/*<Route index element={<Public />} />*/}
-        //<Route path="login" element={<LoginScreen/>} />
-
-        {/* protected routes */}
-        /*<Route element={<RequireAuth />}>
-          <Route path="app/home" element={<HomeApp />} />
-        </Route>
-      </Route>
-    </Routes>
-    )*/
-
     return (
       <Routes>
-      <Route path="/" element={<LayoutRoutes />}>
+      <Route path="/" element={<PersistLogin />}>
           {/* public routes */}
           <Route index element={<Home/>} />
           <Route path="auth/*" 

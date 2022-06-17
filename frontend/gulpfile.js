@@ -20,8 +20,8 @@ const gulp = require('gulp'),
     gulp.task('default',  () => {
         browserSync.init({
             notify: false,
-            port: 3000,
-            proxy: 'localhost:3000'
+            port: 3050,
+            proxy: 'localhost:3050'
         });
         gulp.watch(['./**/*.{scss,css,html,py,js}']).on('change', browserSync.reload);
         gulp.watch('./static/scss/**/*.scss', gulp.series('sass'));

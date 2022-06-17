@@ -18,11 +18,6 @@ const LoginScreen = () =>{
     const [password, setPassword] = useState('');
     const [errMsg, setErrMsg] = useState('');
     const navigate = useNavigate();
-    const [pruebaToken, setPruebaToken] = useState(useSelector(selectCurrentToken) ? useSelector(selectCurrentUser) : "token vacio");
-    const [pruebaUser, setPruebaUser] = useState(useSelector(selectCurrentUser) ? useSelector(selectCurrentUser) : "user vacio");
-
-    console.log(pruebaToken);
-    console.log(pruebaUser);
     const [login, { isLoading }] = useLoginMutation();
     const dispatch = useDispatch();
 
@@ -40,6 +35,7 @@ const LoginScreen = () =>{
 
         try{
             const userData = await login({username, password}).unwrap();
+            console.log(userData);
             dispatch(setCredentials({ ...userData, username }));
             setUser('');
             setPassword('');

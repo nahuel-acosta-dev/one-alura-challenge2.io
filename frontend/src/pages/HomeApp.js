@@ -3,16 +3,17 @@ import Stack from 'react-bootstrap/Stack';
 import Row from 'react-bootstrap/Row';
 import Col from 'react-bootstrap/Col';
 import Button from 'react-bootstrap/Button';
-
 import {useSelector} from 'react-redux';
 import { selectCurrentUser, selectCurrentToken } from '../features/auth/authSlice';
 
 const HomeApp = () =>{
     const user = useSelector(selectCurrentUser);
     const token = useSelector(selectCurrentToken);
+
     let tokenAbbr = "vacio"
     if(token){
     tokenAbbr = `${token.slice(0, 9)}...`}
+
 
     return(
         <Row className="home align-content-center">
