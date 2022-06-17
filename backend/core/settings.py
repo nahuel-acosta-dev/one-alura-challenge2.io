@@ -39,6 +39,7 @@ INSTALLED_APPS = [
     'django.contrib.contenttypes',
     'django.contrib.sessions',
     'django.contrib.messages',
+    'django.contrib.sites',
     'django.contrib.staticfiles',
     'django_extensions',
     'hangman',
@@ -50,6 +51,7 @@ INSTALLED_APPS = [
     'drf_spectacular',
 
 ]
+SITE_ID = 1
 
 REST_FRAMEWORK = {
     'DEFAULT_AUTHENTICATION_CLASSES': (
@@ -79,7 +81,7 @@ SPECTACULAR_SETTINGS = {
 SIMPLE_JWT = {
     # cambiar a 5 al terminar desarrollo
     # 'ACCESS_TOKEN_LIFETIME': timedelta(seconds=5),
-    'ACCESS_TOKEN_LIFETIME': timedelta(minutes=5),
+    'ACCESS_TOKEN_LIFETIME': timedelta(minutes=30),
     'REFRESH_TOKEN_LIFETIME': timedelta(days=1),
     'ROTATE_REFRESH_TOKENS': True,
     'BLACKLIST_AFTER_ROTATION': True,

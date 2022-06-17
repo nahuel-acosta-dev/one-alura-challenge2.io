@@ -2,10 +2,18 @@ from attr import fields
 from hangman.models import Task, User
 from rest_framework import serializers
 from rest_framework_simplejwt.serializers import TokenObtainPairSerializer
+from rest_framework.permissions import IsAuthenticated
+from rest_framework.decorators import (permission_classes)
 
 
 class CustomTokenObtainPairSerializer(TokenObtainPairSerializer):
     pass
+
+
+class LogoutUserSerializer(serializers.ModelSerializer):
+    class Meta:
+        model = User
+        fields = ('')
 
 
 class CustomUserSerializer(serializers.ModelSerializer):

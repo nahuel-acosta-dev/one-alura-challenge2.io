@@ -11,13 +11,19 @@ from rest_framework_simplejwt.views import TokenObtainPairView
 from rest_framework_simplejwt.tokens import RefreshToken
 from rest_framework.decorators import (api_view, permission_classes,
                                        action)
-
+from rest_framework.authentication import get_authorization_header
+from rest_framework_simplejwt.tokens import AccessToken
+from django.contrib.auth.models import User
 from hangman.serializers import (TaskSerializer, UserListSerializer,
                                  CustomTokenObtainPairSerializer,
                                  UserSerializer, CustomUserSerializer,
-                                 UpdateUserSerializer, PasswordSerializer)
+                                 UpdateUserSerializer, PasswordSerializer, LogoutUserSerializer)
 
 from .models import Task, User
+from .authentication import get_token_data
+
+# falta asegurarse que el usuario que hace la llamada sea el usuario que este autenicado
+# es decie los datos del user 1 solo pueden ser obtenidos por el user 1
 
 
 @extend_schema_view(
@@ -27,7 +33,7 @@ from .models import Task, User
     update=extend_schema(description='Permite activar una tarea'),
     destroy=extend_schema(description='Permite eliminar una tarea'),
 )
-class Login(TokenObtainPairView):
+class Login(TokenObtainPairView, GenericAPIView):
     serializer_class = CustomTokenObtainPairSerializer
     queryset = None
 
@@ -50,8 +56,25 @@ class Login(TokenObtainPairView):
         return Response({'error': 'Incorrect password or username'}, status=status.HTTP_400_BAD_REQUEST)
 
 
+class RegisterApi(GenericAPIView):
+    serializer_class = UserSerializer
+    queryset = None
+
+    def post(self, request, *args, **kwargs):
+        user_serializer = self.serializer_class(data=request.data)
+        if user_serializer.is_valid():
+            user_serializer.save()
+            return Response({
+                'message': 'User created successfully.'
+            }, status=status.HTTP_201_CREATED)
+        return Response({
+            'message': 'There are errors in the registration',
+            'error': user_serializer.errors}, status=status.HTTP_400_BAD_REQUEST)
+
+
 class Logout(GenericAPIView):
     queryset = None
+    serializer_class = LogoutUserSerializer
 
     def post(self, request, *args, **kwargs):
         user = User.objects.filter(id=request.data.get('user', 0))
@@ -66,6 +89,7 @@ class UserViewSet(viewsets.GenericViewSet):
     serializer_class = UserSerializer
     custom_serializer_class = CustomUserSerializer
     list_serializer_class = UserListSerializer
+    #permission_classes = (IsAuthenticated,)
     queryset = None
 
     def get_object(self, pk):
@@ -138,7 +162,7 @@ class UserViewSet(viewsets.GenericViewSet):
         }, status=status.HTTP_404_NOT_FOUND)
 
 
-@permission_classes([IsAuthenticated])
+@permission_classes([IsAuthenticated, ])
 class TaskViewSet(viewsets.ModelViewSet):
     serializer_class = TaskSerializer
     queryset = Task.objects.all()
