@@ -8,14 +8,19 @@ import { logOut } from '../../features/auth/authSlice';
 import { useDispatch } from 'react-redux';
 import {useSelector} from 'react-redux';
 import { selectCurrentUser, selectCurrentToken } from '../../features/auth/authSlice';
-import {Link} from 'react-router-dom';
+import {Link, useNavigate} from 'react-router-dom';
+
 
 const Header = () => {
     const user = useSelector(selectCurrentUser);
     const token = useSelector(selectCurrentToken);
     const dispatch = useDispatch();
+    const navigate = useNavigate();
 
-    const logout = () => dispatch(logOut());
+    const logout = () => {
+        dispatch(logOut());
+        navigate('/')
+    }
     
 
     return(
