@@ -27,4 +27,4 @@ const PersistLogin = () => {
     return <Outlet />
 }
 
-export default LayoutRoutes;
+export default PersistLogin;
