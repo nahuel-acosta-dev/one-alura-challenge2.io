@@ -11,8 +11,6 @@ from rest_framework_simplejwt.views import TokenObtainPairView
 from rest_framework_simplejwt.tokens import RefreshToken
 from rest_framework.decorators import (api_view, permission_classes,
                                        action)
-from rest_framework.authentication import get_authorization_header
-from rest_framework_simplejwt.tokens import AccessToken
 from django.contrib.auth.models import User
 from hangman.serializers import (TaskSerializer, UserListSerializer,
                                  CustomTokenObtainPairSerializer,
@@ -20,10 +18,7 @@ from hangman.serializers import (TaskSerializer, UserListSerializer,
                                  UpdateUserSerializer, PasswordSerializer, LogoutUserSerializer)
 
 from .models import Task, User
-from .authentication import get_token_data
-
-# falta asegurarse que el usuario que hace la llamada sea el usuario que este autenicado
-# es decie los datos del user 1 solo pueden ser obtenidos por el user 1
+from .authentication import access_user_data
 
 
 @extend_schema_view(
@@ -56,7 +51,7 @@ class Login(TokenObtainPairView, GenericAPIView):
         return Response({'error': 'Incorrect password or username'}, status=status.HTTP_400_BAD_REQUEST)
 
 
-class RegisterApi(GenericAPIView):
+class Register(GenericAPIView):
     serializer_class = UserSerializer
     queryset = None
 
@@ -89,7 +84,7 @@ class UserViewSet(viewsets.GenericViewSet):
     serializer_class = UserSerializer
     custom_serializer_class = CustomUserSerializer
     list_serializer_class = UserListSerializer
-    #permission_classes = (IsAuthenticated,)
+    permission_classes = (IsAuthenticated,)
     queryset = None
 
     def get_object(self, pk):
@@ -121,7 +116,7 @@ class UserViewSet(viewsets.GenericViewSet):
         users = self.get_queryset()
         users_serializer = self.list_serializer_class(users, many=True)
         return Response(users_serializer.data, status=status.HTTP_200_OK)
-
+    """
     def create(self, request):
         user_serializer = self.serializer_class(data=request.data)
         if user_serializer.is_valid():
@@ -131,14 +126,20 @@ class UserViewSet(viewsets.GenericViewSet):
             }, status=status.HTTP_201_CREATED)
         return Response({
             'message': 'There are errors in the registration',
-            'error': user_serializer.errors}, status=status.HTTP_400_BAD_REQUEST)
+            'error': user_serializer.errors}, status=status.HTTP_400_BAD_REQUEST)"""
 
     def retrieve(self, request, pk=None):
+        permission = access_user_data(request, pk)
+        if permission != True:
+            return permission
         user = self.get_object(pk)
         user_serializer = self.custom_serializer_class(user)
         return Response(user_serializer.data)
 
     def update(self, request, pk=None):
+        permission = access_user_data(request, pk)
+        if permission != True:
+            return permission
         user = self.get_object(pk)
         user_serializer = UpdateUserSerializer(user, data=request.data)
         if user_serializer.is_valid():
@@ -152,6 +153,9 @@ class UserViewSet(viewsets.GenericViewSet):
         }, status=status.HTTP_400_BAD_REQUEST)
 
     def destroy(self, request, pk=None):
+        permission = access_user_data(request, pk)
+        if permission != True:
+            return permission
         user_destroy = self.model.objects.filter(id=pk).update(is_active=False)
         if user_destroy == 1:
             return Response({

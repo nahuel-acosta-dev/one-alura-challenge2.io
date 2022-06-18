@@ -4,7 +4,7 @@ from rest_framework import routers
 from rest_framework_extensions.routers import ExtendedSimpleRouter
 from rest_framework_simplejwt.views import TokenObtainPairView, TokenRefreshView, TokenVerifyView
 
-from .views import TaskViewSet, Login, Logout, UserViewSet, RegisterApi
+from .views import TaskViewSet, Login, Logout, UserViewSet, Register
 router: ExtendedSimpleRouter = ExtendedSimpleRouter()
 
 router = routers.DefaultRouter()
@@ -22,7 +22,7 @@ urlpatterns = [
          SpectacularRedocView.as_view(url_name='hangman_api:schema'), name='redoc'),
     path('auth/logout/', Logout.as_view(), name='logout'),
     path('auth/login/', Login.as_view(), name='login'),
-    path('auth/register/', RegisterApi.as_view(), name='register'),
+    path('auth/register/', Register.as_view(), name='register'),
     path('token/', TokenObtainPairView.as_view(), name='token_obtain_pair'),
     path('token/refresh/', TokenRefreshView.as_view(), name="token_refresh"),
     path('token/verify/', TokenVerifyView.as_view(), name='token_verify'),
