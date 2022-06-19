@@ -1,5 +1,4 @@
 import {createSlice} from "@reduxjs/toolkit";
-import jwt_decode from "jwt-decode";
 
 const authSlice = createSlice({
     name: 'auth',
@@ -10,14 +9,18 @@ const authSlice = createSlice({
             state.user = user;
             state.token = token ? token : access;
             state.refresh = refresh_token ? refresh_token : refresh;
+            //estos ultimos 2 moverlos para que se apliquen en la pantalla que se inicia session
+            //despues de haber recibido el mensaje de aprobacion creo que seria lo mas correcto
             localStorage.removeItem("authTokens");
             localStorage.setItem("authTokens", JSON.stringify(action.payload));
         },
         logOut: (state, action) => {
+            //falta configurar una llamada a la api Logout
             state.user = null;
             state.token = null;
             state.refresh = null;
-            localStorage.removeItem("authTokens");
+            //localStorage.removeItem("authTokens");
+            localStorage.clear();
         }
     },
 })

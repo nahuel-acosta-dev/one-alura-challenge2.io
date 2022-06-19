@@ -1,9 +1,10 @@
-import React from 'react';
+import React, {useState} from 'react';
 import Navbar from 'react-bootstrap/Navbar';
 import Nav from 'react-bootstrap/Nav'
 import Vector from '../../image/Vector.svg';
 import Container from 'react-bootstrap/Container';
 import Button from 'react-bootstrap/Button';
+import {useLogoutMutation} from '../../features/auth/logoutApiSlice';
 import { logOut } from '../../features/auth/authSlice';
 import { useDispatch } from 'react-redux';
 import {useSelector} from 'react-redux';
@@ -16,15 +17,40 @@ const Header = () => {
     const token = useSelector(selectCurrentToken);
     const dispatch = useDispatch();
     const navigate = useNavigate();
+    const [logout, { isLoading }] = useLogoutMutation();
+    const [errMsg, setErrMsg] = useState('');
 
-    const logout = () => {
-        dispatch(logOut());
-        navigate('/')
+    const logoutApi = async () => {
+        
+        try{
+            const logoutUser = await logout({'user': user.id}).unwrap();
+            console.log(logoutUser);
+            dispatch(logOut());
+            navigate('/')
+        }catch(err){
+            if(!err.response){
+                setErrMsg("No server Response");
+            }
+            else if (err.response?.status === 400){
+                setErrMsg("Missing Username or Password");
+            }
+            else if (err.response?.status === 401){
+                setErrMsg("Unauthorized");
+            }
+            else {
+                setErrMsg("Login Failed");
+            }
+            errRef.current.focus();
+        }
     }
     
 
     return(
-        <header>
+        <>
+        {
+        isLoading ? (<h1>Loading...</h1>)
+        :
+        (<header>
             <Navbar expand="sm">
                 <Container fluid>
                     <Navbar.Brand href="#home">
@@ -45,14 +71,15 @@ const Header = () => {
                             <Nav.Link href="#home">Home</Nav.Link>
                             <Nav.Link href="#features">Features</Nav.Link>
                             {
-                                token ? (<Button variant="link" onClick={logout} className="navbar-links">Logout</Button>):
+                                token ? (<Button variant="link" onClick={logoutApi} className="navbar-links">Logout</Button>):
                                 (<Button variant="link" className="navbar-links"><Link to="/auth/login">Login</Link></Button>)
                             }
                         </Nav>
                     </Navbar.Collapse>
                 </Container>
             </Navbar>
-        </header>
+        </header>)}
+        </>
     )
 }
 

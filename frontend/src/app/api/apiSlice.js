@@ -1,5 +1,7 @@
 import {createApi, fetchBaseQuery} from '@reduxjs/toolkit/query/react';
-import {setCredentials, logOut} from '../../features/auth/authSlice';
+import {setCredentials, logOut, selectCurrentUser} from '../../features/auth/authSlice';
+import {useSelector} from 'react-redux';
+
 
 const baseQuery = fetchBaseQuery({
     baseUrl: 'http://localhost:8000/hangman/api/',
@@ -17,19 +19,15 @@ const baseQuery = fetchBaseQuery({
 
 const baseQueryWithReauth = async (args, api, extraOptions) => {
     let result = await baseQuery(args, api, extraOptions);
-    console.log(result)
-    console.log(api)
     if (result?.error?.status === 401 || result?.error?.status === 403){
         console.log('sending refresh token');
-        
+        const refresh = api.getState().auth.refresh
         // send refresh token to get new acces token
         const refreshResult = await baseQuery({url:'token/refresh/', method:'POST', body: {
             "refresh": refresh
         }}, api, extraOptions)
-        //const refreshResult = await baseQuery('token/refresh/', { ...api, endpoint: 'refresh-token' } , extraOptions)
         if (refreshResult?.data){
             const user = api.getState().auth.user;
-           
             // store the new token
             api.dispatch(setCredentials({...refreshResult.data, user}))
             //retry the original query with new access Token
