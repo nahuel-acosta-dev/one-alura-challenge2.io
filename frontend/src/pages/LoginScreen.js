@@ -8,8 +8,6 @@ import {useDispatch} from "react-redux";
 import { setCredentials } from '../features/auth/authSlice';
 import {useLoginMutation} from '../features/auth/authApiSlice';
 
-import { useSelector } from "react-redux";
-import {selectCurrentToken, selectCurrentUser} from "../features/auth/authSlice";
 
 const LoginScreen = () =>{
     const userRef = useRef();

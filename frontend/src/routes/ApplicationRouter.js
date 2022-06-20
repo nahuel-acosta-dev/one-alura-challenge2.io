@@ -12,7 +12,7 @@ const ApplicationRouter = () =>{
     return (
         <>
             <Routes>
-                <Route exact path="home" element={<HomeApp/>} />
+                <Route path="home" element={<HomeApp/>} />
                 <Route path="savescreen" element={<SaveScreen/>} />
                 <Route path="gamestarts" element={<GameStarts/>} />
                 <Route path="notverified" element={<NotVerified/>} />

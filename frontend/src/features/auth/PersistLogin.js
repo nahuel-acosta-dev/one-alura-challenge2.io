@@ -15,7 +15,7 @@ const PersistLogin = () => {
     useEffect(() =>  {
         const dataUser = () => {
             if (authTokens != null){
-                dispatch(setCredentials({ ...authTokens, username: authTokens.username}))
+                dispatch(setCredentials({ ...authTokens}))
             }
         }
 

@@ -1,10 +1,24 @@
-import React from 'react';
+import React, {useState, useEffect} from 'react';
 import Container from 'react-bootstrap/Container';
 import HelperRouters from './routes/HelperRoutes';
 import Header from './components/header/Header';
+import {useDispatch} from "react-redux";
+import { setCredentials } from './features/auth/authSlice';
 
 const App = () => {
-    //const show = false;
+    /*const dispatch = useDispatch();
+    let [authTokens, setAuthTokens] = useState(() => localStorage.getItem("authTokens") ? 
+    JSON.parse(localStorage.getItem("authTokens")) : null);
+
+    useEffect(() =>  {
+        const dataUser = () => {
+            if (authTokens != null){
+                dispatch(setCredentials({ ...authTokens}))
+            }
+        }
+        dataUser();
+    }, []);*/
+
     return(<>
                 <Header />
                 <main>

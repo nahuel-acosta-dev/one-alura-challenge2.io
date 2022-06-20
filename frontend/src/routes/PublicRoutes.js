@@ -6,10 +6,7 @@ import { selectCurrentUser, selectCurrentToken } from '../features/auth/authSlic
 const PublicRoutes = ({children}) =>{
     const user = useSelector(selectCurrentUser);
     const token = useSelector(selectCurrentToken);
-    //Aqui se administran las rutas que todos pueden observar es decie sin loguearse
-    console.log("estoy aca");
-    console.log(user);
-    console.log(token);
+
     return (user && token) ? <Navigate to="/app/home" /> : children;
 }
 
