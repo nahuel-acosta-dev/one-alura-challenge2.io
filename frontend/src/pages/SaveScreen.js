@@ -1,13 +1,23 @@
-import React from 'react';
+import React, {useState} from 'react';
 import Row from 'react-bootstrap/Row';
 import Col from 'react-bootstrap/Col';
 import Buttons from '../components/buttons/Buttons';
 import Textarea from '../components/textarea/Textarea';
 import Form from 'react-bootstrap/Form';
 import Info from '../image/Info.svg';
+import {useCreateWordMutation} from '../words/createWord';
 
 const SaveScreen = () => {
-    const save = () => console.log('el array1');
+    const [word, setWord] = useState('');
+    const [apiWord, { isLoading }] = useCreateWordMutation();
+
+    const handleWordInput = (e) => setWord(e.target.value);
+
+    const createWord = (e) => {
+        e.preventDefault();
+        const create = await apiWord({'word': word}).unwrap();
+        
+    }
     const cancel = () => console.log('el array2');
 
     const buttons = [
