@@ -31,14 +31,9 @@ const Header = () => {
             if(!err.response){
                 setErrMsg("No server Response");
             }
-            else if (err.response?.status === 400){
-                setErrMsg("Missing Username or Password");
-            }
-            else if (err.response?.status === 401){
-                setErrMsg("Unauthorized");
-            }
-            else {
-                setErrMsg("Login Failed");
+            else if (err.response?.status){
+                setErrMsg("Falling servers logout");;
+                console.log(err.response?.status)
             }
             errRef.current.focus();
         }
@@ -47,10 +42,7 @@ const Header = () => {
 
     return(
         <>
-        {
-        isLoading ? (<h1>Loading...</h1>)
-        :
-        (<header>
+        <header>
             <Navbar expand="sm">
                 <Container fluid>
                     <Navbar.Brand href="#home">
@@ -71,14 +63,16 @@ const Header = () => {
                             <Nav.Link href="#home">Home</Nav.Link>
                             <Nav.Link href="#features">Features</Nav.Link>
                             {
-                                token ? (<Button variant="link" onClick={logoutApi} className="navbar-links">Logout</Button>):
-                                (<Button variant="link" className="navbar-links"><Link to="/auth/login">Login</Link></Button>)
+                                isLoading ? (<span>Loading...</span>)
+                                    :
+                                (token ? (<Button variant="link" onClick={logoutApi} className="navbar-links">Logout</Button>):
+                                (<Button variant="link" className="navbar-links"><Link to="/auth/login">Login</Link></Button>))
                             }
                         </Nav>
                     </Navbar.Collapse>
                 </Container>
             </Navbar>
-        </header>)}
+        </header>
         </>
     )
 }
