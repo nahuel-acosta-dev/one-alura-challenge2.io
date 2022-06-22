@@ -4,12 +4,13 @@ from rest_framework import routers
 from rest_framework_extensions.routers import ExtendedSimpleRouter
 from rest_framework_simplejwt.views import TokenObtainPairView, TokenRefreshView, TokenVerifyView
 
-from .views import TaskViewSet, Login, Logout, UserViewSet, Register
+from .views import TaskViewSet, Login, Logout, UserViewSet, Register, WordsViewSet
 router: ExtendedSimpleRouter = ExtendedSimpleRouter()
 
 router = routers.DefaultRouter()
 router.register(r'task', TaskViewSet)
 router.register(r'users', UserViewSet, basename='users')
+router.register(r'words', WordsViewSet, basename='words')
 
 
 app_name = "hangman_api"

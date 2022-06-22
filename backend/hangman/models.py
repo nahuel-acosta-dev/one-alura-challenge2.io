@@ -17,8 +17,22 @@ class Task(models.Model):
     created_at = models.DateTimeField(auto_now_add=True)
     updated_at = models.DateTimeField(auto_now=True)
 
-    def __Str__(self):
-        return self.title
+    def __str__(self):
+        return f'{self.title} {self.id}'
+
+    class Meta:
+        ordering = ['created_at']
+
+
+class Words(models.Model):
+    word = models.CharField(max_length=8)
+    user = models.ForeignKey(
+        "User", on_delete=models.CASCADE, null=False, related_name="creator_user")
+    activated = models.BooleanField(default=True)
+    created_at = models.DateTimeField(auto_now_add=True)
+
+    def __str__(self):
+        return f"{self.word} {self.id}"
 
     class Meta:
         ordering = ['created_at']

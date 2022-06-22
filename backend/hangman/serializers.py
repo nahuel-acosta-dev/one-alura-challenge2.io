@@ -1,5 +1,5 @@
 from attr import fields
-from hangman.models import Task, User
+from hangman.models import Task, User, Words
 from rest_framework import serializers
 from rest_framework_simplejwt.serializers import TokenObtainPairSerializer
 from rest_framework.permissions import IsAuthenticated
@@ -69,3 +69,26 @@ class TaskSerializer(serializers.ModelSerializer):
     class Meta:
         model = Task
         fields = '__all__'
+
+
+class WordsSerializer(serializers.ModelSerializer):
+
+    class Meta:
+        model = Words
+        fields = '__all__'
+
+
+class WordsListSerializer(serializers.ModelSerializer):
+
+    class Meta:
+        model = Words
+        fields = '__all__'
+
+    def to_representation(self, instance):
+
+        return{
+            'id': instance['id'],
+            'word': instance['word'],
+            'user': instance['user'],
+            'created_at': instance['created_at'],
+        }

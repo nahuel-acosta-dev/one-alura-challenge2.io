@@ -3,7 +3,7 @@ from django.contrib.auth import authenticate
 from drf_spectacular.utils import extend_schema, extend_schema_view
 from rest_framework import viewsets
 from rest_framework.generics import GenericAPIView
-#from rest_framework.views import APIView
+# from rest_framework.views import APIView
 from rest_framework.permissions import IsAuthenticated
 from rest_framework.response import Response
 from rest_framework import status
@@ -12,12 +12,13 @@ from rest_framework_simplejwt.tokens import RefreshToken
 from rest_framework.decorators import (api_view, permission_classes,
                                        action)
 from django.contrib.auth.models import User
-from hangman.serializers import (TaskSerializer, UserListSerializer,
+from hangman.serializers import (TaskSerializer, WordsSerializer, WordsListSerializer,
+                                 UserListSerializer,
                                  CustomTokenObtainPairSerializer,
                                  UserSerializer, CustomUserSerializer,
                                  UpdateUserSerializer, PasswordSerializer, LogoutUserSerializer)
 
-from .models import Task, User
+from .models import Task, User, Words
 from .authentication import access_user_data
 
 
@@ -99,6 +100,9 @@ class UserViewSet(viewsets.GenericViewSet):
 
     @action(detail=True, methods=['POST'])
     def set_password(self, request, pk=None):
+        permission = access_user_data(request, pk)
+        if permission != True:
+            return permission
         user = self.get_object(pk)
         password_serializer = PasswordSerializer(data=request.data)
         if password_serializer.is_valid():
@@ -170,3 +174,54 @@ class UserViewSet(viewsets.GenericViewSet):
 class TaskViewSet(viewsets.ModelViewSet):
     serializer_class = TaskSerializer
     queryset = Task.objects.all()
+
+
+class WordsViewSet(viewsets.GenericViewSet):
+    model = Words
+    serializer_class = WordsSerializer
+    list_serializer_class = WordsListSerializer
+    permission_classes = (IsAuthenticated,)
+    queryset = None
+
+    def get_object(self, pk):
+        return get_object_or_404(self.model, pk=pk)
+
+    def get_queryset(self):
+        if self.queryset is None:
+            self.queryset = self.serializer_class().Meta.model.objects\
+                .filter(activated=True).values('id', 'word', 'user', 'created_at')
+        return self.queryset
+
+    def list(self, request):
+        words = self.get_queryset()
+        words_serializer = self.list_serializer_class(words, many=True)
+        return Response(words_serializer.data, status=status.HTTP_200_OK)
+
+    def create(self, request):
+        word_serializer = self.serializer_class(data=request.data)
+        if word_serializer.is_valid():
+            word_serializer.save()
+            data = word_serializer.data
+            return Response({
+                'message': 'Word created successfully.',
+                'word': data
+            }, status=status.HTTP_201_CREATED)
+        return Response({
+            'message': 'There are errors in the creation',
+            'error': word_serializer.errors}, status=status.HTTP_400_BAD_REQUEST)
+
+    def retrieve(self, request, pk=None):
+        word = self.get_object(pk)
+        word_serializer = self.serializer_class(word)
+        return Response(word_serializer.data)
+
+    def destroy(self, request, pk=None):
+        word_destroy = self.model.objects.filter(id=pk)
+        if len(word_destroy) == 1:
+            word_destroy.delete()
+            return Response({
+                'message': 'Word deleted correctly'
+            }, status=status.HTTP_200_OK)
+        return Response({
+            'message': 'There is no word who wants to delete'
+        }, status=status.HTTP_404_NOT_FOUND)
