@@ -10,7 +10,7 @@ const Buttons = ({buttons}) => {
         <>
             {buttons.map((btn, i) => (
                 <Col key={i} sm={6} xs={12}>
-                    <Button variant={btn['color']} className="btn-custom" onClick={btn['func']}>{btn['text']}</Button>
+                    <Button type="submit" variant={btn['color']} className="btn-custom">{btn['text']}</Button>
                 </Col>
             ))}
         </>

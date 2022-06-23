@@ -1,7 +1,6 @@
-import { apiSlice } from "../../app/api/apiSlice";
+import { apiSlice } from "../app/api/apiSlice";
 import {useSelector} from 'react-redux';
 import { selectCurrentUser } from '../features/auth/authSlice';
-const user = useSelector(selectCurrentUser);
 
 export const wordsApiSlice = apiSlice.injectEndpoints({
     endpoints: builder => ({
@@ -9,9 +8,7 @@ export const wordsApiSlice = apiSlice.injectEndpoints({
             query: credentials => ({
                 url: 'words/',
                 method: 'POST',
-                body: { 
-                    'user': user.id,
-                    ...credentials }
+                body: {...credentials }
             })
         }),
     })

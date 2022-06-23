@@ -32,8 +32,10 @@ const LoginScreen = () =>{
         e.preventDefault();
 
         try{
+            //llama a la api lofin
             const userData = await login({username, password}).unwrap();
             console.log(userData);
+            //guardamos los datos en las credebciales
             dispatch(setCredentials({ ...userData, username }));
             setUser('');
             setPassword('');
