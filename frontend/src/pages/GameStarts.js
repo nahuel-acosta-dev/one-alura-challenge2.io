@@ -1,9 +1,8 @@
-import React, {useState} from 'react';
+import React from 'react';
 import {useListWordsQuery} from '../words/getListWord';
 import Game from '../game/Game';
 
 const GameStarts = () => {
-    const [word, setWord] = useState('');
     const {
         data: words,
         isLoading,
