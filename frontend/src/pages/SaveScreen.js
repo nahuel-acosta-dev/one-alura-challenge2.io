@@ -42,13 +42,6 @@ const SaveScreen = () => {
         
     }
 
-    const buttons = [
-        {
-            color: 'primary',
-            text:"Guardar y empezar"
-        }
-    ]
-
     return (
     
         isLoading 
@@ -63,10 +56,10 @@ const SaveScreen = () => {
                     <Row className="saveScreen__buttons align-items-center align-items-md-center align-items-sm-center
                     justify-content-center">
                         <Col sm={6} xs={12}>
-                            <Button variant="primary" >Guardar y empezar</Button>
+                            <Button variant="primary" className="btn-custom" >Guardar y empezar</Button>
                         </Col>
                         <Col sm={6} xs={12}>
-                            <Link to="/app/home" className="btn btn-secondary">Cancelar</Link>
+                            <Link to="/app/home" className="btn btn-secondary btn-custom">Cancelar</Link>
                         </Col>
                     </Row>
                 </Form>
