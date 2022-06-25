@@ -25,6 +25,7 @@ const HelperRouters = () =>{
           <Route element={<RequireAuth />}>
             <Route path="app/*" element={<ApplicationRouter/>} />
         </Route>
+        <Route path="*" element={<h1>404</h1>}></Route>
       </Route>
     </Routes>
 

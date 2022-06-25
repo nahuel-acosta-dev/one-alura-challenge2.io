@@ -5,7 +5,7 @@ import Col from 'react-bootstrap/Col';
 import Hangman from '../components/hangman/Hangman';
 import PropTypes from 'prop-types';
 
-//Hace falta agregar una versio para movil ya que hay no hay butones para ingresar letras, debemos
+//Hace falta agregar una version para movil ya que hay no hay butones para ingresar letras, debemos
 /*ingresar un input de 1 letra que permita usar el teclado virtual del celular,
 ponerle un boton para el usuario activar el modo movil o que la pantalle se de cuenta automaticamente
 aunque eso traeria ciertos problemas a la hora de adaptarse. Es mejor el bton*/ 

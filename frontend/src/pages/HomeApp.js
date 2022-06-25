@@ -13,7 +13,7 @@ const HomeApp = () =>{
                     <Row>
                         <Stack gap={2} className="col-md-5 mx-auto">
                             <Link to="/app/gamestarts" className="btn btn-secondary btn-lg">Juego Rapido</Link>
-                            <Link to="/app/savescreen" className="btn btn-outline-secondary btn-sm">Agregar una nueva palabra</Link>
+                            <Link to="/app/gamemode" className="btn btn-outline-secondary btn-sm">Agregar una nueva palabra</Link>
                         </Stack>
                     </Row>
                 </Col>

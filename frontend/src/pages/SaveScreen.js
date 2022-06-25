@@ -7,16 +7,17 @@ import Button from 'react-bootstrap/Button'
 import Info from '../image/Info.svg';
 import {useSelector} from 'react-redux';
 import { selectCurrentUser } from '../features/auth/authSlice';
-import {useCreateWordMutation} from '../words/createWord';
-import {useNavigate, Link} from 'react-router-dom';
+import {useCreateWordMutation} from '../words/createWordApiSlice';
+import {useNavigate, Link, useLocation} from 'react-router-dom';
 
 
 const SaveScreen = () => {
     const [word, setWord] = useState('');
     const [apiWord, { isLoading }] = useCreateWordMutation();
     const user = useSelector(selectCurrentUser);
+    const location = useLocation();
     const navigate = useNavigate();
-
+ 
     const handleWordInput = (e) => setWord(e.target.value);
 
     const createWordSubmit = async (e) => {
@@ -26,7 +27,14 @@ const SaveScreen = () => {
             const create = await apiWord({'user':user.id, 'word': word}).unwrap();
             console.log(create);
             setWord('');
-            navigate('/app/gameStarts');
+
+            if(location.pathname === '/app/local/savescreen'){
+                navigate('/app/gameStarts');
+            }
+            else{
+                //navigate('/app/gameStarts')
+            }
+            
             localStorage.setItem('word', JSON.stringify(create));
             //tal vez sea mejor guardardar en la base de datos la partida
         }

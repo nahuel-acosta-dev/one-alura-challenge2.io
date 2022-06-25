@@ -21,12 +21,11 @@ const Header = () => {
     const [errMsg, setErrMsg] = useState('');
 
     const logoutApi = async () => {
-        
         try{
             const logoutUser = await logout({'user': user.id}).unwrap();
             console.log(logoutUser);
             dispatch(logOut());
-            navigate('/')
+            navigate('/');
         }catch(err){
             if(!err.response){
                 setErrMsg("No server Response");
@@ -60,7 +59,7 @@ const Header = () => {
                     <Navbar.Toggle aria-controls="navbarScroll" />
                     <Navbar.Collapse id="basic-navbar-nav">
                         <Nav className="me-auto">
-                            <Nav.Link href="#home">Home</Nav.Link>
+                            <Link className="navbar-links" to="/app/home">Home</Link>
                             <Nav.Link href="#features">Features</Nav.Link>
                             {
                                 isLoading ? (<span>Loading...</span>)

@@ -1,5 +1,5 @@
 import React from 'react';
-import {useListWordsQuery} from '../words/getListWord';
+import {useListWordsQuery} from '../words/ListWordApiSlice';
 import Game from '../game/Game';
 
 const GameStarts = () => {
@@ -10,21 +10,13 @@ const GameStarts = () => {
         isError,
         error
     } = useListWordsQuery();
-
-    const getWord = () => setWord(words[Math.floor(Math.random() * words.length)].word);
-
-    if(isSuccess){
-        console.log(words); 
-    }
-
    
     return (
         <>{
         isLoading &&
             <p>"Loading..."</p>}
         {isSuccess &&
-        (<Game word={words[Math.floor(Math.random() * words.length)].word} />)
-        
+        (<Game word={words[Math.floor(Math.random() * words.length)].word} />)      
         }
         </>
         )
