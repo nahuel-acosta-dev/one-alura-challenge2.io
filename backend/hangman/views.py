@@ -198,6 +198,9 @@ class WordsViewSet(viewsets.GenericViewSet):
         return Response(words_serializer.data, status=status.HTTP_200_OK)
 
     def create(self, request):
+        # debo agregar una validacion al serializer que verifique
+        # que la palabra que se esta por crear no sea
+        # mayor a 8 ni menor a 1, al igual que tiene el serializer de password
         word_serializer = self.serializer_class(data=request.data)
         if word_serializer.is_valid():
             word_serializer.save()
