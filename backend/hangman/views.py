@@ -46,7 +46,8 @@ class Login(TokenObtainPairView, GenericAPIView):
                     'token': login_serializer.validated_data.get('access'),
                     'refresh_token': login_serializer.validated_data.get('refresh'),
                     'user': user_Serializer.data,
-                    'message': 'Start of successful session'
+                    'id': user_Serializer.data,
+                    'message': 'Start of successful session',
                 }, status=status.HTTP_200_OK)
             return Response({'error': 'Incorrect password or username'}, status=status.HTTP_400_BAD_REQUEST)
         return Response({'error': 'Incorrect password or username'}, status=status.HTTP_400_BAD_REQUEST)
