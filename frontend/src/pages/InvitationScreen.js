@@ -1,5 +1,8 @@
-import React from 'react';
+import React, { useState, useEffect } from 'react';
 import {useGetUsersQuery} from '../users/usersApiSlice';
+import {useSelector} from 'react-redux';
+import { selectCurrentUser } from '../features/auth/authSlice';
+import Button from 'react-bootstrap/Button';
 
 /*para saber si un usuario esta activo y en linea, podemos hacer que se agrege una columna
 a su modelo User llamado online(Boolean), y que atravez de los canales cada vez que el usuario
@@ -7,6 +10,7 @@ entre y se conecte al canal, al final de ese consumer se envie un put al sql pon
 al usuario*/
 
 const InvitationScreen = () =>{
+
     const {
         data: users,
         isLoading,
@@ -14,6 +18,7 @@ const InvitationScreen = () =>{
         isError,
         error
     } = useGetUsersQuery();
+
 
     return (<>
         {isLoading &&

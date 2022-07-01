@@ -1,7 +1,7 @@
 import React, {useState, useEffect} from 'react';
 import Container from 'react-bootstrap/Container';
 import HelperRouters from './routes/HelperRoutes';
-import Header from './components/header/Header';
+import Header from './header/Header';
 import {useDispatch} from "react-redux";
 import { setCredentials } from './features/auth/authSlice';
 

@@ -1,17 +1,18 @@
 import React, {useState} from 'react';
 import Navbar from 'react-bootstrap/Navbar';
 import Nav from 'react-bootstrap/Nav'
-import Vector from '../../image/Vector.svg';
+import Vector from '../image/Vector.svg';
 import Container from 'react-bootstrap/Container';
 import Button from 'react-bootstrap/Button';
-import {useLogoutMutation} from '../../features/auth/logoutApiSlice';
-import { logOut } from '../../features/auth/authSlice';
+import {useLogoutMutation} from '../features/auth/logoutApiSlice';
+import { logOut } from '../features/auth/authSlice';
 import { useDispatch } from 'react-redux';
 import {useSelector} from 'react-redux';
-import { selectCurrentUser, selectCurrentToken } from '../../features/auth/authSlice';
+import { selectCurrentUser, selectCurrentToken } from '../features/auth/authSlice';
 import {Link, useNavigate} from 'react-router-dom';
 import DropdownButton from 'react-bootstrap/DropdownButton';
-import NavDropdown from 'react-bootstrap/NavDropdown'
+import NavDropdown from 'react-bootstrap/NavDropdown';
+import Notification from '../components/notification/Notification';
 
 const Header = () => {
     const user = useSelector(selectCurrentUser);
@@ -62,31 +63,24 @@ const Header = () => {
                         <Nav className="me-auto">
                             <Link className="navbar-links" to="/app/home">Home</Link>
                             <Nav.Link href="#features">Features</Nav.Link>
-                            <NavDropdown
-                                id="nav-dropdown-dark-example"
-                                title="Dropdown"
-                                menuVariant="dark"
-                                >
-                                <NavDropdown.Item href="#action/3.1">Action</NavDropdown.Item>
-                                <NavDropdown.Item href="#action/3.2">Another action</NavDropdown.Item>
-                                <NavDropdown.Item href="#action/3.3">Something</NavDropdown.Item>
-                                <NavDropdown.Divider />
-                                <NavDropdown.Item href="#action/3.4">Separated link</NavDropdown.Item>
-                            </NavDropdown>
-                            <NavDropdown
-                                id="nav-dropdown-dark-example"
-                                title="More"
-                                menuVariant="dark"
-                                >
-                                <NavDropdown.Item href="#action/3.1">Perfil</NavDropdown.Item>
-                                <NavDropdown.Divider />
-                                <NavDropdown.Item href="#action/3.4">{
-                                isLoading ? (<span>Loading...</span>)
-                                    :
-                                (token ? (<Button variant="link" onClick={logoutApi} className="navbar-links">Logout</Button>):
-                                (<Button variant="link" className="navbar-links"><Link to="/auth/login">Login</Link></Button>))
-                            }</NavDropdown.Item>
-                            </NavDropdown>
+                            {token &&
+                            <>
+                                <Notification/>
+                                <NavDropdown
+                                    id="nav-dropdown-dark-example"
+                                    title="More"
+                                    menuVariant="dark"
+                                    >
+                                    <NavDropdown.Item href="#action/3.1">Perfil</NavDropdown.Item>
+                                    <NavDropdown.Divider />
+                                    <NavDropdown.Item href="#action/3.4">{
+                                    isLoading ? (<span>Loading...</span>)
+                                        :
+                                    (token ? (<Button variant="link" onClick={logoutApi} className="navbar-links">Logout</Button>):
+                                    (<Button variant="link" className="navbar-links"><Link to="/auth/login">Login</Link></Button>))
+                                }</NavDropdown.Item>
+                                </NavDropdown>
+                            </>}
                             {
                                 isLoading ? (<span>Loading...</span>)
                                     :
