@@ -18,18 +18,24 @@ const Notification = () =>{
     },[user])
 
     if(socket){
+        socket.onopen = (e) => {
+            console.log("[open] Connection established")
+        }
+
         socket.onmessage = function(e) {
-            console.log(e)
             const data = JSON.parse(e.data);
             console.log(data)
         }   
-    
+    /*
         socket.onclose = function (e) {
             console.log('Connection closed');
         };
+
+        socket.onerror = function(error) {
+            console.log(`[error] ${error.message}`);
+          };*/
     }
     
-    console.log(socket)
     
     const submitMessage = (e) =>{
         e.preventDefault();
