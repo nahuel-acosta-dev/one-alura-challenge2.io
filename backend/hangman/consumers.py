@@ -1,6 +1,8 @@
 import json
 from channels.generic.websocket import WebsocketConsumer, AsyncWebsocketConsumer
 from asgiref.sync import async_to_sync
+from channels.db import database_sync_to_async
+from .models import Invitation, User
 
 """
 class ChatConsumer(WebsocketConsumer):
@@ -55,21 +57,52 @@ class InvitationConsumer(AsyncWebsocketConsumer):
     async def receive(self, text_data=None, bytes_data=None):
         text_data_json = json.loads(text_data)
         send_type = text_data_json['send_type']
+        guest_id = text_data_json['guest_id']
+        response = text_data_json['response']
+        print(self.user.id)
+
+        if send_type == 'invitation':
+            await self.create_invitation(guest_id)
+        elif send_type == 'response':
+            await self.update_invitation(response)
 
         await self.channel_layer.group_send(
             self.room_group_name,
             {
-                'type': 'send_invitation',
+                'type': 'send_invitation',  # es la llamada a la funcion de abajo
                 'send_type': send_type,
+                'guest_id': guest_id,
+                'response': response
             }
         )
 
     async def send_invitation(self, event):
         send_type = event['send_type']
+        guest_id = event['guest_id']
+        response = event['response']
 
         await self.send(text_data=json.dumps({
             'send_type': send_type,
+            'guest_id': guest_id,
+            'response': response
         }))
+
+    @database_sync_to_async
+    def create_invitation(self, guest_id):
+        guest_user = User.objects.get(id=guest_id)
+        invitation = Invitation.objects.get(
+            host_user=self.user, guest_user=guest_user, answered=False)
+        print(invitation)
+        if invitation:
+            invitation.answered = True
+            invitation.save()
+        Invitation.objects.create(host_user=self.user, guest_user=guest_user)
+
+    @database_sync_to_async
+    def update_invitation(self, response):
+        if response != '':
+            Invitation.objects.get(guest_user=self.user, answered=False).update(
+                answered=True, response=response)
 
     """async def connect(self):
         self.room_name = self.scope['url_route']['kwargs']['room_name']
