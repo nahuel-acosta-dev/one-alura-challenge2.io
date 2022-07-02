@@ -46,9 +46,11 @@ const SocketModal = ({id}) =>{
     const submitMessage = (e) =>{
         e.preventDefault();
     
-        let message = "enviado al usuario"
+        let message = "invitation"
         socketModal.send(JSON.stringify({
-                'send_type': message
+            'send_type':  message,
+            'guest_id': id,
+            'response': ''
         }))
     }
 
