@@ -1,6 +1,8 @@
+from django.db.models import Q
 from django.shortcuts import get_object_or_404
 from django.contrib.auth import authenticate
 from drf_spectacular.utils import extend_schema, extend_schema_view
+from requests import request
 from rest_framework import viewsets
 from rest_framework.generics import GenericAPIView
 # from rest_framework.views import APIView
@@ -13,13 +15,13 @@ from rest_framework.decorators import (api_view, permission_classes,
                                        action)
 from django.contrib.auth.models import User
 from hangman.serializers import (TaskSerializer, WordsSerializer, WordsListSerializer,
-                                 UserListSerializer,
-                                 CustomTokenObtainPairSerializer,
+                                 UserListSerializer, InvitationListSerializer,
+                                 InvitationSerializer, CustomTokenObtainPairSerializer,
                                  UserSerializer, CustomUserSerializer,
                                  UpdateUserSerializer, PasswordSerializer, LogoutUserSerializer)
 
-from .models import Task, User, Words
-from .authentication import access_user_data
+from .models import Task, User, Words, Invitation
+from .authentication import access_user_data, get_user_data
 
 
 @extend_schema_view(
@@ -229,3 +231,29 @@ class WordsViewSet(viewsets.GenericViewSet):
         return Response({
             'message': 'There is no word who wants to delete'
         }, status=status.HTTP_404_NOT_FOUND)
+
+
+class InvitationViewSet(viewsets.GenericViewSet):
+    model = Invitation
+    serializer_class = InvitationSerializer
+    list_serializer_class = InvitationListSerializer
+    permission_classes = (IsAuthenticated,)
+    queryset = None
+
+    def get_object(self, pk):
+        return get_object_or_404(self.model, pk=pk)
+
+    def get_queryset(self, request):
+        if self.queryset is None:
+            user_id = get_user_data(request)
+            self.queryset = self.serializer_class().Meta.model.objects\
+                .filter(Q(host_user=int(user_id)) | Q(guest_user=int(user_id))).values(
+                    'host_user', 'guest_user', 'response', 'answered', 'created_at').order_by('created_at')
+
+        return self.queryset
+
+    def list(self, request):
+        invitations = self.get_queryset(request)
+        invitations_serializer = self.list_serializer_class(
+            invitations, many=True)
+        return Response(invitations_serializer.data, status=status.HTTP_200_OK)

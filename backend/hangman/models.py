@@ -45,6 +45,7 @@ class Invitation(models.Model):
         'User', on_delete=models.CASCADE, null=False, related_name='guest_user')
     response = models.BooleanField(default=False, blank=True)
     answered = models.BooleanField(default=False, blank=True)
+    created_at = models.DateTimeField(auto_now_add=True)
 
     def __str__(self):
         return f"{self.host_user.username} invites {self.guest_user.username}"

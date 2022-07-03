@@ -16,3 +16,15 @@ def access_user_data(request, pk):
         return Response({'error':
                          'You do not have the permissions to access this information'},
                         status=status.HTTP_401_UNAUTHORIZED)
+
+
+def get_user_data(request):
+    token = get_authorization_header(request).split()
+    access_token_obj = AccessToken(token[1])
+    user = access_token_obj['user_id']
+    if user:
+        return user
+    else:
+        return Response({'error':
+                         'User not logged in'},
+                        status=status.HTTP_401_UNAUTHORIZED)
