@@ -1,9 +1,7 @@
-import React, { useState, useEffect } from 'react';
+import React from 'react';
 import {useGetUsersQuery} from '../users/usersApiSlice';
-import {useSelector} from 'react-redux';
-import { selectCurrentUser } from '../features/auth/authSlice';
 import SocketModal from '../components/modal/SocketModal';
-import Button from 'react-bootstrap/Button';
+
 
 /*para saber si un usuario esta activo y en linea, podemos hacer que se agrege una columna
 a su modelo User llamado online(Boolean), y que atravez de los canales cada vez que el usuario

@@ -2,8 +2,8 @@ import { apiSlice } from "../../app/api/apiSlice";
 
 export const notificationsApiSlice = apiSlice.injectEndpoints({
     endpoints: builder => ({
-        notifications: builder.query({
-            query: () => '/notifications',
+        getNotifications: builder.query({
+            query: () => '/invitations',
             keepUnusedDataFor: 5,
         })
     })
