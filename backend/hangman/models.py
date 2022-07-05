@@ -49,3 +49,17 @@ class Invitation(models.Model):
 
     def __str__(self):
         return f"{self.host_user.username} invites {self.guest_user.username}"
+
+
+class Room(models.Model):
+    host_user = models.ForeignKey(
+        'User', on_delete=models.CASCADE, null=False, related_name='room_host_user')
+    guest_user = models.ForeignKey(
+        'User', on_delete=models.CASCADE, null=False, related_name='room_guest_user')
+    word = models.ForeignKey(
+        'Words', on_delete=models.CASCADE, null=False, related_name='room_words')
+    hits = models.CharField(max_length=8)
+    Failures = models.CharField(max_length=5)
+    activated = models.BooleanField(default=False, blank=True)
+    game_over = models.BooleanField(default=False, blank=True)
+    winner = models.BooleanField(default=False, blank=True)

@@ -11,7 +11,7 @@ router = routers.DefaultRouter()
 router.register(r'task', TaskViewSet)
 router.register(r'users', UserViewSet, basename='users')
 router.register(r'words', WordsViewSet, basename='words')
-router.register(r'invitation', InvitationViewSet, basename='invitation')
+router.register(r'invitations', InvitationViewSet, basename='invitations')
 
 
 app_name = "hangman_api"

@@ -2,7 +2,7 @@ import json
 from channels.generic.websocket import WebsocketConsumer, AsyncWebsocketConsumer
 from asgiref.sync import async_to_sync
 from channels.db import database_sync_to_async
-from .models import Invitation, User
+from .models import Invitation, User, Room
 
 """
 class ChatConsumer(WebsocketConsumer):
@@ -101,8 +101,13 @@ class InvitationConsumer(AsyncWebsocketConsumer):
     @database_sync_to_async
     def update_invitation(self, response):
         if response != '':
-            Invitation.objects.get(guest_user=self.user, answered=False).update(
-                answered=True, response=response)
+            invitation = Invitation.objects.get(
+                guest_user=self.user, answered=False)
+            invitation.answered = True
+            invitation.response = response
+            invitation.save()
+        else:
+            return {'message': 'Error response empty'}
 
     """async def connect(self):
         self.room_name = self.scope['url_route']['kwargs']['room_name']
