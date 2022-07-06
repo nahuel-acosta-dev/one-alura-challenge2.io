@@ -17,9 +17,11 @@ const ApplicationRouter = () =>{
                 <Route path="home" element={<HomeApp/>} />
                 <Route path="gamemode" element={<GameMode/>} />
                 <Route path="local/savescreen" element={<SaveScreen/>} />
+                <Route path="local/gamestarts" element={<GameStarts/>} />
+                <Route path="local/fast_play/gamestarts" element={<GameStarts/>} />
                 <Route path="online/savescreen" element={<SaveScreen/>} />
                 <Route path="online/invitation" element={<InvitationScreen/>}/>
-                <Route path="gamestarts" element={<GameStarts/>} />
+                <Route path="online/gamestarts" element={<GameStarts/>} />
                 <Route path="notverified" element={<NotVerified/>} />
 
                 {/*Redirect*/}

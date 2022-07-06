@@ -3,7 +3,7 @@ import Modal from 'react-bootstrap/Modal';
 import Button from 'react-bootstrap/Button';
 import PropTypes from 'prop-types';
 
-const SocketModal = ({id}) =>{
+const SocketModal = ({id, wordId}) =>{
     const [smShow, setSmShow] = useState(false);
     const [socketModal, setSocketModal] = useState(smShow ? 
         new WebSocket(`ws://localhost:8000/ws/invitation/${id}/`) : null);
@@ -50,7 +50,8 @@ const SocketModal = ({id}) =>{
         socketModal.send(JSON.stringify({
             'send_type':  message,
             'guest_id': id,
-            'response': ''
+            'response': '',
+            'word_id': wordId
         }))
     }
 

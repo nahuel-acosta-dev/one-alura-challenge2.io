@@ -55,7 +55,7 @@ const Header = () => {
                         alt="alura logo"
                     />
                     {
-                        user && user.username
+                        user && token && user.username
                     }
                     </Navbar.Brand>
                     <Navbar.Toggle aria-controls="navbarScroll" />
@@ -63,7 +63,7 @@ const Header = () => {
                         <Nav className="me-auto">
                             <Link className="navbar-links" to="/app/home">Home</Link>
                             <Nav.Link href="#features">Features</Nav.Link>
-                            {token &&
+                            {token && user &&
                             <>
                                 <Notification/>
                                 <NavDropdown

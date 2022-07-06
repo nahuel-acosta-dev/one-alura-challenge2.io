@@ -29,13 +29,21 @@ const SaveScreen = () => {
             setWord('');
 
             if(location.pathname === '/app/local/savescreen'){
-                navigate('/app/gameStarts');
+                localStorage.setItem('word', JSON.stringify(create));
+                //aqui en vez de guardar solo la palabra podriamos guardar un objeto
+                //que contenga la palabra, aciertos y errores
+                //para que cuando recargue mantenga su progreso
+                //tambien una que diga si la partida termino o no
+                //por si quiere redirigirse le diga si puede jugar o su partida ya termino
+                navigate('/app/local/gameStarts');
             }
             else{
-                //navigate('/app/gameStarts')
+                if(create.word.id){
+                    localStorage.setItem('word_id', JSON.stringify(create.word.id))
+                    navigate('/app/online/invitation')
+                }
+                else return <span>Error al obtener datos de palabra</span>
             }
-            
-            localStorage.setItem('word', JSON.stringify(create));
             //tal vez sea mejor guardardar en la base de datos la partida
         }
         catch(err){
@@ -59,12 +67,12 @@ const SaveScreen = () => {
             <Col md={6} xs={10}>
                 <Form onSubmit={(e) => createWordSubmit(e)}>
                     <Row className="saveScreen__Textarea">
-                        <Textarea text="Ingrese una palabra" handleWordInput={handleWordInput}/>
+                        <Textarea text="Ingrese una palabra" handleWordInput={handleWordInput} max={'8'}/>
                     </Row>
                     <Row className="saveScreen__buttons align-items-center align-items-md-center align-items-sm-center
                     justify-content-center">
                         <Col sm={6} xs={12}>
-                            <Button variant="primary" className="btn-custom" >Guardar y empezar</Button>
+                            <Button type="submit" variant="primary" className="btn-custom" >Guardar y empezar</Button>
                         </Col>
                         <Col sm={6} xs={12}>
                             <Link to="/app/home" className="btn btn-secondary btn-custom">Cancelar</Link>

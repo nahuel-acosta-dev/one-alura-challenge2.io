@@ -11,7 +11,6 @@ const Notification = () =>{
     //tal vez dejar el socket en el header no sea la forma mas prolija talvez dejarlo en el app sea mejor
     //si se encuentra una mejor manera intentarlo si no dejarlo asi
     const user = useSelector(selectCurrentUser);
-    const [ignored, newState] = useState();
     const [socket, setSocket] = useState(user ? 
         new WebSocket(`ws://localhost:8000/ws/invitation/${user.id}/`) : null);
 
@@ -63,6 +62,7 @@ const Notification = () =>{
                 'send_type': message,
                 'guest_id': '',
                 'response': response,
+                'word_id': ''
         }))
         handleRefetchOne();
 
@@ -76,6 +76,7 @@ const Notification = () =>{
         //la sala podria tener un codigo, que tambien comparta con el model invitations
         //o simplemente obtener la ultima sala entre los 2 usuarios, no pueden tener mas de 1
         //sala activa entre los 2 usuarios
+        
     }
 
     return(
@@ -123,6 +124,11 @@ const Notification = () =>{
                             <span>
                                 el user {notification.host_user} te ha invitado
                             </span>
+                            {
+                            socket == null ?
+                                <span>Loading...</span> 
+                                :
+                            (//falta poner algo mientras el socket.ready... no conecte(diferente de 1)
                             <Row>
                                 <Col><Button variant="primary"  
                                     onClick={e => submitMessage(e, true)} size="sm">Aceptar</Button>
@@ -131,7 +137,7 @@ const Notification = () =>{
                                     <Button variant="danger"  
                                     onClick={e => submitMessage(e, false)} size="sm">Rechazar</Button>
                                 </Col>
-                            </Row>
+                            </Row>)}
                             </>
                         )
                     )

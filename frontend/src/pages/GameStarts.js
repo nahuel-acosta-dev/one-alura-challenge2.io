@@ -1,23 +1,33 @@
-import React from 'react';
-import {useListWordsQuery} from '../words/ListWordApiSlice';
+import React, {useState} from 'react';
+import SaveWord from '../words/SaveWord';
 import Game from '../game/Game';
+import {useLocation} from 'react-router-dom';
 
 const GameStarts = () => {
-    const {
-        data: words,
-        isLoading,
-        isSuccess,
-        isError,
-        error
-    } = useListWordsQuery();
+    const [word, setWord] = useState(() => {
+        if(JSON.parse(localStorage.getItem("word"))){
+            const getWord = JSON.parse(localStorage.getItem("word"));
+
+        }
+        
+    }        
+    );
+    const location = useLocation();
+
+    console.log(location.pathname)
+    console.log(word)
    
     return (
-        <>{
-        isLoading &&
-            <p>"Loading..."</p>}
-        {isSuccess &&
-        (<Game word={words[Math.floor(Math.random() * words.length)].word} />)      
-        }
+        <>
+        {location.pathname == '/app/local/fast_play/gamestarts' &&
+            (
+                word == null ?
+                <SaveWord setWord={setWord}/>
+                :
+                (<Game word={word.word} />)
+            )          
+        }     
+
         </>
         )
 }

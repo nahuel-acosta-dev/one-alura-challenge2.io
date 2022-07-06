@@ -1,6 +1,7 @@
-import React from 'react';
+import React, {useState} from 'react';
 import {useGetUsersQuery} from '../users/usersApiSlice';
 import SocketModal from '../components/modal/SocketModal';
+import { Navigate } from 'react-router-dom';
 
 
 /*para saber si un usuario esta activo y en linea, podemos hacer que se agrege una columna
@@ -9,6 +10,8 @@ entre y se conecte al canal, al final de ese consumer se envie un put al sql pon
 al usuario*/
 
 const InvitationScreen = () =>{
+    const [wordId, setWordId] = useState(() => localStorage.getItem("word_id") ? 
+        JSON.parse(localStorage.getItem("word_id")) : null);
 
     const {
         data: users,
@@ -17,6 +20,10 @@ const InvitationScreen = () =>{
         isError,
         error
     } = useGetUsersQuery();
+
+    console.log(wordId)
+
+    
 
 
     return (<>
@@ -39,7 +46,12 @@ const InvitationScreen = () =>{
                     deberiamos poner un limite de invitaciones o que solo se puedan hacer cada cierto tiempo 
                     */
                     return <li key={i}>
-                        {user.username}{' '} <SocketModal id={user.id}/>
+                        {user.username}{' '} 
+                        {wordId == null ?
+                            (<Navigate to="/app/online/savescreen"/>)
+                            :
+                            (<SocketModal id={user.id} wordId={wordId}/>)
+                        }
                     </li>
                 })}
             </ul>
