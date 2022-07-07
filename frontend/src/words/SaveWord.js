@@ -1,7 +1,9 @@
 import React, {useEffect} from 'react';
 import {useListWordsQuery} from './ListWordApiSlice';
+import {useLocation} from 'react-router-dom';
 
 const SaveWord = ({setWord}) =>{
+    const location = useLocation();
     const {
         data: words,
         isLoading,
@@ -17,6 +19,7 @@ const SaveWord = ({setWord}) =>{
                 const newWord = {
                     word: words[Math.floor(Math.random() * words.length)].word,
                     type:'fast',
+                    url: location.pathname,
                     right: [],
                     failures: [],
                     gameover: false,

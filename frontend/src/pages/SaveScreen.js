@@ -26,16 +26,23 @@ const SaveScreen = () => {
             //llamada api word
             const create = await apiWord({'user':user.id, 'word': word}).unwrap();
             console.log(create);
+            console.log(create.word.word);
             setWord('');
 
             if(location.pathname === '/app/local/savescreen'){
-                localStorage.setItem('word', JSON.stringify(create));
-                //aqui en vez de guardar solo la palabra podriamos guardar un objeto
-                //que contenga la palabra, aciertos y errores
-                //para que cuando recargue mantenga su progreso
-                //tambien una que diga si la partida termino o no
-                //por si quiere redirigirse le diga si puede jugar o su partida ya termino
-                navigate('/app/local/gameStarts');
+                const newWord = {
+                    word: create.word.word,
+                    type:'local',
+                    url: '/app/local/gamestarts',
+                    right: [],
+                    failures: [],
+                    gameover: false,
+                    winner: false
+                }
+
+                localStorage.setItem('word', JSON.stringify(newWord));
+                navigate('/app/local/gamestarts');
+                
             }
             else{
                 if(create.word.id){

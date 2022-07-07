@@ -19,7 +19,7 @@ O podriamos agregar un boton que le permita al usuario elegir el modo. es mejor 
 //recordar una regla es que un componente no puede tener de hijo a otro, por lo tanto
 //modo escritotio y movil no deben ir en carpeta componentes, ahi solo van los reutilizables
 
-const Game = ({word}) => {
+const Game = ({word, setWord}) => {
     const drawerRef = createRef();
     //creo que seria mejor obtener la word del localStorage o de la api de la partida
     //obtenemos un array con todas las letras de la word

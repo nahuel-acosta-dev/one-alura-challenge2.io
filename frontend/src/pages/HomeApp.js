@@ -4,7 +4,9 @@ import Row from 'react-bootstrap/Row';
 import Col from 'react-bootstrap/Col';
 import {Link} from 'react-router-dom';
 
-const HomeApp = () =>{
+const HomeApp = () => {
+
+    localStorage.removeItem('word');
 
     return(
         <Row className="home align-content-center">

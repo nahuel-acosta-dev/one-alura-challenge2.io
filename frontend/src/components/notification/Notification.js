@@ -5,11 +5,13 @@ import {useGetNotificationsQuery} from '../../utils/notifications/notificationsA
 import Row from 'react-bootstrap/Row';
 import Col from 'react-bootstrap/Col';
 import Button from 'react-bootstrap/Button';
-import NavDropdown from 'react-bootstrap/NavDropdown'
+import NavDropdown from 'react-bootstrap/NavDropdown';
+import {useNavigate} from 'react-router-dom';
 
 const Notification = () =>{
     //tal vez dejar el socket en el header no sea la forma mas prolija talvez dejarlo en el app sea mejor
     //si se encuentra una mejor manera intentarlo si no dejarlo asi
+    const navigate = useNavigate();
     const user = useSelector(selectCurrentUser);
     const [socket, setSocket] = useState(user ? 
         new WebSocket(`ws://localhost:8000/ws/invitation/${user.id}/`) : null);
@@ -65,18 +67,8 @@ const Notification = () =>{
                 'word_id': ''
         }))
         handleRefetchOne();
-
-        //debo buscar una manera de obtener la palabra y luego se guarda en localStorage y se redirige
-        //a gamestart, seria bueno crear una sala en models tambien y si la sala estan sin terminar
-        //notificar al usuario en la pagina app/home con un modal.
-
-        //o crear una sala con la palabra ya para esta usuario y si responde que si activarla y 
-        //redirigir al usuario
-        //si responde no simplemente borrarla o desactivarla desde el consumer
-        //la sala podria tener un codigo, que tambien comparta con el model invitations
-        //o simplemente obtener la ultima sala entre los 2 usuarios, no pueden tener mas de 1
-        //sala activa entre los 2 usuarios
         
+        navigate('/app/online/gamestarts');
     }
 
     return(
