@@ -45,6 +45,7 @@ class Invitation(models.Model):
         'User', on_delete=models.CASCADE, null=False, related_name='guest_user')
     response = models.BooleanField(default=False, blank=True)
     answered = models.BooleanField(default=False, blank=True)
+    word_id = models.IntegerField(default=1, blank=False)
     created_at = models.DateTimeField(auto_now_add=True)
 
     def __str__(self):
@@ -58,8 +59,8 @@ class Room(models.Model):
         'User', on_delete=models.CASCADE, null=False, related_name='room_guest_user')
     word = models.ForeignKey(
         'Words', on_delete=models.CASCADE, null=False, related_name='room_words')
-    hits = models.CharField(max_length=8)
-    Failures = models.CharField(max_length=5)
+    hits = models.CharField(max_length=8, default='', blank=True)
+    failures = models.CharField(max_length=5, default='', blank=True)
     activated = models.BooleanField(default=False, blank=True)
     game_over = models.BooleanField(default=False, blank=True)
     winner = models.BooleanField(default=False, blank=True)

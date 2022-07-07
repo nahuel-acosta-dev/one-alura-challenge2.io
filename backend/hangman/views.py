@@ -17,10 +17,10 @@ from django.contrib.auth.models import User
 from hangman.serializers import (TaskSerializer, WordsSerializer, WordsListSerializer,
                                  UserListSerializer, InvitationListSerializer,
                                  InvitationSerializer, CustomTokenObtainPairSerializer,
-                                 UserSerializer, CustomUserSerializer,
+                                 UserSerializer, CustomUserSerializer, RoomSerializer,
                                  UpdateUserSerializer, PasswordSerializer, LogoutUserSerializer)
 
-from .models import Task, User, Words, Invitation
+from .models import Task, User, Words, Invitation, Room
 from .authentication import access_user_data, get_user_data
 
 
@@ -141,7 +141,7 @@ class UserViewSet(viewsets.GenericViewSet):
             return permission
         user = self.get_object(pk)
         user_serializer = self.custom_serializer_class(user)
-        return Response(user_serializer.data)
+        return Response(user_serializer.data, status=status.HTTP_200_OK)
 
     def update(self, request, pk=None):
         permission = access_user_data(request, pk)
@@ -204,6 +204,16 @@ class WordsViewSet(viewsets.GenericViewSet):
         # debo agregar una validacion al serializer que verifique
         # que la palabra que se esta por crear no sea
         # mayor a 8 ni menor a 1, al igual que tiene el serializer de password
+        print(request.data)
+        print(request.data['user'])
+        user = User.objects.get(id=request.data['user'])
+        word = self.model.objects.filter(
+            user=user, word=request.data['word']).last()
+        if word:
+            word_serializer = self.serializer_class(word)
+            return Response({
+                'message': 'This user already recorded the word sent.',
+                'word': word_serializer.data}, status=status.HTTP_200_OK)
         word_serializer = self.serializer_class(data=request.data)
         if word_serializer.is_valid():
             word_serializer.save()
@@ -219,7 +229,15 @@ class WordsViewSet(viewsets.GenericViewSet):
     def retrieve(self, request, pk=None):
         word = self.get_object(pk)
         word_serializer = self.serializer_class(word)
-        return Response(word_serializer.data)
+        return Response(word_serializer.data, status=status.HTTP_200_OK)
+
+    @action(detail=False, methods=['GET'])
+    def last(self, request):
+        user_id = get_user_data(request)
+        user = User.objects.get(id=user_id)
+        word = self.model.objects.filter(user=user).last()
+        word_serializer = self.serializer_class(word)
+        return Response(word_serializer.data, status=status.HTTP_200_OK)
 
     def destroy(self, request, pk=None):
         word_destroy = self.model.objects.filter(id=pk)
@@ -257,3 +275,32 @@ class InvitationViewSet(viewsets.GenericViewSet):
         invitations_serializer = self.list_serializer_class(
             invitations, many=True)
         return Response(invitations_serializer.data, status=status.HTTP_200_OK)
+
+
+class RoomViewSet(viewsets.GenericViewSet):
+    model = Room
+    serializer_class = RoomSerializer
+    permission_classes = (IsAuthenticated,)
+    queryset = None
+
+    def get_object(self, pk):
+        return get_object_or_404(self.model, pk=pk)
+
+    def get_queryset(self):
+        if self.queryset is None:
+            self.queryset = self.serializer_class().Meta.model.objects\
+                .filter(activated=True).values('id', 'word')
+        return self.queryset
+
+    @action(detail=False, methods=['GET'])
+    def activated(self, request):
+        user_id = get_user_data(request)
+        user = User.objects.get(id=user_id)
+        room = self.model.objects.get(guest_user=user, activated=True)
+        if room:
+            room_serializer = self.serializer_class(room)
+            return Response(room_serializer.data, status=status.HTTP_200_OK)
+        else:
+            return Response({
+                'message': 'Room not found'
+            }, status=status.HTTP_404_NOT_FOUND)

@@ -2,7 +2,7 @@ import json
 from channels.generic.websocket import WebsocketConsumer, AsyncWebsocketConsumer
 from asgiref.sync import async_to_sync
 from channels.db import database_sync_to_async
-from .models import Invitation, User, Room
+from .models import Invitation, User, Room, Words
 
 """
 class ChatConsumer(WebsocketConsumer):
@@ -59,10 +59,10 @@ class InvitationConsumer(AsyncWebsocketConsumer):
         send_type = text_data_json['send_type']
         guest_id = text_data_json['guest_id']
         response = text_data_json['response']
-        print(self.user.id)
+        word_id = text_data_json['word_id']
 
         if send_type == 'invitation':
-            await self.create_invitation(guest_id)
+            await self.create_invitation(guest_id, word_id)
         elif send_type == 'response':
             await self.update_invitation(response)
 
@@ -72,7 +72,8 @@ class InvitationConsumer(AsyncWebsocketConsumer):
                 'type': 'send_invitation',  # es la llamada a la funcion de abajo
                 'send_type': send_type,
                 'guest_id': guest_id,
-                'response': response
+                'response': response,
+                'word_id': word_id,
             }
         )
 
@@ -80,18 +81,20 @@ class InvitationConsumer(AsyncWebsocketConsumer):
         send_type = event['send_type']
         guest_id = event['guest_id']
         response = event['response']
+        word_id = event['word_id']
 
         await self.send(text_data=json.dumps({
             'send_type': send_type,
             'guest_id': guest_id,
-            'response': response
+            'response': response,
+            'word_id': word_id,
         }))
 
     @database_sync_to_async
-    def create_invitation(self, guest_id):
+    def create_invitation(self, guest_id, word_id):
         guest_user = User.objects.get(id=guest_id)
         invitation = Invitation.objects.get(
-            host_user=self.user, guest_user=guest_user, answered=False)
+            host_user=self.user, guest_user=guest_user, word_id=word_id, answered=False)
         print(invitation)
         if invitation:
             invitation.answered = True
@@ -106,6 +109,23 @@ class InvitationConsumer(AsyncWebsocketConsumer):
             invitation.answered = True
             invitation.response = response
             invitation.save()
+            if response == True:
+                try:
+                    room = Room.objects.get(host_user=invitation.host_user,
+                                            guest_user=invitation.guest_user, activated=True)
+                    if room:
+                        room.activated = False
+                        room.save()
+                except:
+                    print('No active rooms were found')
+            print(invitation.word_id)
+            print(Words.objects.get(
+                id=invitation.word_id, user=invitation.host_user))
+            word = Words.objects.get(
+                id=invitation.word_id, user=invitation.host_user)  # falta un id o algo para obtener la palabra
+            Room.objects.create(host_user=invitation.host_user,
+                                guest_user=invitation.guest_user, word=word, activated=True)
+
         else:
             return {'message': 'Error response empty'}
 
