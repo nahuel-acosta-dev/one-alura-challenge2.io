@@ -15,7 +15,7 @@ from rest_framework.decorators import (api_view, permission_classes,
                                        action)
 from django.contrib.auth.models import User
 from hangman.serializers import (TaskSerializer, WordsSerializer, WordsListSerializer,
-                                 UserListSerializer, InvitationListSerializer,
+                                 UserListSerializer, InvitationListSerializer, UpdateRoomSerializer,
                                  InvitationSerializer, CustomTokenObtainPairSerializer,
                                  UserSerializer, CustomUserSerializer, RoomSerializer,
                                  UpdateUserSerializer, PasswordSerializer, LogoutUserSerializer)
@@ -88,6 +88,7 @@ class UserViewSet(viewsets.GenericViewSet):
     serializer_class = UserSerializer
     custom_serializer_class = CustomUserSerializer
     list_serializer_class = UserListSerializer
+    update_serizer_class = UpdateUserSerializer
     permission_classes = (IsAuthenticated,)
     queryset = None
 
@@ -148,7 +149,7 @@ class UserViewSet(viewsets.GenericViewSet):
         if permission != True:
             return permission
         user = self.get_object(pk)
-        user_serializer = UpdateUserSerializer(user, data=request.data)
+        user_serializer = self.update_serizer_class(user, data=request.data)
         if user_serializer.is_valid():
             user_serializer.save()
             return Response({
@@ -280,6 +281,7 @@ class InvitationViewSet(viewsets.GenericViewSet):
 class RoomViewSet(viewsets.GenericViewSet):
     model = Room
     serializer_class = RoomSerializer
+    update_serizer_class = UpdateRoomSerializer
     permission_classes = (IsAuthenticated,)
     queryset = None
 
@@ -304,3 +306,17 @@ class RoomViewSet(viewsets.GenericViewSet):
             return Response({
                 'message': 'Room not found'
             }, status=status.HTTP_404_NOT_FOUND)
+
+    def update(self, request, pk=None):
+        room = self.get_object(pk)
+        room_serializer = self.update_serizer_class(room, data=request.data)
+        if room_serializer.is_valid():
+            room_serializer.save()
+            return Response({
+                'message': 'Updated user correctly updated',
+                'data': room_serializer.data
+            }, status=status.HTTP_200_OK)
+        return Response({
+            'message': 'There are errors in the update',
+            'error': room_serializer.errors
+        }, status=status.HTTP_400_BAD_REQUEST)
