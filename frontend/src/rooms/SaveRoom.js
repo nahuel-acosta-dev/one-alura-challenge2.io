@@ -15,12 +15,18 @@ const SaveRoom= ({setWord}) =>{
     useEffect(() =>{
         if(isSuccess){
             let word = room.word['word']
+            let hits = room.hits;
+            let failures = room.failures;
+            
             const newWord = {
+                id: room.id,
                 word: word,
                 type:'online',
                 url: location.pathname,
-                right: room.hits,
-                failures: room.failures,
+                right: (hits == '' ? word.split('').map(() =>  ".") 
+                : 
+                hits.split('').map(letter =>  letter)),
+                failures: failures.split('').map(letter => letter),
                 gameover: room.gameover,
                 winner: room.winner
             }

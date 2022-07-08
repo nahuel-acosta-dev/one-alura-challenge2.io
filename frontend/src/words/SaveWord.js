@@ -16,17 +16,18 @@ const SaveWord = ({setWord}) =>{
 
     useEffect(() =>{
             if(isSuccess){
-                const newWord = {
-                    word: words[Math.floor(Math.random() * words.length)].word,
+                let newWord = words[Math.floor(Math.random() * words.length)].word;
+                const newWordData = {
+                    word: newWord,
                     type:'fast',
                     url: location.pathname,
-                    right: [],
+                    right: newWord.split('').map(() =>  "."),
                     failures: [],
                     gameover: false,
                     winner: false
                 }
                 localStorage.setItem(
-                    'word', JSON.stringify(newWord))
+                    'word', JSON.stringify(newWordData))
                 setWord(JSON.parse(localStorage.getItem('word')));
             }
     },[isSuccess, isLoading])

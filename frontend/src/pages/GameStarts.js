@@ -46,7 +46,7 @@ const GameStarts = () => {
                 word == null ?
                 <SaveWord setWord={setWord}/>
                 :
-                (<Game word={word.word} />)
+                (<Game wordData={word} />)
             )
             :
             pathname == '/app/local/gamestarts' ?
@@ -54,7 +54,7 @@ const GameStarts = () => {
             word == null ?
                 (<Navigate to="/app/local/savescreen"/>)
                 :
-                (<Game word={word.word} />)
+                (<Game wordData={word} />)
             )
             :
             pathname == '/app/online/gamestarts' ?
@@ -62,7 +62,7 @@ const GameStarts = () => {
             word == null ?
                 (<SaveRoom setWord={setWord}/>)
                 :
-                (<Game word={word.word} setWord={setWord}/>)
+                (<Game wordData={word} setWord={setWord}/>)
             )
             :
             <span>Error</span>   

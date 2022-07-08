@@ -1,4 +1,5 @@
 import React, {useEffect, createRef, useState} from 'react';
+import {useUpdateRoomMutation} from '../rooms/updateRoomApiSlice';
 import Button from 'react-bootstrap/Button';
 import Row from 'react-bootstrap/Row';
 import Col from 'react-bootstrap/Col';
@@ -19,14 +20,20 @@ O podriamos agregar un boton que le permita al usuario elegir el modo. es mejor 
 //recordar una regla es que un componente no puede tener de hijo a otro, por lo tanto
 //modo escritotio y movil no deben ir en carpeta componentes, ahi solo van los reutilizables
 
-const Game = ({word, setWord}) => {
+//debemos guardar las fallas de las words en el inicio de setFailures
+//y debemos guardar los aciertos de word en setWordsFount desde el inicio
+const Game = ({wordData, setWord}) => {
     const drawerRef = createRef();
+    const word = wordData.word;
     //creo que seria mejor obtener la word del localStorage o de la api de la partida
     //obtenemos un array con todas las letras de la word
     const [arrayWords, setArrayWords] = useState(word.toUpperCase().split(''));
     //obtenemos en un array la misma cantidad de espacios que letras tiene la word
-    const [wordsFound, setWordsFound] = useState(word.split('').map(() =>  ""));
-    const [failures, setFailures] = useState([]);
+    //const [wordsFound, setWordsFound] = useState(word.split('').map(() =>  ""));
+    const [wordsFound, setWordsFound] = useState(wordData.right);
+    const [failures, setFailures] = useState(wordData.failures);
+    const [update, { isLoading }] = useUpdateRoomMutation();
+    const [errMsg, setErrMsg] = useState('');
 
     if(failures.length > 5) console.log("Juego terminado");
     
@@ -78,6 +85,46 @@ const Game = ({word, setWord}) => {
         setArrayWords(modLetterArrays(indexes, ""));
 
     }
+
+    const updateRoomApi = async ()  =>{
+        try{
+            const updateRoom = await update({
+                "hits": wordsFound.join(''),
+                "failures": failures.join(''),
+                "activated": true,
+                "game_over": false,
+                "winner": false,
+                "id": wordData.id
+            }).unwrap();
+
+            console.log(updateRoom);
+            
+        }
+        catch(err){
+            if(!err.response){
+                setErrMsg("No server Response");
+                console.log("No server Response");
+            }
+            else if (err.response?.status){
+                setErrMsg("Falling servers");
+                console.log(err.response?.status);
+            }
+        }
+
+}
+
+    useEffect(() => {
+        let newWordData = wordData;
+        newWordData.right = wordsFound;
+        newWordData.failures = failures;
+        localStorage.setItem('word', JSON.stringify(newWordData));
+
+        if(wordData.type == 'online'){
+            updateRoomApi();
+        }
+
+    }, [wordsFound, failures])
+    
 
     const handleKeyDown = (e) => {
         const letter = e.key.toUpperCase();

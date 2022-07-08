@@ -30,17 +30,18 @@ const SaveScreen = () => {
             setWord('');
 
             if(location.pathname === '/app/local/savescreen'){
-                const newWord = {
+                let newWord = create.word.word;
+                const newWordData = {
                     word: create.word.word,
                     type:'local',
                     url: '/app/local/gamestarts',
-                    right: [],
+                    right: newWord.split('').map(() =>  "."),
                     failures: [],
                     gameover: false,
                     winner: false
                 }
 
-                localStorage.setItem('word', JSON.stringify(newWord));
+                localStorage.setItem('word', JSON.stringify(newWordData));
                 navigate('/app/local/gamestarts');
                 
             }
