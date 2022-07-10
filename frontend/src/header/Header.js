@@ -39,6 +39,8 @@ const Header = () => {
             errRef.current.focus();
         }
     }
+
+    const redirect = () => navigate('/app/profile');
     
 
     return(
@@ -62,7 +64,6 @@ const Header = () => {
                     <Navbar.Collapse id="basic-navbar-nav">
                         <Nav className="me-auto">
                             <Link className="navbar-links" to="/app/home">Home</Link>
-                            <Nav.Link href="#features">Features</Nav.Link>
                             {token && user &&
                             <>
                                 <Notification/>
@@ -71,9 +72,13 @@ const Header = () => {
                                     title="More"
                                     menuVariant="dark"
                                     >
-                                    <NavDropdown.Item href="#action/3.1">Perfil</NavDropdown.Item>
+                                    <NavDropdown.Item>
+                                        <Button variant="link" className="navbar-links" onClick={redirect}>
+                                            Profile
+                                        </Button>
+                                    </NavDropdown.Item>
                                     <NavDropdown.Divider />
-                                    <NavDropdown.Item href="#action/3.4">{
+                                    <NavDropdown.Item>{
                                     isLoading ? (<span>Loading...</span>)
                                         :
                                     (token ? (<Button variant="link" onClick={logoutApi} className="navbar-links">Logout</Button>):

@@ -1,6 +1,7 @@
 import React, {useEffect} from 'react';
 import {useListWordsQuery} from './ListWordApiSlice';
 import {useLocation} from 'react-router-dom';
+import NotFoundWord from '../components/errors/NotFoundWord';
 
 const SaveWord = ({setWord}) =>{
     const location = useLocation();
@@ -8,8 +9,7 @@ const SaveWord = ({setWord}) =>{
         data: words,
         isLoading,
         isSuccess,
-        isError,
-        error
+        isError
     } = useListWordsQuery();
 
     console.log('estoy aqui')
@@ -33,8 +33,14 @@ const SaveWord = ({setWord}) =>{
     },[isSuccess, isLoading])
 
         console.log(words)
+    
+    if(isError){
+        return <NotFoundWord/>
+    }
 
-    return <span>Loading</span>
+    if(isLoading){
+        return <span>Loading</span>
+    }
 
 }
 

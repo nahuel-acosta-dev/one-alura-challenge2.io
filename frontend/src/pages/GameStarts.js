@@ -1,4 +1,5 @@
 import React, {useState} from 'react';
+import {useUpdateRoomMutation} from '../rooms/updateRoomApiSlice';
 import SaveWord from '../words/SaveWord';
 import SaveRoom from '../rooms/SaveRoom';
 import Game from '../game/Game';
@@ -7,6 +8,13 @@ import {Navigate, useLocation} from 'react-router-dom';
 const GameStarts = () => {
     const location = useLocation();
     const pathname = location.pathname;
+    const pathnames = {
+        fast: '/app/local/fast_play/gamestarts',
+        local: '/app/local/gamestarts',
+        online: '/app/online/gamestarts'
+    }
+    const [update, { isLoading }] = useUpdateRoomMutation();
+    const [errMsg, setErrMsg] = useState('');
 
     const [word, setWord] = useState(() => 
     {
@@ -36,33 +44,58 @@ const GameStarts = () => {
         } 
     );
 
-    console.log(location.pathname)
-    console.log(word)
-   
+    const updateRoomApi = async (wordData)  =>{
+        try{
+            const updateRoom = await update({
+                "hits": wordData.right.join(''),
+                "failures": wordData.failures.join(''),
+                "activated": wordData.activated,
+                "game_over": wordData.gameOver,
+                "winner": wordData.winner,
+                "id": wordData.id
+            }).unwrap();
+
+            console.log(updateRoom);
+            
+        }
+        catch(err){
+            if(!err.response){
+                setErrMsg("No server Response");
+                console.log("No server Response");
+            }
+            else if (err.response?.status){
+                setErrMsg("Falling servers");
+                console.log(err.response?.status);
+            }
+        }
+
+}
+
     return (
         <>
-        {pathname == '/app/local/fast_play/gamestarts' ?
+        <p className={errMsg ? "errmsg" : "offscreen"} aria-live="assertive">{errMsg}</p>
+        {pathname == pathnames.fast ?
             (
                 word == null ?
                 <SaveWord setWord={setWord}/>
                 :
-                (<Game wordData={word} />)
+                (<Game wordData={word} updateRoomApi={(() => false)} setWord={setWord} />)
             )
             :
-            pathname == '/app/local/gamestarts' ?
+            pathname == pathnames.local ?
             (
             word == null ?
                 (<Navigate to="/app/local/savescreen"/>)
                 :
-                (<Game wordData={word} />)
+                (<Game wordData={word} updateRoomApi={(() => false)} setWord={setWord}/>)
             )
             :
-            pathname == '/app/online/gamestarts' ?
+            pathname == pathnames.online ?
             (
             word == null ?
                 (<SaveRoom setWord={setWord}/>)
                 :
-                (<Game wordData={word} setWord={setWord}/>)
+                (<Game wordData={word} updateRoomApi={updateRoomApi} setWord={setWord}/>)
             )
             :
             <span>Error</span>   

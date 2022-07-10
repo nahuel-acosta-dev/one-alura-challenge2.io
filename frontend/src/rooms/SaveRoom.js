@@ -1,6 +1,7 @@
 import React, {useEffect} from 'react';
 import {useGetRoomQuery} from './getRoomApiSlice';
 import {useLocation} from 'react-router-dom';
+import NotFoundWord from '../components/errors/NotFoundWord';
 
 const SaveRoom= ({setWord}) =>{
     const location = useLocation();
@@ -8,9 +9,12 @@ const SaveRoom= ({setWord}) =>{
         data: room,
         isLoading,
         isSuccess,
-        isError,
-        error
+        isError
     } = useGetRoomQuery();
+
+    console.log(isLoading)
+    console.log(isSuccess)
+    console.log(isError)
 
     useEffect(() =>{
         if(isSuccess){
@@ -26,6 +30,7 @@ const SaveRoom= ({setWord}) =>{
                 right: (hits == '' ? word.split('').map(() =>  ".") 
                 : 
                 hits.split('').map(letter =>  letter)),
+                activated: room.activated,
                 failures: failures.split('').map(letter => letter),
                 gameover: room.gameover,
                 winner: room.winner
@@ -38,7 +43,13 @@ const SaveRoom= ({setWord}) =>{
 
     console.log(room)
 
-    return <span>Loading</span>
+    if(isError)
+    {
+        return <NotFoundWord/>
+    }
+    if(isLoading){
+        return <span>Loading</span>
+    }
 
 }
 

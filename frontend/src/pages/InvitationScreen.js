@@ -1,5 +1,7 @@
 import React, {useState} from 'react';
-import {useGetUsersQuery} from '../users/usersApiSlice';
+import {useGetProfilesQuery} from '../profiles/profilesApiSlice';
+import {useSelector} from 'react-redux';
+import { selectCurrentUser } from '../features/auth/authSlice';
 import SocketModal from '../components/modal/SocketModal';
 import { Navigate } from 'react-router-dom';
 
@@ -12,14 +14,15 @@ al usuario*/
 const InvitationScreen = () =>{
     const [wordId, setWordId] = useState(() => localStorage.getItem("word_id") ? 
         JSON.parse(localStorage.getItem("word_id")) : null);
+    const user = useSelector(selectCurrentUser)
 
     const {
-        data: users,
+        data: profiles,
         isLoading,
         isSuccess,
         isError,
         error
-    } = useGetUsersQuery();
+    } = useGetProfilesQuery();
 
     console.log(wordId)
 
@@ -34,8 +37,8 @@ const InvitationScreen = () =>{
         <section className="users">
             <h1>Users List</h1>
             <ul>
-                {users.map((user, i) => {
-                    console.log(user)
+                {profiles.map((profile, i) => {
+                    console.log(profile)
                     /*podriamos hacer que mediante un modal nos conectemos al socket
                     una vez enviada la solicitud cerramos la coneccion con ese socket 
                     el modal nos avisa que la notificacion fue enviada con exito y tambien nos saque
@@ -44,15 +47,16 @@ const InvitationScreen = () =>{
                     si responde nos aparece un puntito en notificaciones y nos avisa, pero lo que
                     responda no afectara nuestro juego mas que parapuntaje
                     deberiamos poner un limite de invitaciones o que solo se puedan hacer cada cierto tiempo 
-                    */
-                    return <li key={i}>
-                        {user.username}{' '} 
-                        {wordId == null ?
-                            (<Navigate to="/app/online/savescreen"/>)
-                            :
-                            (<SocketModal id={user.id} wordId={wordId}/>)
-                        }
-                    </li>
+                */  if(profile.user.id !== user.id){ 
+                        return <li key={i}>
+                            {profile.user.username}{' '} 
+                            {wordId == null ?
+                                (<Navigate to="/app/online/savescreen"/>)
+                                :
+                                (<SocketModal id={profile.user.id} wordId={wordId}/>)
+                            }
+                        </li>
+                    }
                 })}
             </ul>
         </section>}
