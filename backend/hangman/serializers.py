@@ -1,5 +1,5 @@
 from attr import fields
-from hangman.models import Task, User, Words, Invitation, Room
+from hangman.models import Task, User, Profile, Words, Invitation, Room
 from rest_framework import serializers
 from rest_framework_simplejwt.serializers import TokenObtainPairSerializer
 from rest_framework.permissions import IsAuthenticated
@@ -49,6 +49,31 @@ class UserListSerializer(serializers.ModelSerializer):
             'id': instance['id'],
             'username': instance['username'],
             'email': instance['email'],
+        }
+
+
+class ProfileSerializer(serializers.ModelSerializer):
+    user = CustomUserSerializer(read_only=True)
+
+    class Meta:
+        model = Profile
+        fields = '__all__'
+
+
+class ProfileListSerializer(serializers.ModelSerializer):
+    user = CustomUserSerializer(read_only=True)
+
+    class Meta:
+        model = Profile
+
+    def to_representation(self, instance):
+        return{
+            'id': instance['id'],
+            'user': instance['user'],
+            'image': instance['image'],
+            'victories': instance['victories'],
+            'defeats': instance['defeats'],
+            'stars': instance['stars']
         }
 
 

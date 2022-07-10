@@ -15,12 +15,13 @@ from rest_framework.decorators import (api_view, permission_classes,
                                        action)
 from django.contrib.auth.models import User
 from hangman.serializers import (TaskSerializer, WordsSerializer, WordsListSerializer,
-                                 UserListSerializer, InvitationListSerializer, UpdateRoomSerializer,
+                                 ProfileSerializer, ProfileListSerializer, UpdateRoomSerializer,
+                                 UserListSerializer, InvitationListSerializer, LogoutUserSerializer,
                                  InvitationSerializer, CustomTokenObtainPairSerializer,
                                  UserSerializer, CustomUserSerializer, RoomSerializer,
-                                 UpdateUserSerializer, PasswordSerializer, LogoutUserSerializer)
+                                 UpdateUserSerializer, PasswordSerializer)
 
-from .models import Task, User, Words, Invitation, Room
+from .models import Task, User, Profile, Words, Invitation, Room
 from .authentication import access_user_data, get_user_data
 
 
@@ -124,17 +125,6 @@ class UserViewSet(viewsets.GenericViewSet):
         users = self.get_queryset()
         users_serializer = self.list_serializer_class(users, many=True)
         return Response(users_serializer.data, status=status.HTTP_200_OK)
-    """
-    def create(self, request):
-        user_serializer = self.serializer_class(data=request.data)
-        if user_serializer.is_valid():
-            user_serializer.save()
-            return Response({
-                'message': 'User created successfully.'
-            }, status=status.HTTP_201_CREATED)
-        return Response({
-            'message': 'There are errors in the registration',
-            'error': user_serializer.errors}, status=status.HTTP_400_BAD_REQUEST)"""
 
     def retrieve(self, request, pk=None):
         permission = access_user_data(request, pk)
@@ -174,6 +164,39 @@ class UserViewSet(viewsets.GenericViewSet):
         }, status=status.HTTP_404_NOT_FOUND)
 
 
+class ProfileViewSet(viewsets.GenericViewSet):
+    model = Profile
+    model_user = User
+    serializer_class = ProfileSerializer
+    list_serializer_class = ProfileListSerializer
+    permission_classes = (IsAuthenticated,)
+    queryset = None
+
+    def get_object(self, pk):
+        return get_object_or_404(self.model, pk=pk)
+
+    def get_queryset(self):
+        # la barra \ significa que el punto de abajo pertenece arriba(borrar barra para comprobar)
+        if self.queryset is None:
+            self.queryset = self.serializer_class().Meta.model.objects\
+                .all()
+        return self.queryset
+
+    def list(self, request):
+        profile = self.get_queryset()
+        profiles_serializer = self.serializer_class(profile, many=True)
+        return Response(profiles_serializer.data, status=status.HTTP_200_OK)
+
+    def retrieve(self, request, pk=None):
+        permission = access_user_data(request, pk)
+        if permission != True:
+            return permission
+        user = self.model_user.objects.get(id=pk)
+        profile = self.model.objects.get(user=user)
+        profile_serializer = self.serializer_class(profile)
+        return Response(profile_serializer.data, status=status.HTTP_200_OK)
+
+
 @permission_classes([IsAuthenticated, ])
 class TaskViewSet(viewsets.ModelViewSet):
     serializer_class = TaskSerializer
@@ -182,6 +205,7 @@ class TaskViewSet(viewsets.ModelViewSet):
 
 class WordsViewSet(viewsets.GenericViewSet):
     model = Words
+    model_user = User
     serializer_class = WordsSerializer
     list_serializer_class = WordsListSerializer
     permission_classes = (IsAuthenticated,)
@@ -207,7 +231,7 @@ class WordsViewSet(viewsets.GenericViewSet):
         # mayor a 8 ni menor a 1, al igual que tiene el serializer de password
         print(request.data)
         print(request.data['user'])
-        user = User.objects.get(id=request.data['user'])
+        user = self.model_user.objects.get(id=request.data['user'])
         word = self.model.objects.filter(
             user=user, word=request.data['word']).last()
         if word:
@@ -235,7 +259,7 @@ class WordsViewSet(viewsets.GenericViewSet):
     @action(detail=False, methods=['GET'])
     def last(self, request):
         user_id = get_user_data(request)
-        user = User.objects.get(id=user_id)
+        user = self.model_user.objects.get(id=user_id)
         word = self.model.objects.filter(user=user).last()
         word_serializer = self.serializer_class(word)
         return Response(word_serializer.data, status=status.HTTP_200_OK)
@@ -280,6 +304,8 @@ class InvitationViewSet(viewsets.GenericViewSet):
 
 class RoomViewSet(viewsets.GenericViewSet):
     model = Room
+    model_user = User
+    model_profile = Profile
     serializer_class = RoomSerializer
     update_serizer_class = UpdateRoomSerializer
     permission_classes = (IsAuthenticated,)
@@ -294,10 +320,21 @@ class RoomViewSet(viewsets.GenericViewSet):
                 .filter(activated=True).values('id', 'word')
         return self.queryset
 
+    def update_profile(self, request):
+        user_id = get_user_data(request)
+        user = self.model_user.objects.get(id=user_id)
+        profile_guest_user = self.model_profile.objects.get(user=user_id)
+        """falta completar la actualizacion de ambos perfiles, el creador y invitado"""
+        """print(room_serializer.data)
+        if room_serializer.data['game_over']:
+            result = room_serializer.data['winner']
+            if result:
+                update_profile = self.model_profile.objects"""
+
     @action(detail=False, methods=['GET'])
     def activated(self, request):
         user_id = get_user_data(request)
-        user = User.objects.get(id=user_id)
+        user = self.model_user.objects.get(id=user_id)
         room = self.model.objects.get(guest_user=user, activated=True)
         if room:
             room_serializer = self.serializer_class(room)

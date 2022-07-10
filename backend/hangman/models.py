@@ -1,5 +1,6 @@
 from django.db import models
 from django.contrib.auth.models import AbstractUser
+from django.core.validators import MaxValueValidator, MinValueValidator
 
 # Create your models here.
 
@@ -8,6 +9,18 @@ class User(AbstractUser):
 
     def __str__(self):
         return f"{self.username}"
+
+
+class Profile(models.Model):
+    user = models.OneToOneField(User, on_delete=models.CASCADE)
+    image = models.ImageField(null=True, blank=True)
+    victories = models.IntegerField(default=0)
+    defeats = models.IntegerField(default=0)
+    stars = models.IntegerField(default=0, validators=[
+        MinValueValidator(0), MaxValueValidator(999)])
+
+    def __str__(self):
+        return f"Perfil de {self.user.username}"
 
 
 class Task(models.Model):
