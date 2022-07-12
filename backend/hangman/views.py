@@ -189,6 +189,8 @@ class ProfileViewSet(viewsets.GenericViewSet):
 
     def retrieve(self, request, pk=None):
         permission = access_user_data(request, pk)
+        # se corrobora que el usuario que este ingresando a esta informacion
+        # sea el usuario al cual le pertenece
         if permission != True:
             return permission
         user = self.model_user.objects.get(id=pk)
@@ -232,6 +234,7 @@ class WordsViewSet(viewsets.GenericViewSet):
         print(request.data)
         print(request.data['user'])
         user = self.model_user.objects.get(id=request.data['user'])
+        # obtenemos el ultimo word perteneciente a estos datos
         word = self.model.objects.filter(
             user=user, word=request.data['word']).last()
         if word:
@@ -321,25 +324,38 @@ class RoomViewSet(viewsets.GenericViewSet):
         return self.queryset
 
     def update_profile(self, request):
+        # actualizamos los perfiles de los usuarios host y guest
+        # segun quien gano la partida, les sumamos puntos en victoria y derrota
         user_id = get_user_data(request)
         user = self.model_user.objects.get(id=user_id)
-        profile_guest_user = self.model_profile.objects.get(user=user_id)
-        """falta completar la actualizacion de ambos perfiles, el creador y invitado"""
-        """print(room_serializer.data)
-        if room_serializer.data['game_over']:
-            result = room_serializer.data['winner']
-            if result:
-                update_profile = self.model_profile.objects"""
+        profile_guest_user = self.model_profile.objects.get(user=user)
+        room = self.model.objects.filter(
+            guest_user=user).last()
+        profile_host_user = self.model_profile.objects.get(
+            user=room.host_user)
+        if room:
+            if room.winner:
+                profile_guest_user.victories += 1
+                profile_guest_user.save()
+                profile_host_user.defeats += 1
+                profile_host_user.save()
+            else:
+                profile_host_user.victories += 1
+                profile_host_user.save()
+                profile_guest_user.defeats += 1
+                profile_guest_user.save()
+        return "completed update profile"
 
     @action(detail=False, methods=['GET'])
     def activated(self, request):
         user_id = get_user_data(request)
         user = self.model_user.objects.get(id=user_id)
-        room = self.model.objects.get(guest_user=user, activated=True)
-        if room:
-            room_serializer = self.serializer_class(room)
-            return Response(room_serializer.data, status=status.HTTP_200_OK)
-        else:
+        try:
+            room = self.model.objects.get(guest_user=user, activated=True)
+            if room:
+                room_serializer = self.serializer_class(room)
+                return Response(room_serializer.data, status=status.HTTP_200_OK)
+        except:
             return Response({
                 'message': 'Room not found'
             }, status=status.HTTP_404_NOT_FOUND)
@@ -349,6 +365,9 @@ class RoomViewSet(viewsets.GenericViewSet):
         room_serializer = self.update_serizer_class(room, data=request.data)
         if room_serializer.is_valid():
             room_serializer.save()
+            print(room_serializer.data['activated'])
+            if request.data['activated'] == False:
+                self.update_profile(request)
             return Response({
                 'message': 'Updated user correctly updated',
                 'data': room_serializer.data

@@ -73,7 +73,7 @@ class Room(models.Model):
     word = models.ForeignKey(
         'Words', on_delete=models.CASCADE, null=False, related_name='room_words')
     hits = models.CharField(max_length=8, default='', blank=True)
-    failures = models.CharField(max_length=5, default='', blank=True)
+    failures = models.CharField(max_length=6, default='', blank=True)
     activated = models.BooleanField(default=False, blank=True)
     game_over = models.BooleanField(default=False, blank=True)
     winner = models.BooleanField(default=False, blank=True)
