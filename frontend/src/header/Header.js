@@ -48,7 +48,7 @@ const Header = () => {
         <header>
             <Navbar expand="sm">
                 <Container fluid>
-                    <Navbar.Brand href="#home">
+                    <Navbar.Brand>
                     <img
                         src={Vector}
                         width="30"

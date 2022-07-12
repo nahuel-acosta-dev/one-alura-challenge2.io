@@ -32,8 +32,6 @@ const Game = ({wordData, updateRoomApi, setWord}) => {
     //const [wordsFound, setWordsFound] = useState(word.split('').map(() =>  ""));
     const [wordsFound, setWordsFound] = useState(wordData.right);
     const [failures, setFailures] = useState(wordData.failures);
-
-    if(failures.length > 5) console.log("Juego terminado");
     
     useEffect(() => {
         //autoapuntado al div principal para ingresar letras directamente
