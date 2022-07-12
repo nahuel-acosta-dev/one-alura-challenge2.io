@@ -2,6 +2,7 @@ import React, {useState} from 'react';
 import Navbar from 'react-bootstrap/Navbar';
 import Nav from 'react-bootstrap/Nav'
 import Vector from '../image/Vector.svg';
+import Logo from '../image/logo.svg';
 import Container from 'react-bootstrap/Container';
 import Button from 'react-bootstrap/Button';
 import {useLogoutMutation} from '../features/auth/logoutApiSlice';
@@ -13,6 +14,7 @@ import {Link, useNavigate} from 'react-router-dom';
 import DropdownButton from 'react-bootstrap/DropdownButton';
 import NavDropdown from 'react-bootstrap/NavDropdown';
 import Notification from '../components/notification/Notification';
+import Loading from '../components/loading/Loading';
 
 const Header = () => {
     const user = useSelector(selectCurrentUser);
@@ -21,6 +23,7 @@ const Header = () => {
     const navigate = useNavigate();
     const [logout, { isLoading }] = useLogoutMutation();
     const [errMsg, setErrMsg] = useState('');
+    const [changeLogo, setChangeLogo] = useState(false);
 
     const logoutApi = async () => {
         try{
@@ -50,47 +53,74 @@ const Header = () => {
                 <Container fluid>
                     <Navbar.Brand>
                     <img
-                        src={Vector}
-                        width="30"
-                        height="30"
+                        src={changeLogo ? Vector : Logo}//Al pasar el mouse debe cambiar de logo
+                        width="50"
                         className="d-inline-block align-top"
                         alt="alura logo"
                     />
-                    {
-                        user && token && user.username
-                    }
                     </Navbar.Brand>
+                    <Nav className="me-4">
+                            <Link className="navbar-links__mod" to={
+                                token ? 
+                                ("/app/home")
+                                :
+                                ("/")
+                            }>sixLives</Link>
+                    </Nav>
                     <Navbar.Toggle aria-controls="navbarScroll" />
                     <Navbar.Collapse id="basic-navbar-nav">
+                        <Nav className="me-4">
+                        {token && user &&
+                            <Notification/>
+                        }
+                        </Nav>
                         <Nav className="me-auto">
-                            <Link className="navbar-links" to="/app/home">Home</Link>
                             {token && user &&
                             <>
-                                <Notification/>
                                 <NavDropdown
                                     id="nav-dropdown-dark-example"
-                                    title="More"
+                                    title={<i className="bi bi-sort-down nav-icon"></i>}
                                     menuVariant="dark"
+                                    className="nav-dropdown"
                                     >
                                     <NavDropdown.Item>
                                         <Button variant="link" className="navbar-links" onClick={redirect}>
-                                            Profile
+                                            <i className="bi bi-person"></i> Profile
                                         </Button>
                                     </NavDropdown.Item>
                                     <NavDropdown.Divider />
                                     <NavDropdown.Item>{
-                                    isLoading ? (<span>Loading...</span>)
+                                    isLoading ? (<Loading/>)
                                         :
-                                    (token ? (<Button variant="link" onClick={logoutApi} className="navbar-links">Logout</Button>):
-                                    (<Button variant="link" className="navbar-links"><Link to="/auth/login">Login</Link></Button>))
+                                    (token && (
+                                    <>
+                                        
+                                        <Button variant="link" onClick={logoutApi} className="navbar-links">
+                                        <i className="bi bi-power"></i> Logout
+                                        </Button>
+                                    </>
+                                    )
+                                    )
                                 }</NavDropdown.Item>
                                 </NavDropdown>
                             </>}
-                            {
-                                isLoading ? (<span>Loading...</span>)
+                            
+                        </Nav>
+                        <Nav>
+                        {
+                                isLoading ? (<Loading/>)
                                     :
-                                (token ? (<Button variant="link" onClick={logoutApi} className="navbar-links">Logout</Button>):
-                                (<Button variant="link" className="navbar-links"><Link to="/auth/login">Login</Link></Button>))
+                                (!token ?
+                                (<div className="navbar-login">
+                                    <Link className="navbar-login btn btn-outline-info" to="/auth/login">
+                                        Inicia session
+                                    </Link>
+                                </div>)
+                                :
+                                (
+                                    //en vez de poner solo el nombre podria ponerse la foto del perfil
+                                    user && token && user.username.toUpperCase())
+                                )
                             }
                         </Nav>
                     </Navbar.Collapse>

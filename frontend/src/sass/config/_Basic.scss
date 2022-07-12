@@ -1,12 +1,19 @@
 body{
     height: 100vh;
+    font-family: $font-medium;
 }
 #root{
     height: 100%;
 }
 header{
     height: 15%;
+    font-family: $font-medium;
+    height: 500;
 }
 main{
     height: 85%;
+}
+
+.height_maximum{
+    height: 100%;
 }

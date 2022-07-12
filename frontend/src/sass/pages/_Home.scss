@@ -1,7 +1,43 @@
-
 .main__container{
     height: 100%;
-    .home{
-        height: 80%;
+    .home__img{
+        width: 100%;
+        height: 50%;
+        .home__logo{
+            max-height: 100%;
+            @include margin-auto;
+        }
     }
+    .home__title{
+        height: 20%;
+        h1{
+            @include title;
+            font-size: 5em;
+            font-weight: 900;
+            &:hover{
+                color: $blue;
+            }
+        }
+    }
+    .home__button{
+        height: 10%;
+        width: 70%;
+        @include margin-auto;
+        .custom-btn{
+            width: 100%;
+            border-width: 3px;
+        }
+    }
+    .home__text{
+        height: 20%;
+        p{
+            font-family: 'Titillium Web', sans-serif;
+            font-size: 1.5em;
+            font-weight: 500;
+            span{
+                color: $violet;
+            }
+        }
+    }   
 }
+

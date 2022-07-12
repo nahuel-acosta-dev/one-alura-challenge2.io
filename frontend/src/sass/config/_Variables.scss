@@ -1,7 +1,9 @@
 ////////////////////////////////
 //1- Patron de Colores
 ////////////////////////////////
-$celestial: #77c9d4;
+$celestial: #0dcaf0;
+$blue: #0a58ca;
+$violet: #b642f5;
 $green: #57BC90;
 $darkgreen: #015249;
 $grey: #a5a5af;
@@ -14,4 +16,27 @@ $enable-gradients: true;
 $btn-border-radius-sm: .6rem;
 $btn-border-radius-lg: 1rem;
 $btn-border-radius: 3rem;
+
+////////////////////////////////
+//2- Fonts
+////////////////////////////////
+$font-medium: 'Titillium Web', sans-serif;
+$font-regular: 'Libre Franklin', sans-serif;
+$font-shadows: 'Londrina Shadow', cursive;
+
+////////////////////////////////
+//3- mixins generals
+////////////////////////////////
+@mixin margin-auto {
+    margin-left: auto;
+    margin-right: auto;
+}
+
+@mixin title {
+    font-weight: 500;
+    color: $celestial;
+    text-decoration: none;
+    font-family: $font-shadows;
+}
+
 

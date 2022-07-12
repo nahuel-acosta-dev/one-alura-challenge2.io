@@ -74,8 +74,9 @@ const Notification = () =>{
     return(
      <NavDropdown
         id="nav-dropdown-dark-example"
-        title="Dropdown"
+        title={<i className="bi bi-bell nav-icon"></i>}
         menuVariant="dark"
+        className="nav-dropdown"
         >
         {isLoading &&
         <p>"Loading..."</p>} 

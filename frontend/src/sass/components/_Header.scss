@@ -4,10 +4,32 @@
     }
     .navbar-links{
         text-decoration: none;
+        color:white;
         a{
             text-decoration: none;
             color: rgba(0, 0, 0, 0.7);
-        }
-        
+        } 
     }
+    .nav-dropdown{
+        padding-top: 5px;
+    }
+    .nav-icon{
+        font-size: 25px;
+        color: $celestial;
+        &:hover{
+            color: $blue;
+        }
+    }
+    .navbar-login{
+        margin-right: 50px;
+        width: 150px;
+    } 
+    i{
+        margin-top: 6bonpx;
+    }
+}
+
+.navbar-links__mod{
+    @include title;
+    font-size:2.5em;
 }
