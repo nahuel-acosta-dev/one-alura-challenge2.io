@@ -1,0 +1,33 @@
+footer{
+    height: 6em;
+    width: 100%;
+    background-color: rgba(214, 236, 236, 0.3);
+    .footer-container{
+        .copyright{
+            margin-top: 14%;
+        }
+    }
+}
+
+
+@mixin Footer-responsive-sm{
+    footer{
+        height: 8em;
+        .footer-container{
+            .footer-img{
+                height: 80%;
+                img{
+                    width: 30px;
+                }
+            }
+            .copyright{
+                font-size: 0.7em;
+            }
+            .icon-cont{
+                margin-top: 2px;
+            }
+        }
+    }
+
+}
+

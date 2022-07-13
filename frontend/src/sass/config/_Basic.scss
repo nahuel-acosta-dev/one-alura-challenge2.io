@@ -17,3 +17,66 @@ main{
 .height_maximum{
     height: 100%;
 }
+
+body {
+    background: #ecf3f3;
+}
+
+////////////////////////////////
+//1- Particle
+////////////////////////////////
+#particle-container{
+    z-index: -1;
+}
+
+.particle {
+	position: absolute;
+ 	border-radius: 50%;
+}
+
+@for $i from 1 through 30 {
+	@keyframes particle-animation-#{$i} {
+		100% {
+			transform: translate3d((random(90) * 1vw), (random(90) * 1vh), (random(100) * 1px));
+		}
+	}
+	
+	.particle:nth-child(#{$i}){
+		animation: particle-animation-#{$i} 60s infinite;
+		$size: random(5) + 5 + px;
+		opacity: calc(random(100)/100);
+		height: $size;
+		width: $size;
+		animation-delay: -$i * .2s;
+		transform: translate3d((random(90) * 1vw), (random(90) * 1vh), (random(100) * 1px));
+		background: hsl(random(360), 70%, 50%);
+	}
+}
+
+////////////////////////////////
+//2- Scroll
+////////////////////////////////
+html{
+scroll-behavior: smooth;
+}
+
+/* Works on Firefox */
+* {
+	scrollbar-width: thin;
+	scrollbar-color: $celestial transparent;
+  }
+  
+  /* Works on Chrome, Edge, and Safari */
+  *::-webkit-scrollbar {
+	width: 18px;
+  }
+  
+  *::-webkit-scrollbar-track {
+	background: transparent;
+  }
+  
+  *::-webkit-scrollbar-thumb {
+	background-color: $celestial;
+	border-radius: 20px;
+	border: 15px solid $celestial;
+  }
