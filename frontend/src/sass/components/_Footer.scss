@@ -4,11 +4,14 @@ footer{
     background-color: rgba(214, 236, 236, 0.3);
     .footer-container{
         .copyright{
-            margin-top: 14%;
+            margin-top: 10%;
         }
     }
 }
 
+////////////////////////////////
+//Responsive Footer
+////////////////////////////////
 
 @mixin Footer-responsive-sm{
     footer{
@@ -21,6 +24,7 @@ footer{
                 }
             }
             .copyright{
+                margin-top: 14%;
                 font-size: 0.7em;
             }
             .icon-cont{

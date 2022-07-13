@@ -18,5 +18,6 @@ $sm: 576px;
 @media all and (max-width: $sm){
     @include SaveScreen-sm;
     @include GameStarts-sm;
+    @include Home-responsive-sm;
     @include Footer-responsive-sm;
 }
