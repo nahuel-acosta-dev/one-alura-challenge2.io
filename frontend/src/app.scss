@@ -1,4 +1,4 @@
-@import url('https://fonts.googleapis.com/css2?family=Libre+Franklin&display=swap');
+@import url('https://fonts.googleapis.com/css2?family=Fredoka+One&display=swap');
 @import url('https://fonts.googleapis.com/css2?family=Londrina+Shadow&display=swap');
 @import url('https://fonts.googleapis.com/css2?family=Titillium+Web:ital@1&display=swap');
 @import './sass/config/Variables';
@@ -10,9 +10,11 @@
 @import './sass/components/Header';
 @import './sass/components/Textarea';
 @import './sass/components/Button';
+@import './sass/components/Modes';
 @import './sass/components/Footer';
 //pages
 @import './sass/pages/Home';
+@import './sass/pages/HomeApp';
 @import './sass/pages/SaveScreen';
 @import './sass/pages/GameStarts';
 @import './sass/pages/GameMode';

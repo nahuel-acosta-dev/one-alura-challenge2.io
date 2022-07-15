@@ -80,10 +80,10 @@ const SaveScreen = () => {
                     <Row className="saveScreen__buttons align-items-center align-items-md-center align-items-sm-center
                     justify-content-center">
                         <Col sm={6} xs={12}>
-                            <Button type="submit" variant="primary" className="btn-custom" >Guardar y empezar</Button>
+                            <Button type="submit" variant="info" className="btn-custom" >Guardar y empezar</Button>
                         </Col>
                         <Col sm={6} xs={12}>
-                            <Link to="/app/home" className="btn btn-secondary btn-custom">Cancelar</Link>
+                            <Link to="/app/home" className="btn btn-danger btn-custom">Cancelar</Link>
                         </Col>
                     </Row>
                 </Form>

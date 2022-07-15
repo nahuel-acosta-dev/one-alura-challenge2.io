@@ -2,24 +2,11 @@ import React, {useEffect, createRef, useState} from 'react';
 import Button from 'react-bootstrap/Button';
 import Row from 'react-bootstrap/Row';
 import Col from 'react-bootstrap/Col';
+import PhoneMode from '../components/responsive-game/PhoneMode';
 import Hangman from '../components/hangman/Hangman';
 import GameOver from '../components/game-over/GameOver';
 import PropTypes from 'prop-types';
 import {useNavigate, useLocation} from 'react-router-dom';
-
-//Hace falta agregar una version para movil ya que hay no hay butones para ingresar letras, debemos
-/*ingresar un input de 1 letra que permita usar el teclado virtual del celular,
-ponerle un boton para el usuario activar el modo movil o que la pantalle se de cuenta automaticamente
-aunque eso traeria ciertos problemas a la hora de adaptarse. Es mejor el bton*/ 
-
-/*o crear un teclado en la pantalla, esta dificil esta habria que crear mas funciones y
-la pantalla tendria que darse cuenta de en que dimensiones esta.
-O podriamos agregar un boton que le permita al usuario elegir el modo. es mejor el boton creo*/
-
-//separar en componentes el modo escritorio y el modo movil, podriamos crear componentes 
-//mas pequeños para las funcionalidades que compartarn el modo escritorio y movil.
-//recordar una regla es que un componente no puede tener de hijo a otro, por lo tanto
-//modo escritotio y movil no deben ir en carpeta componentes, ahi solo van los reutilizables
 
 const Game = ({wordData, updateRoomApi, setWord}) => {
     const drawerRef = createRef();
@@ -87,6 +74,8 @@ const Game = ({wordData, updateRoomApi, setWord}) => {
         newWordData.right = wordsFound;
         newWordData.failures = failures;
         if(failures.length > 5){
+            //si tenemos mas fallas de las permitidas llamamos a la api
+            //y le informamos que hemos perdido la partida
             newWordData.activated = false;
             newWordData.gameOver = true;
             newWordData.winner = false;
@@ -94,6 +83,8 @@ const Game = ({wordData, updateRoomApi, setWord}) => {
             setGameOver(true);
         }
         else if(wordsFound.join('') == word.toUpperCase()){
+            //si al juntar el array de aciertos se forma la partida dada
+            //llamamos a la api diciendole que ganamos
             newWordData.activated = false;
             newWordData.gameOver = true;
             newWordData.winner = true;
@@ -107,12 +98,9 @@ const Game = ({wordData, updateRoomApi, setWord}) => {
             updateRoomApi(newWordData);
         }
 
-    }, [wordsFound, failures])
-    
+    }, [wordsFound, failures]);
 
-    const handleKeyDown = (e) => {
-        const letter = e.key.toUpperCase();
-        const code = letter.charCodeAt(); //obtenemos el codigo ascii de la letra en mayuscula
+    const checkGameStatus = (letter, code) => {
 
         if(failures.length > 5) {
             console.log("No tienes mas intentos");
@@ -133,6 +121,14 @@ const Game = ({wordData, updateRoomApi, setWord}) => {
         if(code >= 65 && code <= 90) return searchLyrics(letter); 
         //else if(code >= 97 && code <= 122) return searchLyrics(letter);//Minusculas si es necesario
         else return false;
+
+    }
+    
+    const handleKeyDown = (e) => {
+        const letter = e.key.toUpperCase();
+        const code = letter.charCodeAt(); //obtenemos el codigo ascii de la letra en mayuscula
+
+        return checkGameStatus(letter, code);
     }
 
     const newGame = () => {
@@ -171,18 +167,23 @@ const Game = ({wordData, updateRoomApi, setWord}) => {
                     }
                 </Row></>)
                 :
-                (<GameOver/>)
+                (
+                    <GameOver/>
+                )
                 }
+
+                <PhoneMode checkGameStatus={checkGameStatus} />
+
                 <Row className="gameStarts__buttons align-items-center justify-content-center">
                 <Col sm={6} xs={12}>
                     {wordData.type != 'online' &&
-                        <Button variant="primary" className="btn-custom" onClick={newGame}>Nuevo juego</Button>}
+                        <Button variant="info" className="btn-custom" onClick={newGame}>Nuevo juego</Button>}
                 </Col>
                     <Col sm={6} xs={12}>{
                         !gameOver ?
-                        <Button variant="secondary" className="btn-custom" onClick={endGame}>Desistir</Button>
+                        <Button variant="danger" className="btn-custom" onClick={endGame}>Desistir</Button>
                         :
-                        <Button variant="secondary" className="btn-custom" onClick={endGame}>Volver</Button>
+                        <Button variant="danger" className="btn-custom" onClick={endGame}>Volver</Button>
                     }
                     </Col>    
                 </Row>

@@ -51,7 +51,7 @@ const Header = () => {
         <header>
             <Navbar expand="sm">
                 <Container fluid>
-                    <Navbar.Brand>
+                    <Navbar.Brand className="header__logo d-flex navbar-center">
                     <img
                         src={changeLogo ? Vector : Logo}//Al pasar el mouse debe cambiar de logo
                         width="50"
@@ -59,7 +59,7 @@ const Header = () => {
                         alt="alura logo"
                     />
                     </Navbar.Brand>
-                    <Nav className="me-4">
+                    <Nav className="header-title me-sm-4">
                             <Link className="navbar-links__mod" to={
                                 token ? 
                                 ("/app/home")
@@ -67,14 +67,15 @@ const Header = () => {
                                 ("/")
                             }>sixLives</Link>
                     </Nav>
-                    <Navbar.Toggle aria-controls="navbarScroll" />
-                    <Navbar.Collapse id="basic-navbar-nav">
-                        <Nav className="me-4">
-                        {token && user &&
-                            <Notification/>
-                        }
+                        <Nav className="me-4"
+                        style={{ maxHeight: '50px' }}
+                        >
+                            {token && user &&
+                                <Notification/>
+                            }
                         </Nav>
-                        <Nav className="me-auto">
+                        <Nav className="me-auto"
+                        style={{ maxHeight: '50px' }}>
                             {token && user &&
                             <>
                                 <NavDropdown
@@ -96,7 +97,7 @@ const Header = () => {
                                     <>
                                         
                                         <Button variant="link" onClick={logoutApi} className="navbar-links">
-                                        <i className="bi bi-power"></i> Logout
+                                            <i className="bi bi-power"></i> Logout
                                         </Button>
                                     </>
                                     )
@@ -106,24 +107,26 @@ const Header = () => {
                             </>}
                             
                         </Nav>
-                        <Nav>
+                        <Nav className="navbar-center">
                         {
                                 isLoading ? (<Loading/>)
                                     :
                                 (!token ?
                                 (<div className="navbar-login">
                                     <Link className="navbar-login btn btn-outline-info" to="/auth/login">
-                                        Inicia session
+                                        Iniciar Sesion
                                     </Link>
                                 </div>)
                                 :
                                 (
-                                    //en vez de poner solo el nombre podria ponerse la foto del perfil
-                                    user && token && user.username.toUpperCase())
+                                    <div className="profile">
+                                        {user && token && user.username.toUpperCase()}
+                                    </div>
+                                    //en vez de poner solo el nombre podria ponerse la foto del perfil    
+                                )
                                 )
                             }
                         </Nav>
-                    </Navbar.Collapse>
                 </Container>
             </Navbar>
         </header>

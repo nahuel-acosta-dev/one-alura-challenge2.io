@@ -65,7 +65,9 @@ module.exports = {
         static:path.join(__dirname, 'dist'),
         compress:true,
         port:3050,
+        host: 'localhost',
         historyApiFallback:true,
         open:true
     }
-}
+}//host: "192.168.1.14",
+//host: 'localhost',

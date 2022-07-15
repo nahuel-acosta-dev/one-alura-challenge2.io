@@ -3,7 +3,10 @@ import Stack from 'react-bootstrap/Stack';
 import Row from 'react-bootstrap/Row';
 import Col from 'react-bootstrap/Col';
 import Button from 'react-bootstrap/Button';
-import Modal from 'react-bootstrap/Modal'
+import Modal from 'react-bootstrap/Modal';
+import Modes from '../components/modes/Modes';
+import Fast from '../image/fast.svg';
+import Plus from '../image/plus.svg';
 import {useGetRoomQuery} from '../rooms/getRoomApiSlice';
 import {useUpdateRoomMutation} from '../rooms/updateRoomApiSlice.js'
 import {Link, useNavigate} from 'react-router-dom';
@@ -20,6 +23,27 @@ const HomeApp = () => {
         isSuccess,
         isError
     } = useGetRoomQuery();
+
+    const modes = [
+        {
+            title: 'Juega',
+            text: 'Juega una partida rapida con una palabra al azar',
+            url: "/app/local/fast_play/gamestarts",
+            img: {Fast},
+            background: '$green',
+            colorTitle: '#71ed5e',
+            width: '20'
+        },
+        {
+            title: 'Agrega',
+            text: 'Agrega una palabra y elige como jugar',
+            url: "/app/gamemode",
+            img: {Plus},
+            background: '$green',
+            colorTitle: '#f2b73a',
+            width: '30'
+        }
+    ]
 
     useEffect(() =>  {
         if(isSuccess){
@@ -60,19 +84,21 @@ const HomeApp = () => {
 
     return(
         <>
-        <Row className="home align-content-center">
-            <Col md={4} sm={3} xs={1}></Col>
-                <Col md={4} sm={6} xs={10}>
-                    <Row>
-                        <Stack gap={2} className="col-md-5 mx-auto">
-                            <Link to="/app/local/fast_play/gamestarts" className="btn btn-secondary btn-lg">Juego Rapido</Link>
-                            <Link to="/app/gamemode" className="btn btn-outline-secondary btn-sm">Agregar una nueva palabra</Link>
-                        </Stack>
-                    </Row>
-                </Col>
-            <Col md={4} sm={3} xs={1}></Col>
+        <Row className="modes height_maximum d-flex align-content-center justify-content-center">
+            {
+                modes.map((mode, i) => (
+                    <Modes key={i} 
+                        title={mode.title} 
+                        text={mode.text} 
+                        url={mode.url}
+                        img={mode.img}
+                        background={mode.background}
+                        colorTitle={mode.colorTitle}
+                        width={mode.width}
+                    />
+                ))
+            }
         </Row>
-        
 
         <Modal
             size="sm"

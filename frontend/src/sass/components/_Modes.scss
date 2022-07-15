@@ -1,0 +1,35 @@
+.modes{
+    .modes__cont{
+            .img__cont{
+                width: 30%;
+                border: 2px solid $celestial;
+                border-radius: 50%;
+                background-color: $celestial;
+            }
+            .modes__info{
+                a{
+                    text-decoration: none;
+                    h2{
+                        padding-top: 2%;
+                        font-family: $font-fredoka;
+                        color: $green;
+                    }
+
+                }
+                    p{
+                        font-family: $font-medium;
+                        font-weight: 500;
+                    }
+            }
+    }
+}
+
+@mixin Modes-responsive-sm{
+
+    .modes{
+        .modes__cont{
+            height: 40%!important;
+        }
+    }
+
+}

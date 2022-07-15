@@ -85,7 +85,7 @@ const Notification = () =>{
             notifications.map((notification, i) => {
                 return(
                 <div key={i}>  
-                    <NavDropdown.Item href="#action/3.1">{notification.host_user == user.id ?
+                    <NavDropdown.Item>{notification.host_user == user.id ?
                     (
                         notification.answered ?
                         (

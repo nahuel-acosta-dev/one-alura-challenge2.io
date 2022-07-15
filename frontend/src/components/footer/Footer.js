@@ -7,6 +7,7 @@ import GitHub from '../../image/github.svg';
 import Linkedin from '../../image/linked.svg';
 import Email from '../../image/email.svg';
 import Phone from '../../image/phone.svg';
+import {Link} from 'react-router-dom'
 
 const Footer = () =>{
 

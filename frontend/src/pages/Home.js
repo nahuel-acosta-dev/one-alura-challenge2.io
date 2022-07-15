@@ -2,10 +2,15 @@ import React from 'react';
 import Logo from '../image/logo.svg';
 import Row from 'react-bootstrap/Row';
 import Col from 'react-bootstrap/Col';
+//import useScreenSize from "../hooks/useScreenSize";
 import Button from 'react-bootstrap/Button';
-import {Outlet, Link} from 'react-router-dom'
+import {Outlet, Link} from 'react-router-dom';
+import {useSelector} from 'react-redux';
+import { selectCurrentUser, selectCurrentToken } from '../features/auth/authSlice';
 
 const Home = () =>{
+    //const { width, height } = useScreenSize();
+    const token = useSelector(selectCurrentToken)
 
     return (
         <section className="home height_maximum">
@@ -23,9 +28,17 @@ const Home = () =>{
                         <h1>sixLives</h1>
                     </div>
                     <div className="home__button">
-                        <Link className="btn btn-outline-info custom-btn" to="/auth/register">
+                        {!token ?
+                        (<Link className="btn btn-outline-info custom-btn" to="/auth/register">
                             Registrate es gratis
-                        </Link>
+                        </Link>)
+                        :
+                        (<Link className="btn btn-outline-info custom-btn" to="/app/home">
+                            Empezar
+                        </Link>)
+                        
+                        }
+                        
                     </div>
                     <div className="home__text text-center">
                         <p>

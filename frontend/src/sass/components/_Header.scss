@@ -33,3 +33,27 @@
     @include title;
     font-size:2.5em;
 }
+
+////////////////////////////////
+//Responsive Header
+////////////////////////////////
+
+@mixin Header-responsive-sm{
+    .header__logo{
+        display: none !important;
+    }
+    .header-title{
+        display:none;
+    }
+    .navbar-login{
+        margin-right: 0px!important;
+        width: 120px!important;
+    } 
+    .navbar-center{
+        margin-left: auto;
+        margin-right: auto;
+    }
+    .profile{
+        display: none;
+    }
+}

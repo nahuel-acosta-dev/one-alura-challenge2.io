@@ -16,8 +16,18 @@ $sm: 576px;
 }
 
 @media all and (max-width: $sm){
+ ////////////////////////////////
+//1- Components
+////////////////////////////////
+    @include Header-responsive-sm;
+    @include Modes-responsive-sm;
+    @include Footer-responsive-sm;
+
+ ////////////////////////////////
+//2- Pages
+////////////////////////////////
+    @include Home-responsive-sm;
     @include SaveScreen-sm;
     @include GameStarts-sm;
-    @include Home-responsive-sm;
-    @include Footer-responsive-sm;
+
 }
