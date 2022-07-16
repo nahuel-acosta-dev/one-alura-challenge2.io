@@ -8,7 +8,7 @@ import GameOver from '../components/game-over/GameOver';
 import PropTypes from 'prop-types';
 import {useNavigate, useLocation} from 'react-router-dom';
 
-const Game = ({wordData, updateRoomApi, setWord}) => {
+const Game = ({wordData, updateRoomApi, setWord,  setErrMsg}) => {
     const drawerRef = createRef();
     const word = wordData.word;
     const navigate = useNavigate();
@@ -19,6 +19,7 @@ const Game = ({wordData, updateRoomApi, setWord}) => {
     //const [wordsFound, setWordsFound] = useState(word.split('').map(() =>  ""));
     const [wordsFound, setWordsFound] = useState(wordData.right);
     const [failures, setFailures] = useState(wordData.failures);
+    const [keyboard, setKeyboard] = useState(false);
     
     useEffect(() => {
         //autoapuntado al div principal para ingresar letras directamente
@@ -69,27 +70,29 @@ const Game = ({wordData, updateRoomApi, setWord}) => {
 
     }
 
+    const gameResult = (obj, result) => {
+        obj.activated = false;
+        obj.gameOver = true;
+        obj.winner = result;
+        setGameOver(true);
+        setKeyboard(false);
+    }
+
     useEffect(() => {
         let newWordData = wordData;
         newWordData.right = wordsFound;
         newWordData.failures = failures;
         if(failures.length > 5){
+            let result = false;
             //si tenemos mas fallas de las permitidas llamamos a la api
             //y le informamos que hemos perdido la partida
-            newWordData.activated = false;
-            newWordData.gameOver = true;
-            newWordData.winner = false;
-            console.log('juego perdido');
-            setGameOver(true);
+            gameResult(newWordData, result);
         }
         else if(wordsFound.join('') == word.toUpperCase()){
+            let result = true;
             //si al juntar el array de aciertos se forma la partida dada
             //llamamos a la api diciendole que ganamos
-            newWordData.activated = false;
-            newWordData.gameOver = true;
-            newWordData.winner = true;
-            console.log('juego ganado');
-            setGameOver(true);
+            gameResult(newWordData, result);
         }
 
         localStorage.setItem('word', JSON.stringify(newWordData));
@@ -114,9 +117,11 @@ const Game = ({wordData, updateRoomApi, setWord}) => {
         else if(failures.includes(letter) || wordsFound.includes(letter)){
             //La letra ya fue ingresada
             console.log("Ya ingresaste esa letra");
+            setErrMsg('Ya introduciste esa letra');
             return false;
         }
 
+        setErrMsg('');
         //entre estos numeros se encuentran las letras mayusculas en codigo ascii
         if(code >= 65 && code <= 90) return searchLyrics(letter); 
         //else if(code >= 97 && code <= 122) return searchLyrics(letter);//Minusculas si es necesario
@@ -144,49 +149,83 @@ const Game = ({wordData, updateRoomApi, setWord}) => {
 
     return(
         <Row className="gameStarts" ref={drawerRef} onKeyDown={handleKeyDown} tabIndex={0}>
-            <Col md={2} xs={1}></Col>
+            <Col md={2} xs={1}>
+      </Col>
             <Col md={8} xs={10}>
                 {
                 !gameOver ? 
-                (<><Hangman failures={failures}/>
-                <Row className="gameStarts__letters align-items-end text-center justify-content-center">
-                    {
-                        wordsFound.map((letter, i) => (
-                        <Col xs={1} key={i} className="letter">
-                            <span>{letter}</span>
-                        </Col>
-                    ))}
-                </Row>
-                <Row className="gameStarts__failures text-center align-item-center justify-content-center">
-                    {
-                        failures.map((failure, i) => (
-                            <Col xs={1} key={i} className="gameStarts__fails">
-                                <span>{failure}</span>
+                (<>
+                    <Hangman failures={failures}/>
+                    <Button variant={
+                        keyboard ? "success" : "danger"} size="sm" onClick={() => setKeyboard(
+                        keyboard ? false : true
+                    )}>
+                        <i className="bi bi-keyboard"></i>
+                    </Button>
+                    <Row className="gameStarts__letters 
+                        align-items-end text-center justify-content-center"
+                    >
+                        {
+                            wordsFound.map((letter, i) => (
+                            <Col xs={1} key={i} className="letter">
+                                <span>{letter}</span>
                             </Col>
-                        ))
-                    }
-                </Row></>)
+                        ))}
+                    </Row>
+                    <Row className="gameStarts__failures text-center align-item-center justify-content-center">
+                        {
+                            failures.map((failure, i) => (
+                                <Col xs={1} key={i} className="gameStarts__fails">
+                                    <span>{failure}</span>
+                                </Col>
+                            ))
+                        }
+                    </Row>
+                </>)
                 :
                 (
-                    <GameOver/>
+                    <GameOver word={word} result={failures.length > 5 ? false : true}/>
                 )
                 }
 
-                <PhoneMode checkGameStatus={checkGameStatus} />
+                {
+                    keyboard ? 
+                    (<PhoneMode checkGameStatus={checkGameStatus} />)
+                    :
+                    (
+                        <Row className="gameStarts__buttons d-flex 
+                            align-items-center justify-content-center">
+                        <Col sm={6} xs={12}>
+                            {
+                                wordData.type != 'online' &&
+                                <Button variant="info" className="btn-custom" onClick={newGame}>
+                                    Nuevo juego
+                                </Button>
+                            }
+                            </Col>
+                                <Col sm={6} xs={12}>
+                                {
+                                    !gameOver ?
+                                    (<Button variant="danger" 
+                                        className="btn-custom" onClick={endGame}
+                                    >
+                                        Desistir
+                                    </Button>)
+                                    :
+                                    (<Button variant="danger" 
+                                        className="btn-custom" onClick={endGame}
+                                    >
+                                        Volver
+                                    </Button>)
+                                }
+                        </Col>           
+                    </Row>
 
-                <Row className="gameStarts__buttons align-items-center justify-content-center">
-                <Col sm={6} xs={12}>
-                    {wordData.type != 'online' &&
-                        <Button variant="info" className="btn-custom" onClick={newGame}>Nuevo juego</Button>}
-                </Col>
-                    <Col sm={6} xs={12}>{
-                        !gameOver ?
-                        <Button variant="danger" className="btn-custom" onClick={endGame}>Desistir</Button>
-                        :
-                        <Button variant="danger" className="btn-custom" onClick={endGame}>Volver</Button>
-                    }
-                    </Col>    
-                </Row>
+                    )
+
+                }
+
+                
             </Col>
             <Col md={2} xs={1}></Col>
         </Row>

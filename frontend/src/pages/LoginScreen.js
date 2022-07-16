@@ -3,10 +3,11 @@ import React, {useState, useRef, useEffect} from 'react';
 import Form from 'react-bootstrap/Form';
 import Button from 'react-bootstrap/Button';
 import { useNavigate } from 'react-router-dom';
-
 import {useDispatch} from "react-redux";
 import { setCredentials } from '../features/auth/authSlice';
 import {useLoginMutation} from '../features/auth/authApiSlice';
+import Loading from '../components/loading/Loading';
+import Auth from '../components/auth/Auth';
 
 
 const LoginScreen = () =>{
@@ -41,17 +42,14 @@ const LoginScreen = () =>{
             setPassword('');
             navigate('/app/home')
         }catch(err){
-            if(!err.response){
-                setErrMsg("No server Response");
-            }
-            else if (err.response?.status === 400){
+            if (err.status === 400){
                 setErrMsg("Missing Username or Password");
             }
-            else if (err.response?.status === 401){
+            else if (err.status === 401){
                 setErrMsg("Unauthorized");
             }
             else {
-                setErrMsg("Login Failed");
+                setErrMsg("No server Response");
             }
             errRef.current.focus();
         }
@@ -64,32 +62,31 @@ const LoginScreen = () =>{
     return (
         <>
         {
-        isLoading ? (<h1>Loading...</h1>)
+        isLoading ? (<Loading/>)
         :
         (
-        <section className="container">
+        <Auth>
             <p ref={errRef} className={errMsg ? "errmsg" : "offscreen"} aria-live="assertive">{errMsg}</p>
             <Form onSubmit={(e) => handleSubmit(e)}>
                 <Form.Group className="mb-3" controlId="formBasicEmail">
-                    <Form.Label>Username address</Form.Label>
-                     <Form.Control type="text" placeholder="Enter username" 
+                    <Form.Label>Usuario</Form.Label>
+                     <Form.Control type="text" placeholder="Ingresa tu Usuario" 
                     ref={userRef} value={username} onChange={handleUserInput}
                     autoComplete="off" required/>
-                    <Form.Text className="text-muted">
-                    We'll never share your email with anyone else.
-                    </Form.Text>
                 </Form.Group>
 
                 <Form.Group className="mb-3" controlId="formBasicPassword">
-                    <Form.Label>Password</Form.Label>
-                    <Form.Control type="password" placeholder="Password" 
+                    <Form.Label>Contraseña</Form.Label>
+                    <Form.Control type="password" placeholder="Ingresa tu contraseña" 
                     onChange={handlePwdInput} value={password} required/>
                 </Form.Group>
-                <Button variant="primary" type="submit">
-                    Submit
-                </Button>
+                <div className="d-grid gap-2">
+                    <Button variant="info" type="submit" size="sm">
+                        Iniciar sesión
+                    </Button>
+                </div>
             </Form>
-        </section>
+        </Auth>
         )}
         </>
         )

@@ -73,13 +73,14 @@ const GameStarts = () => {
 
     return (
         <>
-        <p className={errMsg ? "errmsg" : "offscreen"} aria-live="assertive">{errMsg}</p>
+        <span className={errMsg ? "errmsg" : "offscreen"} aria-live="assertive">{errMsg}</span>
         {pathname == pathnames.fast ?
             (
                 word == null ?
                 <SaveWord setWord={setWord}/>
                 :
-                (<Game wordData={word} updateRoomApi={(() => false)} setWord={setWord} />)
+                (<Game wordData={word} updateRoomApi={(() => false)} 
+                setWord={setWord} setErrMsg={setErrMsg} />)
             )
             :
             pathname == pathnames.local ?
@@ -87,7 +88,8 @@ const GameStarts = () => {
             word == null ?
                 (<Navigate to="/app/local/savescreen"/>)
                 :
-                (<Game wordData={word} updateRoomApi={(() => false)} setWord={setWord}/>)
+                (<Game wordData={word} updateRoomApi={(() => false)} 
+                setWord={setWord} setErrMsg={setErrMsg}/>)
             )
             :
             pathname == pathnames.online ?
@@ -95,7 +97,8 @@ const GameStarts = () => {
             word == null ?
                 (<SaveRoom setWord={setWord}/>)
                 :
-                (<Game wordData={word} updateRoomApi={updateRoomApi} setWord={setWord}/>)
+                (<Game wordData={word} updateRoomApi={updateRoomApi} 
+                    setWord={setWord} setErrMsg={setErrMsg} />)
             )
             :
             <span>Error</span>   

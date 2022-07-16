@@ -1,0 +1,25 @@
+.auth{
+    height: 90%;
+    h2{
+        font-family: $font-shadows;
+        font-size: 4em;
+        color: $celestial;
+        &:hover{
+            color: $blue;
+        }
+    }
+    .auth__form{
+        height: 80%;
+        border: 2px solid #f9f4f4;
+        box-shadow: 5px 5px 5px 5px rgb(203, 203, 203);
+    }
+}
+
+@mixin auth-responsive-sm{
+    .auth{
+        h2{
+            font-size: 3em!important;
+        }
+    }
+
+}

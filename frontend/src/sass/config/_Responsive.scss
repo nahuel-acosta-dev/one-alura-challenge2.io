@@ -22,6 +22,7 @@ $sm: 576px;
     @include Header-responsive-sm;
     @include Modes-responsive-sm;
     @include Footer-responsive-sm;
+    @include auth-responsive-sm;
 
  ////////////////////////////////
 //2- Pages

@@ -1,3 +1,7 @@
+.errmsg{
+    color: red;
+}
+
 .gameStarts{
     height: 100%;
     outline: none;
@@ -118,7 +122,7 @@
         }
 
         .gameStarts__letters{
-            height: 20%;
+            height: 15%;
             .letter{
                 border-bottom: 2px solid blue;
                 height:50px;
@@ -145,11 +149,11 @@
             }
             
         }
-
-        .gameStarts__buttons{
-            height: 25%;
-        }
     
+}
+
+.gameStarts__buttons{
+    height: 25%;
 }
 
 
