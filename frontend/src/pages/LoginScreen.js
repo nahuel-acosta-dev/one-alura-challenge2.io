@@ -2,7 +2,9 @@ import React, {useState, useRef, useEffect} from 'react';
 //import {googleLogin} from "../actions/authActions";
 import Form from 'react-bootstrap/Form';
 import Button from 'react-bootstrap/Button';
-import { useNavigate } from 'react-router-dom';
+import Row from 'react-bootstrap/Row';
+import Col from 'react-bootstrap/Col';
+import { useNavigate, Link } from 'react-router-dom';
 import {useDispatch} from "react-redux";
 import { setCredentials } from '../features/auth/authSlice';
 import {useLoginMutation} from '../features/auth/authApiSlice';
@@ -86,6 +88,16 @@ const LoginScreen = () =>{
                     </Button>
                 </div>
             </Form>
+            
+            <Row>
+                <Col sm={1}></Col>
+                <Col>
+                <hr />
+                    <Link to="/auth/register" className="text-decoration-none">Regístrese para crear una cuenta</Link>
+                </Col>
+                <Col sm={1}></Col>
+            </Row>
+            
         </Auth>
         )}
         </>
