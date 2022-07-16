@@ -2,12 +2,13 @@ import React, {useEffect, createRef, useState} from 'react';
 import Button from 'react-bootstrap/Button';
 import Row from 'react-bootstrap/Row';
 import Col from 'react-bootstrap/Col';
-import PhoneMode from '../components/responsive-game/PhoneMode';
+import ButtonKeyboard from '../components/buttons/ButtonKeyboard';
+import PhoneMode from '../components/game/PhoneMode';
 import ShowLetters from '../components/game/ShowLetters';
 import Hangman from '../components/hangman/Hangman';
 import GameOver from '../components/game/GameOver';
 import PropTypes from 'prop-types';
-import {useNavigate, useLocation} from 'react-router-dom';
+import {useNavigate} from 'react-router-dom';
 
 const Game = ({wordData, updateRoomApi, setWord,  setErrMsg}) => {
     const drawerRef = createRef();
@@ -83,6 +84,7 @@ const Game = ({wordData, updateRoomApi, setWord,  setErrMsg}) => {
         let newWordData = wordData;
         newWordData.right = wordsFound;
         newWordData.failures = failures;
+
         if(failures.length > 5){
             let result = false;
             //si tenemos mas fallas de las permitidas llamamos a la api
@@ -104,8 +106,8 @@ const Game = ({wordData, updateRoomApi, setWord,  setErrMsg}) => {
 
     }, [wordsFound, failures]);
 
-    const checkGameStatus = (letter, code) => {
 
+    const checkGameStatus = (letter, code) => {
         if(failures.length > 5) {
             console.log("No tienes mas intentos");
             return false;}
@@ -150,32 +152,31 @@ const Game = ({wordData, updateRoomApi, setWord,  setErrMsg}) => {
 
     return(
         <Row className="gameStarts" ref={drawerRef} onKeyDown={handleKeyDown} tabIndex={0}>
-            <Col md={2} xs={1}>
-      </Col>
+            <Col md={2} xs={1}></Col>
             <Col md={8} xs={10}>
                 {
-                !gameOver ? 
-                (<>
-                    <Hangman failures={failures}/>
-                    <Button variant={
-                        keyboard ? "success" : "danger"} size="sm" onClick={() => setKeyboard(
-                        keyboard ? false : true
-                    )}>
-                        <i className="bi bi-keyboard"></i>
-                    </Button>
-                    <Row className="gameStarts__letters 
-                        align-items-end text-center justify-content-center"
-                    >
-                        <ShowLetters letters={wordsFound} />
-                    </Row>
-                    <Row className="gameStarts__failures text-center align-item-center justify-content-center">
-                        <ShowLetters letters={failures} />
-                    </Row>
-                </>)
-                :
-                (
-                    <GameOver word={word} result={failures.length > 5 ? false : true}/>
-                )
+                    !gameOver ? 
+                    (
+                        <>
+                            <Hangman failures={failures}/>
+
+                            <ButtonKeyboard keyboard={keyboard} setKeyboard={setKeyboard} />
+
+                            <Row className="gameStarts__letters 
+                                align-items-end text-center justify-content-center"
+                            >
+                                <ShowLetters letters={wordsFound} />
+                            </Row>
+                            <Row className="gameStarts__failures text-center 
+                            align-item-center justify-content-center">
+                                <ShowLetters letters={failures} />
+                            </Row>
+                        </>
+                    )
+                    :
+                    (
+                        <GameOver word={word} result={failures.length > 5 ? false : true}/>
+                    )
                 }
 
                 {
@@ -210,12 +211,8 @@ const Game = ({wordData, updateRoomApi, setWord,  setErrMsg}) => {
                                 }
                         </Col>           
                     </Row>
-
                     )
-
                 }
-
-                
             </Col>
             <Col md={2} xs={1}></Col>
         </Row>
