@@ -3,8 +3,9 @@ import Button from 'react-bootstrap/Button';
 import Row from 'react-bootstrap/Row';
 import Col from 'react-bootstrap/Col';
 import PhoneMode from '../components/responsive-game/PhoneMode';
+import ShowLetters from '../components/game/ShowLetters';
 import Hangman from '../components/hangman/Hangman';
-import GameOver from '../components/game-over/GameOver';
+import GameOver from '../components/game/GameOver';
 import PropTypes from 'prop-types';
 import {useNavigate, useLocation} from 'react-router-dom';
 
@@ -165,21 +166,10 @@ const Game = ({wordData, updateRoomApi, setWord,  setErrMsg}) => {
                     <Row className="gameStarts__letters 
                         align-items-end text-center justify-content-center"
                     >
-                        {
-                            wordsFound.map((letter, i) => (
-                            <Col xs={1} key={i} className="letter">
-                                <span>{letter}</span>
-                            </Col>
-                        ))}
+                        <ShowLetters letters={wordsFound} />
                     </Row>
                     <Row className="gameStarts__failures text-center align-item-center justify-content-center">
-                        {
-                            failures.map((failure, i) => (
-                                <Col xs={1} key={i} className="gameStarts__fails">
-                                    <span>{failure}</span>
-                                </Col>
-                            ))
-                        }
+                        <ShowLetters letters={failures} />
                     </Row>
                 </>)
                 :
@@ -193,7 +183,7 @@ const Game = ({wordData, updateRoomApi, setWord,  setErrMsg}) => {
                     (<PhoneMode checkGameStatus={checkGameStatus} />)
                     :
                     (
-                        <Row className="gameStarts__buttons d-flex 
+                    <Row className="gameStarts__buttons d-flex 
                             align-items-center justify-content-center">
                         <Col sm={6} xs={12}>
                             {

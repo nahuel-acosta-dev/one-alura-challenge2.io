@@ -4,7 +4,6 @@ import Col from 'react-bootstrap/Col';
 import Textarea from '../components/textarea/Textarea';
 import Form from 'react-bootstrap/Form';
 import Button from 'react-bootstrap/Button'
-import Info from '../image/Info.svg';
 import Loading from '../components/loading/Loading';
 import {useSelector} from 'react-redux';
 import { selectCurrentUser } from '../features/auth/authSlice';
@@ -19,7 +18,23 @@ const SaveScreen = () => {
     const location = useLocation();
     const navigate = useNavigate();
  
-    const handleWordInput = (e) => setWord(e.target.value);
+    const handleWordInput = (e) => {
+            const code = e.target.value.substr(-1).charCodeAt();
+
+            if(e.target.value.length >= 1){
+                if(code >= 65 && code <= 90) {
+                    return setWord(e.target.value);
+                }
+                else if(code >= 97 && code <= 122){
+                    return setWord(e.target.value);
+                }
+            }
+            
+            else{
+                return setWord(e.target.value);
+            }
+       
+    }
 
     const createWordSubmit = async (e) => {
         e.preventDefault();
@@ -77,7 +92,12 @@ const SaveScreen = () => {
             <Col md={6} xs={10}>
                 <Form onSubmit={(e) => createWordSubmit(e)}>
                     <Row className="saveScreen__Textarea">
-                        <Textarea text="Ingrese una palabra" handleWordInput={handleWordInput} max={'8'}/>
+                        <Textarea 
+                        text="Ingrese una palabra" 
+                        handleWordInput={handleWordInput} 
+                        max={'8'}
+                        word={word}
+                        />
                     </Row>
                     <Row className="saveScreen__buttons align-items-center align-items-md-center align-items-sm-center
                     justify-content-center">
@@ -96,4 +116,3 @@ const SaveScreen = () => {
 }
 
 export default SaveScreen;
-//creating functionalities for Savescreen
