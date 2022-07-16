@@ -4,14 +4,13 @@ import Col from 'react-bootstrap/Col';
 import Modes from '../components/modes/Modes';
 import Joystick from '../image/joystick.svg';
 import Avatar from '../image/avatar.svg';
-import {Link} from 'react-router-dom';
 
 const GameMode = () =>{
     const modes = [
         {
             title: 'PvP',
             text: 'Crea una palabra y invita a alguien en linea a que la descubra',
-            url: "/app/local/savescreen",
+            url: "/app/online/savescreen",
             img: {Avatar},
             background: '$green',
             colorTitle: '#71ed5e',

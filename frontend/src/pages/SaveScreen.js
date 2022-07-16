@@ -5,6 +5,7 @@ import Textarea from '../components/textarea/Textarea';
 import Form from 'react-bootstrap/Form';
 import Button from 'react-bootstrap/Button'
 import Info from '../image/Info.svg';
+import Loading from '../components/loading/Loading';
 import {useSelector} from 'react-redux';
 import { selectCurrentUser } from '../features/auth/authSlice';
 import {useCreateWordMutation} from '../words/createWordApiSlice';
@@ -69,7 +70,8 @@ const SaveScreen = () => {
     return (
     
         isLoading 
-        ? (<h1>Loading...</h1>):
+        ? (<Loading/>)
+        :
         (<Row className="saveScreen">
             <Col md={3} xs={1}></Col>
             <Col md={6} xs={10}>
