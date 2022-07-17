@@ -67,10 +67,6 @@ class InvitationConsumer(AsyncWebsocketConsumer):
     @database_sync_to_async
     def create_invitation(self, host_id, word_id):
         host_user = User.objects.get(id=host_id)
-        print('el siguiente es my user')
-        print(self.user)
-        print('el siguiente es el invitado')
-        print(host_user)
         try:
             invitation = Invitation.objects.get(
                 host_user=host_user, guest_user=self.user, word_id=word_id, answered=False)
@@ -80,7 +76,8 @@ class InvitationConsumer(AsyncWebsocketConsumer):
                 invitation.save()
         except:
             print('no se encontraron invitaciones de este usuario')
-        Invitation.objects.create(host_user=host_user, guest_user=self.user)
+        Invitation.objects.create(
+            host_user=host_user, guest_user=self.user, word_id=word_id)
 
     @database_sync_to_async
     def update_invitation(self, response, host_id):
@@ -100,14 +97,15 @@ class InvitationConsumer(AsyncWebsocketConsumer):
                         room.save()
                 except:
                     print('No active rooms were found')
-            print(invitation.word_id)
-            print(Words.objects.get(
-                id=invitation.word_id, user=invitation.host_user))
-            # el error al aceptar la invitation esta en word
-            word = Words.objects.get(
-                id=invitation.word_id, user=invitation.host_user)
-            Room.objects.create(host_user=invitation.host_user,
-                                guest_user=invitation.guest_user, word=word, activated=True)
+
+                print(invitation.word_id)
+                print(Words.objects.get(
+                    id=invitation.word_id, user=invitation.host_user))
+                # el error al aceptar la invitation esta en word
+                word = Words.objects.get(
+                    id=invitation.word_id, user=invitation.host_user)
+                Room.objects.create(host_user=invitation.host_user,
+                                    guest_user=invitation.guest_user, word=word, activated=True)
 
         else:
             return {'message': 'Error response empty'}
