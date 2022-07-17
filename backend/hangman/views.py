@@ -57,6 +57,7 @@ class Login(TokenObtainPairView, GenericAPIView):
 
 
 class Register(GenericAPIView):
+    model = User
     serializer_class = UserSerializer
     queryset = None
 

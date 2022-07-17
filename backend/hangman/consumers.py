@@ -4,32 +4,6 @@ from asgiref.sync import async_to_sync
 from channels.db import database_sync_to_async
 from .models import Invitation, User, Room, Words
 
-"""
-class ChatConsumer(WebsocketConsumer):
-
-    def connect(self):
-        async_to_sync(self.channel_layer.group_add)("chat", self.channel_name)
-        self.accept()
-        self.user = self.scope["user"]
-        self.send(text_data=json.dumps(
-            {"message": "Se ha conectado %s" % (self.user.username)}))
-
-    def disconnect(self, close_code):
-        async_to_sync(self.channel_layer.group_discard)(
-            "chat", self.channel_name)
-
-    def receive(self, text_data):
-        async_to_sync(self.channel_layer.group_send)(
-            "chat",
-            {
-                "type": "chat.message",
-                "text": text_data,
-            },
-        )
-
-    def chat_message(self, event):
-        self.send(text_data=event["text"])"""
-
 
 class InvitationConsumer(AsyncWebsocketConsumer):
     async def connect(self):
@@ -57,21 +31,21 @@ class InvitationConsumer(AsyncWebsocketConsumer):
     async def receive(self, text_data=None, bytes_data=None):
         text_data_json = json.loads(text_data)
         send_type = text_data_json['send_type']
-        guest_id = text_data_json['guest_id']
+        host_id = text_data_json['host_id']
         response = text_data_json['response']
         word_id = text_data_json['word_id']
 
         if send_type == 'invitation':
-            await self.create_invitation(guest_id, word_id)
+            await self.create_invitation(host_id, word_id)
         elif send_type == 'response':
-            await self.update_invitation(response)
+            await self.update_invitation(response, host_id)
 
         await self.channel_layer.group_send(
             self.room_group_name,
             {
                 'type': 'send_invitation',  # es la llamada a la funcion de abajo
                 'send_type': send_type,
-                'guest_id': guest_id,
+                'host_id': host_id,
                 'response': response,
                 'word_id': word_id,
             }
@@ -79,33 +53,41 @@ class InvitationConsumer(AsyncWebsocketConsumer):
 
     async def send_invitation(self, event):
         send_type = event['send_type']
-        guest_id = event['guest_id']
+        host_id = event['host_id']
         response = event['response']
         word_id = event['word_id']
 
         await self.send(text_data=json.dumps({
             'send_type': send_type,
-            'guest_id': guest_id,
+            'host_id': host_id,
             'response': response,
             'word_id': word_id,
         }))
 
     @database_sync_to_async
-    def create_invitation(self, guest_id, word_id):
-        guest_user = User.objects.get(id=guest_id)
-        invitation = Invitation.objects.get(
-            host_user=self.user, guest_user=guest_user, word_id=word_id, answered=False)
-        print(invitation)
-        if invitation:
-            invitation.answered = True
-            invitation.save()
-        Invitation.objects.create(host_user=self.user, guest_user=guest_user)
+    def create_invitation(self, host_id, word_id):
+        host_user = User.objects.get(id=host_id)
+        print('el siguiente es my user')
+        print(self.user)
+        print('el siguiente es el invitado')
+        print(host_user)
+        try:
+            invitation = Invitation.objects.get(
+                host_user=host_user, guest_user=self.user, word_id=word_id, answered=False)
+            print(invitation)
+            if invitation:
+                invitation.answered = True
+                invitation.save()
+        except:
+            print('no se encontraron invitaciones de este usuario')
+        Invitation.objects.create(host_user=host_user, guest_user=self.user)
 
     @database_sync_to_async
-    def update_invitation(self, response):
+    def update_invitation(self, response, host_id):
         if response != '':
-            invitation = Invitation.objects.get(
-                guest_user=self.user, answered=False)
+            user = User.objects.get(id=host_id)
+            invitation = Invitation.objects.filter(
+                guest_user=user, answered=False).last()
             invitation.answered = True
             invitation.response = response
             invitation.save()
@@ -121,50 +103,11 @@ class InvitationConsumer(AsyncWebsocketConsumer):
             print(invitation.word_id)
             print(Words.objects.get(
                 id=invitation.word_id, user=invitation.host_user))
+            # el error al aceptar la invitation esta en word
             word = Words.objects.get(
-                id=invitation.word_id, user=invitation.host_user)  # falta un id o algo para obtener la palabra
+                id=invitation.word_id, user=invitation.host_user)
             Room.objects.create(host_user=invitation.host_user,
                                 guest_user=invitation.guest_user, word=word, activated=True)
 
         else:
             return {'message': 'Error response empty'}
-
-    """async def connect(self):
-        self.room_name = self.scope['url_route']['kwargs']['room_name']
-        self.room_group_name = 'invitation_%s' % self.room_name
-
-        await self.channel_layer.group_add(
-            self.room_group_name,
-            self.channel_name
-        )
-
-        self.accept()
-
-        self.user = self.scope["user"]
-        self.send(text_data=json.dumps(
-            {"message": "Se ha conectado %s" % (self.user.username)}))
-
-    async def disconnect(self, close_code):
-        await self.channel_layer.group_discard(
-            self.room_group_name,
-            self.channel_name
-        )
-
-    async def receive(self, text_data=None):
-        text_data_json = json.loads(text_data)
-        send_type = text_data_json['send_type']
-        await self.channel_layer.group_send(
-            self.room_group_name,
-            {
-                "type": "send_invitation",
-                "send_type": send_type,
-            },
-        )
-
-    async def send_invitation(self, event):
-        response = event['response']
-
-        await self.send(text_data=json.dumps({
-            'response': response
-        }))
-"""

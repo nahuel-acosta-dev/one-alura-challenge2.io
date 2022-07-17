@@ -199,17 +199,21 @@ CORS_ALLOWED_ORIGINS = [
     # "http://localhost:8080",
     "http://localhost:3000",
     "http://localhost:3050",
-    # "http://127.0.0.1:9000",
+    "http://192.168.1.14:3050",
 ]
 
 CORS_ORIGIN_WHITELIST = [
     "http://localhost:3000",
     "http://localhost:3050",
+    "http://192.168.1.14:3050",
 ]
+
+ALLOWED_HOSTS = ['*']
 
 
 # si quiero permirir peticiones de cualquier sitio uso este DE ABAJO
 #CORS_ORIGIN_ALLOW_ALL = True
+#ALLOWED_HOSTS = ['*']
 # Puede ser peligroso ya que cualquier sitio podria hacer peticiones
 
 
