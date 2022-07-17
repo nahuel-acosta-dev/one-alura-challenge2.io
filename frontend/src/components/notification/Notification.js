@@ -1,7 +1,8 @@
 import React, {useState, useEffect, useCallback} from 'react';
 import {useSelector} from 'react-redux';
 import { selectCurrentUser } from '../../features/auth/authSlice';
-import {useGetNotificationsQuery} from '../../utils/notifications/notificationsApiSlice';
+import {useGetNotificationsQuery} from '../../notifications/notificationsApiSlice';
+import Loading from '../loading/Loading';
 import Row from 'react-bootstrap/Row';
 import Col from 'react-bootstrap/Col';
 import Button from 'react-bootstrap/Button';
@@ -9,13 +10,12 @@ import NavDropdown from 'react-bootstrap/NavDropdown';
 import {useNavigate} from 'react-router-dom';
 
 const Notification = () =>{
-    //tal vez dejar el socket en el header no sea la forma mas prolija talvez dejarlo en el app sea mejor
-    //si se encuentra una mejor manera intentarlo si no dejarlo asi
     const navigate = useNavigate();
     const user = useSelector(selectCurrentUser);
     const [socket, setSocket] = useState(user ? 
         new WebSocket(`ws://localhost:8000/ws/invitation/${user.id}/`) : null);
-
+    console.log(socket)
+        
         const {
             data: notifications,
             isLoading,
@@ -40,14 +40,14 @@ const Notification = () =>{
             const data = JSON.parse(e.data);
             console.log(data)
         }   
-    /*
+    
         socket.onclose = function (e) {
             console.log('Connection closed');
         };
 
         socket.onerror = function(error) {
             console.log(`[error] ${error.message}`);
-          };*/
+          };
     }
 
     const handleRefetchOne = () => {
@@ -62,14 +62,22 @@ const Notification = () =>{
         let message = "response"
         socket.send(JSON.stringify({
                 'send_type': message,
-                'guest_id': '',
+                'host_id': user.id,
                 'response': response,
                 'word_id': ''
         }))
         handleRefetchOne();
         
-        navigate('/app/online/gamestarts');
+        if(response){
+            //antes de redireccionar debo esperar a que se cree la partida
+            //tarda unos momentos y al redireccionar tan rapido no llega a obtener la partida
+            //tal vez podria obtener la partida a travez de una llamada a la api
+            navigate('/app/online/gamestarts');
+        }
     }
+
+    //falta agregar un lugar donde se agregen los nuevos mensajes un array donde recibirlos,
+    //y donde ponerlo en el render
 
     return(
      <NavDropdown
@@ -79,7 +87,7 @@ const Notification = () =>{
         className="nav-dropdown"
         >
         {isLoading &&
-        <p>"Loading..."</p>} 
+        <Loading/>} 
         {notifications ?
             (isSuccess &&
             notifications.map((notification, i) => {
@@ -119,16 +127,21 @@ const Notification = () =>{
                             </span>
                             {
                             socket == null ?
-                                <span>Loading...</span> 
+                                <Loading/>
                                 :
                             (//falta poner algo mientras el socket.ready... no conecte(diferente de 1)
                             <Row>
-                                <Col><Button variant="primary"  
-                                    onClick={e => submitMessage(e, true)} size="sm">Aceptar</Button>
+                                <Col>
+                                <Button variant="primary" 
+                                    onClick={e => submitMessage(e, true)} size="sm">
+                                        Aceptar
+                                    </Button>
                                 </Col>
                                 <Col>
                                     <Button variant="danger"  
-                                    onClick={e => submitMessage(e, false)} size="sm">Rechazar</Button>
+                                    onClick={e => submitMessage(e, false)} size="sm">
+                                        Rechazar
+                                    </Button>
                                 </Col>
                             </Row>)}
                             </>

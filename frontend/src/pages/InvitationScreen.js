@@ -1,20 +1,20 @@
-import React, {useState} from 'react';
+import React, {useState, useEffect} from 'react';
+import Table from 'react-bootstrap/Table';
+import Container from 'react-bootstrap/Container';
+import Row from 'react-bootstrap/Row';
+import Col from 'react-bootstrap/Col';
+import SocketModal from '../components/modal/SocketModal';
+import Loading from '../components/loading/Loading';
+import MyPagination from '../components/pagination/MyPagination';
 import {useGetProfilesQuery} from '../profiles/profilesApiSlice';
 import {useSelector} from 'react-redux';
 import { selectCurrentUser } from '../features/auth/authSlice';
-import SocketModal from '../components/modal/SocketModal';
-import { Navigate } from 'react-router-dom';
-
-
-/*para saber si un usuario esta activo y en linea, podemos hacer que se agrege una columna
-a su modelo User llamado online(Boolean), y que atravez de los canales cada vez que el usuario
-entre y se conecte al canal, al final de ese consumer se envie un put al sql poniendo online True 
-al usuario*/
+import { Navigate, Link } from 'react-router-dom';
 
 const InvitationScreen = () =>{
     const [wordId, setWordId] = useState(() => localStorage.getItem("word_id") ? 
         JSON.parse(localStorage.getItem("word_id")) : null);
-    const user = useSelector(selectCurrentUser)
+    const user = useSelector(selectCurrentUser);
 
     const {
         data: profiles,
@@ -24,41 +24,50 @@ const InvitationScreen = () =>{
         error
     } = useGetProfilesQuery();
 
-    console.log(wordId)
+    console.log(wordId);
 
-    
-
-
+//Falta poner un los botones para solo mostrar de a diez usuarios
     return (<>
         {isLoading &&
-            <p>"Loading..."</p>}  
+            <Loading/>}  
         
         {isSuccess &&
         <section className="users">
-            <h1>Users List</h1>
-            <ul>
-                {profiles.map((profile, i) => {
-                    console.log(profile)
-                    /*podriamos hacer que mediante un modal nos conectemos al socket
-                    una vez enviada la solicitud cerramos la coneccion con ese socket 
-                    el modal nos avisa que la notificacion fue enviada con exito y tambien nos saque
-                    podemos seguir jugando o invitando,hasta mientras la invitacion enviada al usuario
-                    nos aparecera sin responder hasta que responda. pero nosotros podemos seguir jugando
-                    si responde nos aparece un puntito en notificaciones y nos avisa, pero lo que
-                    responda no afectara nuestro juego mas que parapuntaje
-                    deberiamos poner un limite de invitaciones o que solo se puedan hacer cada cierto tiempo 
-                */  if(profile.user.id !== user.id){ 
-                        return <li key={i}>
-                            {profile.user.username}{' '} 
-                            {wordId == null ?
-                                (<Navigate to="/app/online/savescreen"/>)
-                                :
-                                (<SocketModal id={profile.user.id} wordId={wordId}/>)
+            <Row>
+                <Col sm={1} md={2}></Col>
+                <Col className="text-center">
+                    <h4>Desafia a tus compañeros</h4>
+                    <Table striped responsive="sm" variant="info">
+                        <thead>
+                            <tr>
+                            <th>Nombre de usuario</th>
+                            <th>Victorias</th>
+                            <th>Derrotas</th>
+                            <th>Invitar</th>
+                            </tr>
+                        </thead>
+                        <tbody>
+                            {
+                            profiles.map((profile, i) => {
+                            if(profile.user.id !== user.id){ 
+                                return <tr key={i}>
+                                    <td>{profile.user.username}{' '}</td>
+                                    <td>{profile.victories}</td>
+                                    <td>{profile.defeats}</td>
+                                    <td>{wordId == null ?
+                                        (<Navigate to="/app/online/savescreen"/>)
+                                        :
+                                        (<SocketModal id={profile.user.id} wordId={wordId}/>)
+                                        }
+                                    </td>
+                                </tr>
                             }
-                        </li>
-                    }
-                })}
-            </ul>
+                        })}
+                        </tbody>
+                    </Table>
+                </Col>
+                <Col sm={1} md={2}></Col>
+            </Row>
         </section>}
         </>
 

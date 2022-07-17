@@ -25,6 +25,7 @@ const Header = () => {
     const [errMsg, setErrMsg] = useState('');
     const [changeLogo, setChangeLogo] = useState(false);
 
+
     const logoutApi = async () => {
         try{
             const logoutUser = await logout({'user': user.id}).unwrap();
@@ -119,9 +120,9 @@ const Header = () => {
                                 </div>)
                                 :
                                 (
-                                    <div className="profile">
-                                        {user && token && user.username.toUpperCase()}
-                                    </div>
+                                    <Navbar.Text  className="profile">
+                                        Signed in as: {user && token && user.username.toUpperCase()}
+                                    </Navbar.Text>
                                     //en vez de poner solo el nombre podria ponerse la foto del perfil    
                                 )
                                 )
