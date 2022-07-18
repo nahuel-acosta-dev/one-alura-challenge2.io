@@ -90,8 +90,8 @@ class InvitationConsumer(AsyncWebsocketConsumer):
             invitation.save()
             if response == True:
                 try:
-                    room = Room.objects.get(host_user=invitation.host_user,
-                                            guest_user=invitation.guest_user, activated=True)
+                    room = Room.objects.filter(host_user=invitation.host_user,
+                                               guest_user=invitation.guest_user, activated=True).last()
                     if room:
                         room.activated = False
                         room.save()
@@ -102,8 +102,8 @@ class InvitationConsumer(AsyncWebsocketConsumer):
                 print(Words.objects.get(
                     id=invitation.word_id, user=invitation.host_user))
                 # el error al aceptar la invitation esta en word
-                word = Words.objects.get(
-                    id=invitation.word_id, user=invitation.host_user)
+                word = Words.objects.filter(
+                    id=invitation.word_id, user=invitation.host_user).last()
                 Room.objects.create(host_user=invitation.host_user,
                                     guest_user=invitation.guest_user, word=word, activated=True)
 
