@@ -65,7 +65,7 @@ const Notification = () =>{
                 setSendResponse(true);
             }
         }   
-        
+
         socket.onclose = function (e) {
             console.log('Connection closed');
         };
@@ -93,9 +93,6 @@ const Notification = () =>{
         }))
         handleRefetchOne();
     }
-
-    //falta agregar un lugar donde se agregen los nuevos mensajes un array donde recibirlos,
-    //y donde ponerlo en el render
 
     return(
     sendResponse ?
@@ -174,3 +171,4 @@ const Notification = () =>{
 }
 
 export default Notification;
+
