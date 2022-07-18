@@ -72,6 +72,7 @@ const Notification = () =>{
             //antes de redireccionar debo esperar a que se cree la partida
             //tarda unos momentos y al redireccionar tan rapido no llega a obtener la partida
             //tal vez podria obtener la partida a travez de una llamada a la api
+            //la redireccion debe ocurrir una vez recibida de onmessage
             navigate('/app/online/gamestarts');
         }
     }
