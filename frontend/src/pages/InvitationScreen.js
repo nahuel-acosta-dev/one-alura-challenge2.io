@@ -74,7 +74,7 @@ const InvitationScreen = () =>{
                 <Col className="text-center">
                     <h4>Desafia a tus compañeros</h4>
                     <Row className="users__search">
-                        <Col>
+                        <Col xs={12} sm="auto">
                             <Form.Control
                                 type="search"
                                 placeholder="Buscar usuario"

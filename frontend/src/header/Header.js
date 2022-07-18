@@ -13,7 +13,7 @@ import { selectCurrentUser, selectCurrentToken } from '../features/auth/authSlic
 import {Link, useNavigate} from 'react-router-dom';
 import DropdownButton from 'react-bootstrap/DropdownButton';
 import NavDropdown from 'react-bootstrap/NavDropdown';
-import Notification from '../components/notification/Notification';
+import Notification from '../notifications/Notification';
 import Loading from '../components/loading/Loading';
 
 const Header = () => {

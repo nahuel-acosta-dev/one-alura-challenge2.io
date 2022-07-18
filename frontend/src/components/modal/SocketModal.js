@@ -26,7 +26,7 @@ const SocketModal = ({id, wordId}) =>{
         socketModal.onopen = (e) => {
             console.log("[open] Connection established")
             console.log('conectado al socket del modal')
-            setConnection(true)
+            setConnection(true);
         }
     
         socketModal.onmessage = function(e) {
@@ -97,18 +97,18 @@ const SocketModal = ({id, wordId}) =>{
                 <Loading/>
             )
                 :
-                    <Loading/>
+                <Loading/>
             }
             </Row>
         </Modal.Body>
       </Modal>
-                {
-                    !invited &&
-                    <Button variant="primary" onClick={() => {setSmShow(true)}}>
-                        <i className="bi bi-plus-lg"></i>
-                    </Button>
+        {
+            !invited &&
+                <Button variant="primary" onClick={() => {setSmShow(true)}}>
+                    <i className="bi bi-plus-lg"></i>
+                </Button>
 
-                }
+        }
       </>
 
     )

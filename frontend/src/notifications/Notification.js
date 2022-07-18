@@ -1,8 +1,10 @@
 import React, {useState, useEffect, useCallback} from 'react';
 import {useSelector} from 'react-redux';
-import { selectCurrentUser } from '../../features/auth/authSlice';
-import {useGetNotificationsQuery} from '../../notifications/notificationsApiSlice';
-import Loading from '../loading/Loading';
+import { selectCurrentUser } from '../features/auth/authSlice';
+import {useGetNotificationsQuery} from './notificationsApiSlice';
+import GuestResponseNotification from '../components/notifications/GuestResponseNotification';
+import HostResponseNotification from '../components/notifications/HostResponseNotification';
+import Loading from '../components/loading/Loading';
 import Row from 'react-bootstrap/Row';
 import Col from 'react-bootstrap/Col';
 import Button from 'react-bootstrap/Button';
@@ -14,6 +16,7 @@ const Notification = () =>{
     const user = useSelector(selectCurrentUser);
     const [socket, setSocket] = useState(user ? 
         new WebSocket(`ws://localhost:8000/ws/invitation/${user.id}/`) : null);
+    const [connection, setConnection] = useState(false);
     console.log(socket)
         
         const {
@@ -33,7 +36,8 @@ const Notification = () =>{
 
     if(socket){
         socket.onopen = (e) => {
-            console.log("[open] Connection established")
+            console.log("[open] Connection established");
+            setConnection(true);
         }
 
         socket.onmessage = function(e) {
@@ -88,78 +92,62 @@ const Notification = () =>{
         className="nav-dropdown"
         >
         {isLoading &&
-        <Loading/>} 
-        {notifications ?
+            <Loading/>
+        } 
+        {
+        (notifications ?
             (isSuccess &&
-            notifications.map((notification, i) => {
+            !connection ?
+                (<Loading/>)
+                :
+                notifications.map((notification, i) => 
+                {
                 return(
-                <div key={i}>  
-                    <NavDropdown.Item>{notification.host_user == user.id ?
-                    (
-                        notification.answered ?
+                    <div key={i}>  
+                        <NavDropdown.Item>{
+                        notification.host_user == user.id ?
                         (
-                            <span>
-                                {notification.response ?
-                                    <>el user {notification.guest_user} a aceptado tu invitacion</>
-                                    :
-                                    <>el user {notification.guest_user} a rechazado tu invitacion</>
-                                }
-                            </span>
-                        )
-                        :
+                            <GuestResponseNotification notification={notification} />
+                        ) 
+                        : 
                         (
-                            <span>el user {notification.guest_user} no ha respondido</span>
-                        )
-                    ) 
-                    : 
-                    (
-                        notification.answered ? 
-                        (
-                            notification.response == true ?
-                            <span>Has aceptado la propuesta</span>
-                            :
-                            <span>Has rechazado la propuesta o no la has respondido</span>
-                        )
-                        :
-                        (
-                            <>
-                            <span>
-                                el user {notification.host_user} te ha invitado
-                            </span>
+                        <HostResponseNotification notification={notification}>
                             {
                             socket == null ?
                                 <Loading/>
                                 :
-                            (//falta poner algo mientras el socket.ready... no conecte(diferente de 1)
-                            <Row>
-                                <Col>
-                                <Button variant="primary" 
-                                    onClick={e => submitMessage(e, true)} size="sm">
-                                        Aceptar
-                                    </Button>
-                                </Col>
-                                <Col>
-                                    <Button variant="danger"  
-                                    onClick={e => submitMessage(e, false)} size="sm">
-                                        Rechazar
-                                    </Button>
-                                </Col>
-                            </Row>)}
-                            </>
+                                (
+                                <Row>
+                                    <Col>
+                                        <Button variant="primary" 
+                                        onClick={e => submitMessage(e, true)} size="sm">
+                                            Aceptar
+                                        </Button>
+                                    </Col>
+                                    <Col>
+                                        <Button variant="danger"  
+                                        onClick={e => submitMessage(e, false)} size="sm">
+                                            Rechazar
+                                        </Button>
+                                    </Col>
+                                </Row>
+                                )
+                            }
+                        </HostResponseNotification>
                         )
-                    )
-                }</NavDropdown.Item>
-                    <NavDropdown.Divider />
-                </div>  
+                        }
+                        </NavDropdown.Item>
+                        <NavDropdown.Divider />
+                    </div>  
                 )
-
-                })
-            ) 
-            : 
-            (
+            })
+        ) 
+        : 
+        (
             <span>Data no available</span>
-            )
-        }
+        )
+    )
+    }
     </NavDropdown>
     )
 }
