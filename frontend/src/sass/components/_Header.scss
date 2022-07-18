@@ -13,12 +13,22 @@
     .nav-dropdown{
         padding-top: 5px;
     }
+    .dropdown-menu{
+        max-height: 150px;
+        word-wrap: break-word;
+        overflow:auto;
+        overflow-x: auto;
+    }
     .nav-icon{
         font-size: 25px;
         color: $celestial;
         &:hover{
             color: $blue;
         }
+    }
+    .nav-icon-active{
+        font-size: 25px;
+        color: red;
     }
     .navbar-login{
         margin-right: 50px;
@@ -55,5 +65,9 @@
     }
     .profile{
         display: none;
+    }
+    .dropdown-menu{
+        max-width: 300px;
+        overflow-x: auto;
     }
 }

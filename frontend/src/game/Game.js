@@ -72,12 +72,14 @@ const Game = ({wordData, updateRoomApi, setWord,  setErrMsg}) => {
 
     }
 
-    const gameResult = (obj, result) => {
+    const gameResult = (obj, result, changeState) => {
         obj.activated = false;
         obj.gameOver = true;
         obj.winner = result;
-        setGameOver(true);
-        setKeyboard(false);
+        if(changeState){
+            setGameOver(true);
+            setKeyboard(false);
+        }
     }
 
     useEffect(() => {
@@ -89,13 +91,13 @@ const Game = ({wordData, updateRoomApi, setWord,  setErrMsg}) => {
             let result = false;
             //si tenemos mas fallas de las permitidas llamamos a la api
             //y le informamos que hemos perdido la partida
-            gameResult(newWordData, result);
+            gameResult(newWordData, result, true);
         }
         else if(wordsFound.join('') == word.toUpperCase()){
             let result = true;
             //si al juntar el array de aciertos se forma la partida dada
             //llamamos a la api diciendole que ganamos
-            gameResult(newWordData, result);
+            gameResult(newWordData, result, true);
         }
 
         localStorage.setItem('word', JSON.stringify(newWordData));
@@ -144,7 +146,14 @@ const Game = ({wordData, updateRoomApi, setWord,  setErrMsg}) => {
         localStorage.removeItem('word');
     }
 
-    const endGame = () => {
+    const endGame = async () => {
+        if(wordData.type === 'online'){
+            let newWordData = wordData;
+            newWordData.right = wordsFound;
+            newWordData.failures = failures;
+            gameResult(newWordData, false, false);
+            const result = await updateRoomApi(newWordData);
+        }
         setWord(null);
         localStorage.removeItem('word');
         navigate('/app')

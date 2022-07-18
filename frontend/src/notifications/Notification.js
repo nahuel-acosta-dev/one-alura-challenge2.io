@@ -17,6 +17,9 @@ const Notification = () =>{
     const [socket, setSocket] = useState(user ? 
         new WebSocket(`ws://localhost:8000/ws/invitation/${user.id}/`) : null);
     const [connection, setConnection] = useState(false);
+    const [sendResponse, setSendResponse] = useState(false);
+    const [newNotification, setNewNotification] = useState(false);
+
     console.log(socket)
         
         const {
@@ -34,6 +37,17 @@ const Notification = () =>{
         }
     },[user])
 
+    //poner una barra a las invitaciones y maximo de height para evitar que se hagan muy grande
+
+    useEffect(() =>{
+        if(sendResponse){
+            setTimeout(() => {
+                setSendResponse(false);
+                return navigate('/app/online/gamestarts')
+            }, 5000)
+        }
+    }, [sendResponse])
+
     if(socket){
         socket.onopen = (e) => {
             console.log("[open] Connection established");
@@ -42,9 +56,16 @@ const Notification = () =>{
 
         socket.onmessage = function(e) {
             const data = JSON.parse(e.data);
-            console.log(data)
+
+            if(data.send_type === 'invitation'){
+                handleRefetchOne();
+                setNewNotification(true);
+            }
+            else if(data.send_type === 'response' && data.response){
+                setSendResponse(true);
+            }
         }   
-    
+        
         socket.onclose = function (e) {
             console.log('Connection closed');
         };
@@ -71,25 +92,26 @@ const Notification = () =>{
                 'word_id': ''
         }))
         handleRefetchOne();
-        
-        if(response){
-            //antes de redireccionar debo esperar a que se cree la partida
-            //tarda unos momentos y al redireccionar tan rapido no llega a obtener la partida
-            //tal vez podria obtener la partida a travez de una llamada a la api
-            //la redireccion debe ocurrir una vez recibida de onmessage
-            navigate('/app/online/gamestarts');
-        }
     }
 
     //falta agregar un lugar donde se agregen los nuevos mensajes un array donde recibirlos,
     //y donde ponerlo en el render
 
     return(
+    sendResponse ?
+    (<span>Espere...</span>)    
+    :
      <NavDropdown
         id="nav-dropdown-dark-example"
-        title={<i className="bi bi-bell nav-icon"></i>}
+        title={
+            newNotification ?
+            <i class="bi bi-bell-fill nav-icon-active"></i>
+            :
+            <i className="bi bi-bell nav-icon"></i>
+        }
         menuVariant="dark"
         className="nav-dropdown"
+        onClick={() => setNewNotification(false)}
         >
         {isLoading &&
             <Loading/>
@@ -100,8 +122,7 @@ const Notification = () =>{
             !connection ?
                 (<Loading/>)
                 :
-                notifications.map((notification, i) => 
-                {
+                notifications.slice().reverse().map((notification, i) => {
                 return(
                     <div key={i}>  
                         <NavDropdown.Item>{
@@ -113,7 +134,7 @@ const Notification = () =>{
                         (
                         <HostResponseNotification notification={notification}>
                             {
-                            socket == null ?
+                            socket === null ?
                                 <Loading/>
                                 :
                                 (

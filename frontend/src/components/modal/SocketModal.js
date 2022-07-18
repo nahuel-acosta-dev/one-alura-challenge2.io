@@ -62,9 +62,10 @@ const SocketModal = ({id, wordId}) =>{
             'word_id': wordId
         }))
         setInvited(true);
+        setSmShow(false);
     }
 
-
+    //al tocar enviar se debe cerrar el modal
 
     return (<>
         <Modal

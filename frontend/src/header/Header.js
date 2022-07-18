@@ -24,6 +24,7 @@ const Header = () => {
     const [logout, { isLoading }] = useLogoutMutation();
     const [errMsg, setErrMsg] = useState('');
     const [changeLogo, setChangeLogo] = useState(false);
+    
 
 
     const logoutApi = async () => {
@@ -72,7 +73,7 @@ const Header = () => {
                         style={{ maxHeight: '50px' }}
                         >
                             {token && user &&
-                                <Notification/>
+                                <Notification />
                             }
                         </Nav>
                         <Nav className="me-auto"
