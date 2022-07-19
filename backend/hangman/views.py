@@ -294,8 +294,7 @@ class InvitationViewSet(viewsets.GenericViewSet):
         if self.queryset is None:
             user_id = get_user_data(request)
             self.queryset = self.serializer_class().Meta.model.objects\
-                .filter(Q(host_user=int(user_id)) | Q(guest_user=int(user_id))).values(
-                    'host_user', 'guest_user', 'response', 'answered', 'created_at').order_by('created_at')
+                .filter(Q(host_user=int(user_id)) | Q(guest_user=int(user_id))).order_by('created_at')
 
         return self.queryset
 

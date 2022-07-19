@@ -6,6 +6,25 @@ from rest_framework.permissions import IsAuthenticated
 from rest_framework.decorators import (permission_classes)
 
 
+class RelatedFieldAlternative(serializers.PrimaryKeyRelatedField):
+    # este serializer sirve para mostrar los datos anidados de los modelos foreignKey en las listas
+    # que traen los datos filtrados.
+    def __init__(self, **kwargs):
+        self.serializer = kwargs.pop('serializer', None)
+        if self.serializer is not None and not issubclass(self.serializer, serializers.Serializer):
+            raise TypeError('"serializer" is not a valid serializer class')
+
+        super().__init__(**kwargs)
+
+    def use_pk_only_optimization(self):
+        return False if self.serializer else True
+
+    def to_representation(self, instance):
+        if self.serializer:
+            return self.serializer(instance, context=self.context).data
+        return super().to_representation(instance)
+
+
 class CustomTokenObtainPairSerializer(TokenObtainPairSerializer):
     pass
 
@@ -126,18 +145,14 @@ class InvitationSerializer(serializers.ModelSerializer):
 
 
 class InvitationListSerializer(serializers.ModelSerializer):
+    host_user = RelatedFieldAlternative(
+        queryset=User.objects.all(), serializer=CustomUserSerializer)
+    guest_user = RelatedFieldAlternative(
+        queryset=User.objects.all(), serializer=CustomUserSerializer)
+
     class Meta:
         model = Invitation
         fields = '__all__'
-
-    def to_representation(self, instance):
-        return{
-            'host_user': instance['host_user'],
-            'guest_user': instance['guest_user'],
-            'response': instance['response'],
-            'answered': instance['answered'],
-            'created_at': instance['created_at']
-        }
 
 
 class RoomSerializer(serializers.ModelSerializer):
