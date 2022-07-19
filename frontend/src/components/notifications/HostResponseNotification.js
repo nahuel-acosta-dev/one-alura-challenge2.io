@@ -18,7 +18,7 @@ const HostResponseNotification = ({notification, children}) =>{
         (
         <>
             <span>
-                el user {notification.host_user} te ha invitado
+                {notification.host_user.username} te ha invitado
             </span>
             {children}
         </>

@@ -9,12 +9,12 @@ const GuestResponseNotification = ({notification}) =>{
                     {
                         notification.response ?
                         <>
-                        el user {notification.guest_user} 
+                        {notification.guest_user.username} 
                             a aceptado tu invitacion
                         </>
                         :
                         <>
-                            el user {notification.guest_user} 
+                            {notification.guest_user.username} 
                             a rechazado tu invitacion
                         </>
                     }
@@ -23,7 +23,7 @@ const GuestResponseNotification = ({notification}) =>{
             :
             (
                 <span>
-                    el user {notification.guest_user} no ha respondido
+                    {notification.guest_user.username} no ha respondido
                 </span>
             )
     )
