@@ -18,7 +18,7 @@ const InvitationScreen = () =>{
     const user = useSelector(selectCurrentUser);
     const [currentPage, setCurrentPage] = useState(0);
     const [search, setSearch] = useState('');
-    const pageLimits = 2;
+    const pageLimits = 5;
 
     const {
         data: profiles,

@@ -7,6 +7,7 @@ import GameMode from '../pages/GameMode';
 import ProfileScreen from '../pages/ProfileScreen';
 import InvitationScreen from '../pages/InvitationScreen';
 import NotVerified from '../pages/NotVerified';
+import SetPassword from '../pages/SetPassword';
 import { Navigate } from 'react-router-dom';
 
 const ApplicationRouter = () =>{
@@ -18,6 +19,7 @@ const ApplicationRouter = () =>{
                 <Route path="home" element={<HomeApp/>} />
                 <Route path="gamemode" element={<GameMode/>} />
                 <Route path="profile" element={<ProfileScreen/>} />
+                <Route path="set_password" element={<SetPassword/>} />
                 <Route path="local/savescreen" element={<SaveScreen/>} />
                 <Route path="local/gamestarts" element={<GameStarts/>} />
                 <Route path="local/fast_play/gamestarts" element={<GameStarts/>} />
