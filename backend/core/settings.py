@@ -65,13 +65,13 @@ REST_FRAMEWORK = {
 }
 
 SPECTACULAR_SETTINGS = {
-    'TITLE': 'Your Project Hangman_Api',
-    'DESCRIPTION': 'Your project description of Hangman_Api',
+    'TITLE': 'Api Hangman',
+    'DESCRIPTION': 'Public Documentation of API for the Border Sixlives application',
     'VERSION': '1.0.0',
     'SERVE_INCLUDE_SCHEMA': False,
     # OTHER SETTINGS
     'CONTACT': {
-        'name': 'nahuel',
+        'name': 'Brian Nahuel Acosta',
         'email': 'brianacostanahuel2000@gmail.com',
         'url': '',
     },
