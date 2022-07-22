@@ -1,8 +1,9 @@
 #Node 
 #instala node(lts ultima version) en una version muy pequeña de linux(alpine)
-#build-stage permite correr comandos
+#crearemos un contenedor lts alpine y lo renombramos como build-stage
 FROM node:lts-alpine as build-stage
 
+#RUN permite correr comandos
 #Los siguientes son los comandos
 #En el contenedor crea la carpeta app
 RUN mkdir app

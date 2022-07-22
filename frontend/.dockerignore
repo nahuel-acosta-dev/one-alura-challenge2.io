@@ -3,3 +3,10 @@ dist
 .dockerignore
 Dockerfile
 gulpfile.js
+docker-compose.yml
+.docker
+
+# Git
+.git
+.gitignore
+.gitattributes

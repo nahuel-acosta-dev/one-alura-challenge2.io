@@ -12,7 +12,7 @@ import {Link} from 'react-router-dom'
 const Footer = () =>{
 
     return(
-            <footer className="sticky-bottom">
+            <footer>
                 <Container className="height_maximum" fluid>
                     <Row className="footer-container height_maximum">
                         <Col xs={6} className="height_maximum">
