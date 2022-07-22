@@ -1,0 +1,33 @@
+version: "3"
+
+services:
+
+  # Redis
+  redis:
+    image: redis
+    restart: always
+    ports:
+      - "6379-6379"
+
+  # Database Postgres
+  db:
+    image: mysql
+    ports:
+      - '3306:3306'
+    environment:
+      MYSQL_DATABASE: 'base_hangman'
+      MYSQL_ROOT_PASSWORD: ''
+      MYSQL_ALLOW_EMPTY_PASSWORD: true
+    restart: always
+  # Django Application
+  web:
+    build: .
+    command: python manage.py runserver 0.0.0.0:8000
+    volumes:
+      - .:/app
+    ports:
+      - "8000:8000"
+    depends_on:
+      - db
+      - redis
+    restart: always
