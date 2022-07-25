@@ -12,13 +12,13 @@ const SocketModal = ({id, wordId}) =>{
     const user = useSelector(selectCurrentUser);
     const [smShow, setSmShow] = useState(false);
     const [socketModal, setSocketModal] = useState(smShow ? 
-        new WebSocket(`ws://localhost:8000/ws/invitation/${id}/`) : null);
+        new WebSocket(`ws://backend-sixlives.herokuapp.com/ws/invitation/${id}/`) : null);
     const [invited, setInvited] = useState(false);
     const [connection, setConnection] = useState(false);
         
     useEffect(() => {
         if(smShow){
-            setSocketModal(new WebSocket(`ws://localhost:8000/ws/invitation/${id}/`))
+            setSocketModal(new WebSocket(`ws://backend-sixlives.herokuapp.com/ws/invitation/${id}/`))
         }
     }, [smShow])
 

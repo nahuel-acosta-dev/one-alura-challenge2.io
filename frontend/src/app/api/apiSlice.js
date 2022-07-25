@@ -4,7 +4,7 @@ import {useSelector} from 'react-redux';
 
 
 const baseQuery = fetchBaseQuery({
-    baseUrl: 'http://localhost:8000/hangman/api/',
+    baseUrl: 'http://backend-sixlives.herokuapp.com/hangman/api/',
     credentials: 'include',
     'prepareHeaders': (headers, {getState}) => {
         const token = getState().auth.token;

@@ -15,7 +15,7 @@ const Notification = () =>{
     const navigate = useNavigate();
     const user = useSelector(selectCurrentUser);
     const [socket, setSocket] = useState(user ? 
-        new WebSocket(`ws://localhost:8000/ws/invitation/${user.id}/`) : null);
+        new WebSocket(`ws://backend-sixlives.herokuapp.com/ws/invitation/${user.id}/`) : null);
     const [connection, setConnection] = useState(false);
     const [sendResponse, setSendResponse] = useState(false);
     const [newNotification, setNewNotification] = useState(false);

@@ -27,7 +27,7 @@ RUN npm run build
 
 #INSTALAMOS UNA VERSION DE NGINX DESDE HUB.DOCKER.COM
 
-FROM nginx:1.21.6-alpine as production-strategy
+FROM nginx:1.23.1-alpine as production-strategy
 
 #elegimos la carpeta app/dist y le pegamos lo que hay en nginx
 COPY --from=build-stage /app/dist /usr/share/nginx/html
