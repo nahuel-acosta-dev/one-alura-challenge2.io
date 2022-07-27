@@ -32,11 +32,12 @@ class InvitationConsumer(AsyncWebsocketConsumer):
         text_data_json = json.loads(text_data)
         send_type = text_data_json['send_type']
         host_id = text_data_json['host_id']
+        guest_id = text_data_json['guest_id']
         response = text_data_json['response']
         word_id = text_data_json['word_id']
 
         if send_type == 'invitation':
-            await self.create_invitation(host_id, word_id)
+            await self.create_invitation(host_id, guest_id, word_id)
         elif send_type == 'response':
             await self.update_invitation(response, host_id)
 
@@ -46,6 +47,7 @@ class InvitationConsumer(AsyncWebsocketConsumer):
                 'type': 'send_invitation',  # es la llamada a la funcion de abajo
                 'send_type': send_type,
                 'host_id': host_id,
+                'guest_id': guest_id,
                 'response': response,
                 'word_id': word_id,
             }
@@ -54,22 +56,27 @@ class InvitationConsumer(AsyncWebsocketConsumer):
     async def send_invitation(self, event):
         send_type = event['send_type']
         host_id = event['host_id']
+        guest_id = event['guest_id']
         response = event['response']
         word_id = event['word_id']
 
         await self.send(text_data=json.dumps({
             'send_type': send_type,
             'host_id': host_id,
+            'guest_id': guest_id,
             'response': response,
             'word_id': word_id,
         }))
 
     @database_sync_to_async
-    def create_invitation(self, host_id, word_id):
+    def create_invitation(self, host_id, guest_id, word_id):
         host_user = User.objects.get(id=host_id)
+        guest_user = User.objects.get(id=guest_id)
+        print(host_user)
+        print(guest_user)
         try:
             invitation = Invitation.objects.get(
-                host_user=host_user, guest_user=self.user, word_id=word_id, answered=False)
+                host_user=host_user, guest_user=guest_user, word_id=word_id, answered=False)
             print(invitation)
             if invitation:
                 invitation.answered = True
@@ -77,14 +84,19 @@ class InvitationConsumer(AsyncWebsocketConsumer):
         except:
             print('no se encontraron invitaciones de este usuario')
         Invitation.objects.create(
-            host_user=host_user, guest_user=self.user, word_id=word_id)
+            host_user=host_user, guest_user=guest_user, word_id=word_id)
 
     @database_sync_to_async
     def update_invitation(self, response, host_id):
         if response != '':
             user = User.objects.get(id=host_id)
+            print(user)
             invitation = Invitation.objects.filter(
                 guest_user=user, answered=False).last()
+            print('los codigos vienen a continuacion')
+            print(invitation)
+            print(invitation.host_user)
+            print(invitation.guest_user)
             invitation.answered = True
             invitation.response = response
             invitation.save()

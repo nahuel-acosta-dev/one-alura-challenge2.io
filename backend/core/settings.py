@@ -151,12 +151,12 @@ WSGI_APPLICATION = 'core.wsgi.application'
 
 ASGI_APPLICATION = "core.asgi.application"
 
-"""CHANNEL_LAYERS = {
+CHANNEL_LAYERS = {
     "default": {
         "BACKEND": "channels.layers.InMemoryChannelLayer"
     }
 }
-"""
+
 
 """
 CHANNEL_LAYERS = {
@@ -168,7 +168,7 @@ CHANNEL_LAYERS = {
     },
 }
 """
-
+"""
 CHANNEL_LAYERS = {
     "default": {
         "BACKEND": "channels_redis.core.RedisChannelLayer",
@@ -176,7 +176,7 @@ CHANNEL_LAYERS = {
             "hosts": [("redis", 6379)],
         },
     },
-}
+}"""
 
 # Database
 # https://docs.djangoproject.com/en/4.0/ref/settings/#databases
