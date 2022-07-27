@@ -3,7 +3,7 @@
 sixLives es un juego del ahorcado en el que podras jugar solo o invitar a
 otras personas a descubrir las palabras que creaste
 
-## Installation
+## Instalacion
 
 La aplicacion fue contruida sobre python 3.9,
 y React 17.
@@ -52,4 +52,6 @@ para correr react podra hacerlo ejecutando:
 - crear palabras para que un compañero la descubra de forma local
 - invitar y recibir invitaciones de forma online
 
-## Visual
+## Bugs
+El juego del ahorcado tiene ciertos problemas al mostrar las imagenes svg por lo menos en edge y chrome, se recomienda usar mozilla firefox.
+Los problemas estan en proceso de solucion.
