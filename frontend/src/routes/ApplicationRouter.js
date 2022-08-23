@@ -27,7 +27,7 @@ const ApplicationRouter = () =>{
                 <Route path="online/invitation" element={<InvitationScreen/>}/>
                 <Route path="online/gamestarts" element={<GameStarts/>} />
                 <Route path="notverified" element={<NotVerified/>} />
-
+                <Route path="*" element={<p>404</p>}></Route>
                 {/*Redirect*/}
                 <Route path="" element={<Navigate to="home"/>} />
             </Routes>

@@ -58,6 +58,7 @@ const SocketModal = ({id, wordId}) =>{
         socketModal.send(JSON.stringify({
             'send_type':  message,
             'host_id': user.id,
+            'guest_id': id,
             'response': '',
             'word_id': wordId
         }))

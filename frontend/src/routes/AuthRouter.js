@@ -14,6 +14,7 @@ const AuthRouter = () =>{
                 <Route exact path='login' element={<LoginScreen/>} />
                 <Route exact path='register' element={<RegisterScreen/>} />
                 <Route exact path='reset' element={<LoginScreen/>} />
+                <Route path="*" element={<p>404</p>}></Route>
             </Routes>
         </>
     )

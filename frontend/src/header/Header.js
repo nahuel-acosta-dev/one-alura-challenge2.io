@@ -54,12 +54,19 @@ const Header = () => {
             <Navbar expand="sm">
                 <Container fluid>
                     <Navbar.Brand className="header__logo d-flex navbar-center">
-                    <img
-                        src={changeLogo ? Vector : Logo}//Al pasar el mouse debe cambiar de logo
-                        width="50"
-                        className="d-inline-block align-top"
-                        alt="alura logo"
-                    />
+                    <Link className="navbar-sm-logo" to={
+                        token ? 
+                        ("/app/home")
+                            :
+                        ("/")
+                    }>
+                        <img
+                            src={changeLogo ? Vector : Logo}//Al pasar el mouse debe cambiar de logo
+                            width="50"
+                            className="d-inline-block align-top"
+                            alt="alura logo"
+                        />      
+                    </Link>
                     </Navbar.Brand>
                     <Nav className="header-title me-sm-4">
                             <Link className="navbar-links__mod" to={

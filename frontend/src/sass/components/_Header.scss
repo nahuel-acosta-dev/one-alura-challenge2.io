@@ -49,11 +49,12 @@
 ////////////////////////////////
 
 @mixin Header-responsive-sm{
-    .header__logo{
-        display: none !important;
-    }
     .header-title{
         display:none;
+    }
+    .navbar-sm-logo{
+        margin-right: 0px!important;
+        width: 120px!important;
     }
     .navbar-login{
         margin-right: 0px!important;

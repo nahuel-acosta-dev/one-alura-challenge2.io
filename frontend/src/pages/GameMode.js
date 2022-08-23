@@ -19,7 +19,7 @@ const GameMode = () =>{
         {
             title: 'Local',
             text: 'Has que tu compañero descubra la palabra que acabas de crear',
-            url: "/app/online/savescreen",
+            url: "/app/local/savescreen",
             img: {Joystick},
             background: '$green',
             colorTitle: '#f2b73a',

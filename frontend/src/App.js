@@ -1,6 +1,7 @@
 import React, {useState, useEffect} from 'react';
 import Container from 'react-bootstrap/Container';
 import HelperRouters from './routes/HelperRoutes';
+import {Helmet} from "react-helmet";
 import Header from './header/Header';
 import Footer from './components/footer/Footer';
 
@@ -10,6 +11,11 @@ const App = () => {
       });
 
     return(<>
+                <div className="application">
+                    <Helmet>
+                        <meta http-equiv="Content-Security-Policy" content="upgrade-insecure-requests"/>
+                    </Helmet>
+                </div>
                 <Header />
                 <main>
                     <Container className="main__container" fluid>

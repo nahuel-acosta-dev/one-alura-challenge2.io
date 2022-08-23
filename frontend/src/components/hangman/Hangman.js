@@ -1,11 +1,11 @@
 import React, {useState, useEffect} from 'react';
-import HangedZero from '../../image/HangedZero.svg';
-import HangedOne from '../../image/HangedOne.svg';
-import HangedTwo from '../../image/HangedTwo.svg';
-import HangedThree from '../../image/HangedThree.svg';
-import HangedFour from '../../image/HangedFour.svg';
-import HangedFive from '../../image/HangedFive.svg';
-import Hanged from '../../image/Hanged.svg';
+import HangedZero from '../../image/HangedZero.png';
+import HangedOne from '../../image/HangedOne.png';
+import HangedTwo from '../../image/HangedTwo.png';
+import HangedThree from '../../image/HangedThree.png';
+import HangedFour from '../../image/HangedFour.png';
+import HangedFive from '../../image/HangedFive.png';
+import Hanged from '../../image/Hanged.png';
 import PropTypes from 'prop-types';
 
 const Hangman = ({failures}) =>{
@@ -40,7 +40,7 @@ const Hangman = ({failures}) =>{
 
     return(
         <div className="gameStarts__hangman">
-            <img src={Img} />
+            <img src={Img} alt="image hangman" rel="noreferrer"/>
         </div>
     )
 }

@@ -88,6 +88,7 @@ const Notification = () =>{
         socket.send(JSON.stringify({
                 'send_type': message,
                 'host_id': user.id,
+                'guest_id': '',
                 'response': response,
                 'word_id': ''
         }))

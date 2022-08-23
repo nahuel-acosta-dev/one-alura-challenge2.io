@@ -2,8 +2,20 @@ const path=require('path');
 const HtmlWebpackPlugin = require('html-webpack-plugin');
 const MiniCssExtractPlugin = require('mini-css-extract-plugin');
 const Dotenv = require('dotenv-webpack');
+const TerserPlugin = require("terser-webpack-plugin");
 
 module.exports = {
+    optimization: {
+        minimizer: [
+          new TerserPlugin({
+            terserOptions: {
+              compress: {
+                drop_console: true
+              }
+            }
+          })
+        ]
+    },
     entry: './src/index.js',
     output:{
         path:path.resolve(__dirname, 'dist'),
